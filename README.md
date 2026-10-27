@@ -14,7 +14,7 @@ Ruh sağlığı ve gelişim alanında çalışan uzmanların (psikolog, klinik p
 | 4 | Uzman paneli: profil düzenleme, fotoğraf, yazılar, görünürlük istatistikleri | — |
 | 5 | Yönetici paneli: unvan/diploma doğrulama, profil onayı | — |
 | 6a | Veritabanı kurulumu (Supabase, Frankfurt): tablolar, güvenlik kuralları, dosya depoları — 22 senaryoluk testten geçti | ✅ Tamam |
-| 6b | Siteyi veritabanına bağlama: örnek verilerin aktarımı, gerçek kayıt, giriş, CAPTCHA | ⏳ Sırada |
+| 6b | Siteyi veritabanına bağlama: örnek verilerin aktarımı ✅, liste/profil/blog/manşet veritabanından ✅, mesaj formu ✅; gerçek kayıt, giriş, CAPTCHA | ⏳ Kayıt ve giriş sırada |
 | 7 | Google'da bulunabilirlik: her uzmana kalıcı adres (`/uzman/elif-aydin`), sayfa başlıkları, paylaşım önizlemesi, site haritası. GitHub Actions ile otomatik sayfa üretimi (framework değişikliği gerekmez) | — |
 | 8 | Bildirim sistemi: "Bu profilde sorun var" (taklit profil, yanlış unvan, güncel olmayan bilgi); CAPTCHA'lı, kayıtlı, itiraz hakkı olan süreç | — |
 | 9 | Alan adı, güvenlik başlıkları (Cloudflare), Pro plan (yedekleme, sızdırılmış şifre kontrolü) ve yayına alma | — |
@@ -33,7 +33,7 @@ Ruh sağlığı ve gelişim alanında çalışan uzmanların (psikolog, klinik p
 - **Güncellik:** "Yeni danışan kabul ediyor" bilgisi 60 günden uzun süre güncellenmezse "Kabul durumu bir süredir güncellenmedi" olarak gösterilir.
 - **İhtiyaç kategorileri tanı değildir:** Danışanın günlük dille arama yapması içindir; tanı koymak ya da yönlendirmek için kullanılmaz.
 - **Var olmayan hizmet vaat edilmez** (ör. bekleme listesi). Henüz çalışmayan özellikler çalışıyormuş gibi gösterilmez.
-- **Örnek veriler gerçek uzman gibi sunulmaz:** Veritabanında `ornek = true` olarak işaretlidir ve yayın öncesi topluca silinir.
+- **Örnek veriler gerçek uzman gibi sunulmaz:** Veritabanında `ornek = true` olarak işaretlidir ve yayın öncesi tek komutla silinir: `delete from public.uzmanlar where ornek;`
 - **Veri katmanı ayrı tutulur:** Sayfalar verileri yalnızca `veri.js` üzerinden ister. Veritabanına geçişte sadece bu dosya değişir.
 - **Gizli bilgi koda yazılmaz:** Repo herkese açık olduğu için şifre, gizli anahtar vb. hiçbir zaman bu dosyalarda yer almaz.
 
@@ -45,9 +45,7 @@ uzman.html            Uzman profil sayfası  →  uzman.html?id=elif-aydin
 giris.html            Uzman Girişi: giriş / kayıt / doğrulama / şifremi unuttum
 assets/css/stil.css   Tüm sayfaların ortak tasarımı (renkler en üstte)
 assets/js/ayarlar.js  Marka adı ve sabit listeler (unvanlar, yaş grupları…)
-assets/js/ornek-veri.js  Örnek uzmanlar, manşetler ve blog yazıları — veritabanı bağlanınca silinecek
-assets/js/ornek-veri-deneme.js  Sayfalamayı denemek için otomatik üretilmiş 40 hayali uzman — silinecek
-assets/js/veri.js     Veri katmanı — sayfaların veriye ulaştığı tek kapı
+assets/js/veri.js     Veri katmanı — sayfaların veriye (Supabase) ulaştığı tek kapı
 assets/js/ortak.js    Ortak yardımcılar ve ikonlar
 assets/js/liste.js    Uzman listesi: arama, filtreler, sayfalama, kutu/liste görünümü
 assets/js/manset.js   Ana sayfadaki kayan manşet alanı
@@ -58,6 +56,7 @@ assets/js/mesaj-formu.js  "Uzmana Mesaj Gönder" penceresi
 assets/js/giris.js    Giriş/kayıt ekranlarının kodu
 supabase/migrations/  Veritabanının kurulum adımları (sırayla uygulanan SQL dosyaları)
 supabase/tests/       Güvenlik kurallarını deneyen test (SQL Editor'da çalıştırılır)
+supabase/ornek-veri/  Veritabanına aktarılan 49 hayali örnek uzman ve 6 yazı (hepsi ornek = true)
 supabase/functions/mesaj-gonder/  Mesaj formunu CAPTCHA ve gönderim sınırıyla kaydeden sunucu fonksiyonu
 ```
 

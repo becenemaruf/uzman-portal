@@ -91,6 +91,7 @@ function okunurNumara(numara) {
 /* İHTİYAÇ KATEGORİLERİ VE ÇALIŞMA ALANI RENKLERİ */
 // Bir çalışma alanının ihtiyaç kategorisini bulur. Veritabanı kategoriyi doğrudan verirse o kullanılır.
 function kategoriBul(alan, kod) {
+  kod = kod || (window.ALAN_KATEGORILERI || {})[alan];
   if (kod) {
     const kayitli = IHTIYAC_KATEGORILERI.find((k) => k.kod === kod);
     if (kayitli) return kayitli;

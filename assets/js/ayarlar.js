@@ -23,9 +23,9 @@ const BAGLANTI = {
   supabaseAdresi: "https://nzkkbnhwxmjcywvghxon.supabase.co",
   supabaseAnahtari: "sb_publishable_vPd4ryhRte0G3Cv4ZyN7yQ_tPVhkDGM",
   turnstileSiteAnahtari: "0x4AAAAAAFoFIAxaZOt3g_v_",
-  // "Uzmana Mesaj Gönder" sistemi (Supabase Edge Function) kurulup test edilince true yapılır.
-  // false iken form çalışır ama mesaj hiçbir yere gönderilmez; ziyaretçiye bu açıkça söylenir.
-  mesajSistemiAcik: false,
+  // "Uzmana Mesaj Gönder" sistemi (Supabase Edge Function "mesaj-gonder").
+  // false yapılırsa form çalışır ama mesaj hiçbir yere gönderilmez; ziyaretçiye bu açıkça söylenir.
+  mesajSistemiAcik: true,
 };
 
 // Uzmanların seçebileceği unvanlar (filtrede ve kayıt formunda kullanılır)
@@ -60,7 +60,7 @@ const KABUL_GUNCELLIK_GUN = 60;
  * Aynı gruplar etiket renklerini de belirler (arka plan rengin %15 opaklığı, yazı koyu tonu).
  *
  * "kod" değerleri veritabanındaki uzmanlik_alanlari.kategori sütunuyla aynıdır.
- * "kelimeler": Örnek veri kullanılırken bir alanın hangi gruba girdiği bu kelimelerle bulunur
+ * "kelimeler": Veritabanı bir alanın kategorisini vermediğinde (ör. blog yazısı kategorisi) grup bu kelimelerle bulunur
  * (Türkçe karakter ve büyük/küçük harf farkı gözetilmez). Sıra önemlidir: İlk eşleşen grup alınır.
  */
 const IHTIYAC_KATEGORILERI = [
