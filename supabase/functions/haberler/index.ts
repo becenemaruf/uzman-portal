@@ -13,7 +13,17 @@
 //  - Bağlantılar yalnızca aktuelpsikoloji.com alan adına aitse kabul edilir.
 //  - Sonuç 15 dakika önbellekte tutulur; haber sitesine her ziyarette istek gitmez.
 // =====================================================================
-const KAYNAK = "https://www.aktuelpsikoloji.com/service/rss.php";
+// Aday besleme adresleri sırayla denenir; haber bulunan ilk adres kullanılır.
+const KAYNAKLAR = [
+  "https://www.aktuelpsikoloji.com/service/rss.php",
+  "https://www.aktuelpsikoloji.com/service/rss.php?feed=atom",
+  "https://www.aktuelpsikoloji.com/rss",
+  "https://www.aktuelpsikoloji.com/rss.xml",
+  "https://www.aktuelpsikoloji.com/sitemap/news.xml",
+  "https://www.aktuelpsikoloji.com/sitemap-news.xml",
+];
+const TARAYICI_KIMLIGI =
+  "Mozilla/5.0 (compatible; UzmanPortali-HaberOnizleme/1.0; +https://becenemaruf.github.io/uzman-portal/)";
 const IZINLI_ALAN = /^https?:\/\/(www\.)?aktuelpsikoloji\.com\//;
 const ONBELLEK_SURESI = 15 * 60 * 1000;
 const EN_FAZLA = 12;
@@ -62,9 +72,21 @@ function atomIlk(oge: string) {
 }
 
 async function haberleriGetir() {
+  for (const kaynak of KAYNAKLAR) {
+    try {
+      const sonuc = await kaynaktanGetir(kaynak);
+      if (sonuc.haberler.length) return sonuc;
+    } catch (e) {
+      console.log(JSON.stringify({ kaynak, hata: String(e).slice(0, 150) }));
+    }
+  }
+  return { kaynak: "Aktüel Psikoloji", kaynakAdresi: "https://www.aktuelpsikoloji.com/", haberler: [] };
+}
+
+async function kaynaktanGetir(KAYNAK: string) {
   const yanit = await fetch(KAYNAK, {
-    headers: { "User-Agent": "UzmanPortali-HaberOnizleme/1.0", Accept: "application/rss+xml, application/xml, text/xml" },
-    signal: AbortSignal.timeout(8000),
+    headers: { "User-Agent": TARAYICI_KIMLIGI, Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml, */*" },
+    signal: AbortSignal.timeout(6000),
   });
   if (!yanit.ok) throw new Error(`Kaynak yanıt vermedi (${yanit.status})`);
   // Karakter kodlaması: Türkçe siteler bazen UTF-8 yerine ISO-8859-9 / windows-1254 kullanır.
@@ -82,15 +104,19 @@ async function haberleriGetir() {
     xml = new TextDecoder("utf-8").decode(ham);
   }
   // RSS (<item>) ve Atom (<entry>) biçimleri desteklenir.
-  const ogeler = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) ?? xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) ?? [];
+  const ogeler =
+    xml.match(/<item[\s>][\s\S]*?<\/item>/gi) ??
+    xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) ??
+    xml.match(/<url>[\s\S]*?<\/url>/gi) ??
+    [];
   const haberler = [];
   for (const oge of ogeler) {
-    const baslik = duzMetin(etiket(oge, "title"));
+    const baslik = duzMetin(etiket(oge, "title")) || duzMetin(etiket(oge, "news:title"));
     const atomLink = oge.match(/<link[^>]*href=["']([^"']+)["']/i)?.[1] ?? "";
-    const baglantiHam = duzMetin(etiket(oge, "link")) || atomLink || duzMetin(etiket(oge, "guid"));
+    const baglantiHam = duzMetin(etiket(oge, "link")) || atomLink || duzMetin(etiket(oge, "guid")) || duzMetin(etiket(oge, "loc"));
     if (!baslik || !IZINLI_ALAN.test(baglantiHam)) continue;
     const baglanti = baglantiHam.replace(/^http:\/\//i, "https://");
-    const tarihHam = duzMetin(etiket(oge, "pubDate")) || duzMetin(etiket(oge, "updated")) || duzMetin(etiket(oge, "published"));
+    const tarihHam = duzMetin(etiket(oge, "pubDate")) || duzMetin(etiket(oge, "updated")) || duzMetin(etiket(oge, "published")) || duzMetin(etiket(oge, "news:publication_date"));
     const tarih = tarihHam && !isNaN(Date.parse(tarihHam)) ? new Date(tarihHam).toISOString() : null;
     haberler.push({
       baslik: kisalt(baslik, 160),
@@ -103,10 +129,10 @@ async function haberleriGetir() {
   }
   // Teşhis notu (sunucu kayıtlarında görünür; kişisel veri içermez)
   console.log(JSON.stringify({
-    durum: yanit.status, tur: yanit.headers.get("content-type"), kodlama, boyut: ham.length,
+    kaynak: KAYNAK, durum: yanit.status, tur: yanit.headers.get("content-type"), kodlama, boyut: ham.length,
     oge: ogeler.length, haber: haberler.length,
     ilkBaglanti: ogeler[0] ? (etiket(ogeler[0], "link") || atomIlk(ogeler[0])).slice(0, 120) : null,
-    bas: ogeler.length ? null : xml.slice(0, 300),
+    icerik: ogeler.length ? null : xml.slice(0, 1200),
   }));
   return { kaynak: "Aktüel Psikoloji", kaynakAdresi: "https://www.aktuelpsikoloji.com/", haberler };
 }
