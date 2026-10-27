@@ -232,63 +232,47 @@ select.girdi {
 .sonuc-satir strong { color: var(--metin); }
 
 /* ---------- Uzman kartları ----------
- * Kartlar tek bir beyaz panelin içinde hücreler halinde durur.
- * Hücreleri, uçlara doğru silikleşen ince çizgiler ayırır:
- *   ::before → hücrenin üstündeki yatay çizgi (ilk satırda yok)
- *   ::after  → hücrenin sağındaki dikey çizgi (satırın son hücresinde yok)
- * Hangi hücrede çizgi olacağı ekran genişliğine göre değişir (1 / 2 / 3 sütun).
+ * Her uzman ayrı bir kart. Kartlar arasındaki boşluk ekran genişliğine göre değişir:
+ *   mobil 1 sütun / 16px · tablet 2 sütun / 20px · masaüstü 3 sütun / 24px
+ * Asimetrik vurgu: kartın üst kenarı sol başta ilk çalışma alanının renginde başlar
+ * ve sağa doğru söner; köşede kısa, kalın bir renk çizgisi durur.
  */
 .kartlar {
-  display: grid; grid-template-columns: 1fr; gap: 0;
-  background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 20px;
-  box-shadow: var(--golge); overflow: hidden; margin-bottom: 48px;
+  display: grid; grid-template-columns: 1fr; gap: 16px;
+  margin-bottom: 48px;
 }
-@media (min-width: 700px) { .kartlar { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1050px) { .kartlar { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 700px) { .kartlar { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+@media (min-width: 1050px) { .kartlar { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
 
 .kart {
-  position: relative; min-width: 0;
+  position: relative; min-width: 0; overflow: hidden;
   display: flex; flex-direction: column; gap: 14px;
-  padding: 26px 22px;
-  transition: background-color 0.2s;
+  padding: 26px 22px 22px;
+  background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 18px;
+  box-shadow: var(--golge);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
-@media (min-width: 700px) { .kart { padding: 30px 28px; } }
-.kart:hover { background: #fbfaf6; }
-.kart:focus-within { background: #fbfaf6; }
+@media (min-width: 700px) { .kart { padding: 30px 26px 24px; } }
+.kart:hover, .kart:focus-within {
+  transform: translateY(-3px); border-color: var(--cizgi-koyu);
+  box-shadow: 0 2px 4px rgba(28, 35, 33, 0.04), 0 14px 32px rgba(28, 35, 33, 0.09);
+}
+@media (prefers-reduced-motion: reduce) { .kart:hover, .kart:focus-within { transform: none; } }
 
-.kart::before, .kart::after { content: ""; position: absolute; pointer-events: none; }
+/* Üst kenarda soldan sağa sönen renkli ince çizgi */
 .kart::before {
-  top: 0; left: 22px; right: 22px; height: 1px;
-  /* asimetrik: solda belirgin başlar, sağa doğru söner */
-  background: linear-gradient(90deg, var(--cizgi-koyu), var(--cizgi-koyu) 35%, transparent);
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, var(--kart-renk, var(--vurgu)), transparent 70%);
+  opacity: 0.6;
 }
-.kart::after {
-  display: none; top: 28px; bottom: 28px; right: 0; width: 1px;
-  /* asimetrik: üstte belirgin başlar, aşağı doğru söner */
-  background: linear-gradient(180deg, var(--cizgi-koyu), var(--cizgi-koyu) 30%, transparent);
-}
-/* Sol üst köşedeki renkli vurgu çizgisi (ilk çalışma alanının rengi) */
+/* Sol üst köşedeki kısa, kalın vurgu çizgisi */
 .kart-vurgu {
-  position: absolute; top: 0; left: 22px; width: 52px; height: 3px;
-  background: var(--kart-renk, var(--vurgu)); border-radius: 0 0 3px 3px;
+  position: absolute; top: 0; left: 22px; width: 52px; height: 4px;
+  background: var(--kart-renk, var(--vurgu)); border-radius: 0 0 4px 4px;
   transition: width 0.3s;
 }
-@media (min-width: 700px) { .kart-vurgu { left: 28px; } }
+@media (min-width: 700px) { .kart-vurgu { left: 26px; } }
 .kart:hover .kart-vurgu { width: 88px; }
-/* Mobil (1 sütun): sadece yatay çizgiler */
-.kart:first-child::before { display: none; }
-/* Tablet (2 sütun) */
-@media (min-width: 700px) {
-  .kart:nth-child(-n+2)::before { display: none; }
-  .kart:nth-child(odd)::after { display: block; }
-  .kart:nth-child(odd):last-child::after { display: none; }
-}
-/* Masaüstü (3 sütun) */
-@media (min-width: 1050px) {
-  .kart:nth-child(-n+3)::before { display: none; }
-  .kart::after { display: block; }
-  .kart:nth-child(3n)::after, .kart:last-child::after { display: none; }
-}
 
 .kart-ust { display: flex; gap: 16px; align-items: center; min-width: 0; }
 .kart-kimlik { min-width: 0; }
@@ -368,7 +352,6 @@ select.girdi {
   grid-column: 1 / -1; text-align: center; padding: 48px 20px;
   background: var(--yuzey); border: 1px dashed var(--cizgi-koyu); border-radius: var(--yaricap);
 }
-.kartlar .bos-durum { border: none; border-radius: 0; }
 .bos-durum h2 { font-size: 1.3rem; margin: 0 0 8px; }
 .bos-durum p { color: var(--soluk); margin: 0 0 16px; }
 
