@@ -1,7 +1,7 @@
 -- =====================================================================
 -- GÜVENLİK KURALLARI TESTİ
 -- Üç sahte kullanıcı (Uzman A, Uzman B, Yönetici) ve danışan (giriş yapmamış ziyaretçi)
--- rolleriyle 31 senaryoyu dener.
+-- rolleriyle 42 senaryoyu dener.
 --
 -- NASIL ÇALIŞTIRILIR: Supabase panelindeki SQL Editor'a yapıştırıp çalıştırın.
 -- Sonuç bir "hata" olarak görünür: Bu bilinçlidir. Rapor hata olarak döndürüldüğü için
@@ -256,6 +256,129 @@ begin
   set local role anon;
   select count(*) into n from public.uzmanlik_alanlari where kategori <> 'diger';
   r := r || case when n > 0 then '✅' else '❌' end || format(' 31) Danışan ihtiyaç kategorilerini görüyor → kategorili alan: %s', n) || E'\n';
+
+  -- ===== İLETİŞİM TERCİHLERİ VE MESAJLAR =====
+  -- Hazırlık: Yönetici A'nın profilini yayına alır
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', y, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  update public.uzmanlar set durum = 'yayinda' where id = pa;
+
+  -- 32) Uzman, herkese açık telefon sütununa doğrudan yazamaz
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', a, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  begin
+    update public.uzmanlar set telefon = '05551112233' where id = pa;
+    r := r || '❌ 32) Uzman yayındaki telefonu doğrudan yazabildi!' || E'\n';
+  exception when others then
+    r := r || '✅ 32) Uzman yayındaki telefonu doğrudan yazamadı → "' || sqlerrm || '"' || E'\n';
+  end;
+
+  -- 33) Uzman iletişim bilgilerini kaydeder; yalnızca WhatsApp'a izin verir
+  insert into public.uzman_iletisim (uzman_id, telefon, whatsapp, eposta, whatsapp_yayinda)
+    values (pa, '05551112233', '05551112244', 'uzman-a@ornek.test', true);
+  reset role;
+  perform set_config('request.jwt.claims', '{"role":"anon"}', true);
+  set local role anon;
+  select telefon is null and eposta is null and whatsapp = '05551112244' into t from public.uzmanlar where id = pa;
+  r := r || case when t then '✅' else '❌' end || ' 33) Danışan yalnızca izin verilen WhatsApp''ı görüyor; telefon ve e-posta boş' || E'\n';
+
+  -- 34) Danışan gizli iletişim tablosunu okuyamaz
+  begin
+    select count(*) into n from public.uzman_iletisim;
+    r := r || case when n = 0 then '✅' else '❌' end || format(' 34) Danışan gizli iletişim bilgilerini görüyor mu? görünen: %s', n) || E'\n';
+  exception when others then
+    r := r || '✅ 34) Danışan gizli iletişim tablosuna erişemedi' || E'\n';
+  end;
+
+  -- 35) Uzman B, A'nın gizli iletişim bilgilerini göremez ve değiştiremez
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', b, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  select count(*) into n from public.uzman_iletisim where uzman_id = pa;
+  update public.uzman_iletisim set telefon_yayinda = true where uzman_id = pa;
+  get diagnostics d = row_count;
+  r := r || case when n = 0 and d = '0' then '✅' else '❌' end || format(' 35) Uzman B, A''nın iletişim bilgilerini görüyor: %s, değiştirdi: %s', n, d) || E'\n';
+
+  -- 36) İzin değişikliği anında yansır: A telefonu açar, WhatsApp'ı kapatır
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', a, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  update public.uzman_iletisim set telefon_yayinda = true, whatsapp_yayinda = false where uzman_id = pa;
+  reset role;
+  perform set_config('request.jwt.claims', '{"role":"anon"}', true);
+  set local role anon;
+  select telefon = '05551112233' and whatsapp is null into t from public.uzmanlar where id = pa;
+  r := r || case when t then '✅' else '❌' end || ' 36) İzin değişikliği herkese açık profile anında yansıdı' || E'\n';
+
+  -- 37) Boş bir bilgi yayımlanamaz
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', a, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  begin
+    update public.uzman_iletisim set eposta = null, eposta_yayinda = true where uzman_id = pa;
+    r := r || '❌ 37) Boş e-posta yayımlanabildi!' || E'\n';
+  exception when others then
+    r := r || '✅ 37) Boş e-posta yayımlanamadı' || E'\n';
+  end;
+
+  -- 38) Danışan mesaj tablosuna doğrudan yazamaz (yalnızca CAPTCHA'lı sunucu fonksiyonu yazabilir)
+  reset role;
+  perform set_config('request.jwt.claims', '{"role":"anon"}', true);
+  set local role anon;
+  begin
+    insert into public.iletisim_mesajlari (uzman_id, gonderen_ad, gonderen_eposta, mesaj, ip_ozeti)
+      values (pa, 'Bot', 'bot@ornek.test', repeat('x', 30), repeat('0', 64));
+    r := r || '❌ 38) Danışan mesaj tablosuna doğrudan yazabildi!' || E'\n';
+  exception when others then
+    r := r || '✅ 38) Danışan mesaj tablosuna doğrudan yazamadı' || E'\n';
+  end;
+
+  -- Hazırlık: Sunucu fonksiyonu yerine sistem olarak bir mesaj eklenir
+  reset role;
+  insert into public.iletisim_mesajlari (uzman_id, gonderen_ad, gonderen_eposta, mesaj, ip_ozeti)
+    values (pa, 'Danışan', 'danisan@ornek.test', 'Görüşme için uygun saatlerinizi öğrenebilir miyim?', repeat('a', 64));
+
+  -- 39) Danışan ve Uzman B mesajları okuyamaz
+  perform set_config('request.jwt.claims', '{"role":"anon"}', true);
+  set local role anon;
+  begin
+    select count(*) into n from public.iletisim_mesajlari;
+  exception when others then n := 0;
+  end;
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', b, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  select n + count(*) into n from public.iletisim_mesajlari;
+  r := r || case when n = 0 then '✅' else '❌' end || format(' 39) Danışan ve başka uzman mesajları görüyor mu? görünen: %s', n) || E'\n';
+
+  -- 40) Uzman A kendi mesajını okur ve "okundu" işaretler
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', a, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  select count(*) into n from public.iletisim_mesajlari where uzman_id = pa;
+  update public.iletisim_mesajlari set okundu = true where uzman_id = pa;
+  get diagnostics d = row_count;
+  r := r || case when n = 1 and d = '1' then '✅' else '❌' end || format(' 40) Uzman kendi mesajını görüyor (%s) ve okundu işaretledi (%s)', n, d) || E'\n';
+
+  -- 41) Uzman mesajın içeriğini ya da gönderen bilgisini değiştiremez
+  begin
+    update public.iletisim_mesajlari set mesaj = 'Değiştirildi: ' || repeat('x', 20) where uzman_id = pa;
+    r := r || '❌ 41) Uzman mesaj içeriğini değiştirebildi!' || E'\n';
+  exception when others then
+    r := r || '✅ 41) Uzman mesaj içeriğini değiştiremedi' || E'\n';
+  end;
+
+  -- 42) "Aile Danışmanı" artık seçilemez, yeni unvanlar seçilebilir
+  reset role;
+  begin
+    update public.uzmanlar set unvan = 'Aile Danışmanı' where id = pa;
+    r := r || '❌ 42) Kaldırılan unvan hâlâ seçilebiliyor!' || E'\n';
+  exception when others then
+    update public.uzmanlar set unvan = 'Dil ve Konuşma Terapisti' where id = pa returning unvan into d;
+    r := r || case when d = 'Dil ve Konuşma Terapisti' then '✅' else '❌' end || ' 42) Kaldırılan unvan reddedildi, yeni unvan kabul edildi' || E'\n';
+  end;
 
   reset role;
   -- Rapor hata olarak döndürülür: böylece testin yaptığı her şey otomatik olarak geri alınır.

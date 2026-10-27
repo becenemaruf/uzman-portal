@@ -16,13 +16,13 @@
  *  guncellenme   : profilin son güncellenme tarihi
  *  deneyimYili   : meslekteki yıl
  *  cinsiyet, diller
- *  ucret         : { min, max } ya da null (uzman göstermek istemezse)
  *  kisaTanitim   : listedeki kartta görünen tek cümle
  *  hakkinda      : profil sayfasındaki paragraflar
  *  uzmanliklar, yaklasimlar, yasGruplari
  *  seans         : { sure, onlinePlatform, adres }
  *  egitim, sertifikalar
- *  iletisim      : { whatsapp, telefon } — ikisi de isteğe bağlı
+ *  iletisim      : { telefon, whatsapp, eposta } — YALNIZCA uzmanın yayımlanmasına izin verdiği
+ *                  kanallar bulunur. İzin verilmeyen bilgi bu nesnede (ve sayfa kaynağında) hiç yer almaz.
  *  yazilar, sss
  * Boş bırakılan bölümler profil sayfasında hiç görünmez.
  */
@@ -42,7 +42,6 @@ const ORNEK_UZMANLAR = [
     deneyimYili: 9,
     cinsiyet: "Kadın",
     diller: ["Türkçe", "İngilizce"],
-    ucret: { min: 2000, max: 2500 },
     kisaTanitim:
       "Kaygı, travma ve yaşam geçişlerinde yetişkinlerle sakin ve yapılandırılmış bir süreç yürütüyorum.",
     hakkinda: [
@@ -63,7 +62,7 @@ const ORNEK_UZMANLAR = [
       "Yüksek Lisans — Klinik Psikoloji, İstanbul Üniversitesi (2018)",
     ],
     sertifikalar: ["EMDR Düzey 1 ve 2 Eğitimi", "Bilişsel Davranışçı Terapi Uygulayıcı Eğitimi"],
-    iletisim: { whatsapp: "05550000001", telefon: "05550000001" },
+    iletisim: { telefon: "05550000001", whatsapp: "05550000001", eposta: "elif.aydin@example.com" },
     yazilar: [
       { baslik: "Panik atak sırasında beden neler yaşar?", tarih: "Eylül 2026" },
       { baslik: "Tükenmişliği yorgunluktan ayıran beş işaret", tarih: "Temmuz 2026" },
@@ -89,7 +88,6 @@ const ORNEK_UZMANLAR = [
     deneyimYili: 14,
     cinsiyet: "Erkek",
     diller: ["Türkçe"],
-    ucret: null,
     kisaTanitim: "Depresyon, bipolar bozukluk ve yetişkin dikkat eksikliğinde değerlendirme ve tedavi.",
     hakkinda: [
       "On dört yıldır psikiyatri alanında çalışıyorum. Muayenehanemde yetişkin ve ergenlerle değerlendirme, ilaç tedavisi ve destekleyici görüşmeler yapıyorum.",
@@ -100,7 +98,7 @@ const ORNEK_UZMANLAR = [
     yasGruplari: ["Ergen", "Yetişkin"],
     seans: { sure: "30–45 dakika", adres: "Kızılay, Çankaya / Ankara" },
     egitim: ["Tıp Fakültesi, Hacettepe Üniversitesi (2008)", "Psikiyatri Uzmanlığı, Gazi Üniversitesi (2013)"],
-    iletisim: { telefon: "05550000002" },
+    iletisim: { telefon: "05550000002", eposta: "murat.kaya@example.com" },
     sss: [
       { soru: "Psikiyatriste gitmek ilaç kullanmak zorunda olduğum anlamına mı gelir?", cevap: "Hayır. Değerlendirme sonrasında tedavi seçeneklerini birlikte konuşuruz; her durumda ilaç gerekmez." },
     ],
@@ -118,7 +116,6 @@ const ORNEK_UZMANLAR = [
     deneyimYili: 11,
     cinsiyet: "Kadın",
     diller: ["Türkçe"],
-    ucret: { min: 1200, max: 1500 },
     kisaTanitim: "Çocuklar, ergenler ve ebeveynlerle oyun ve çözüm odaklı yaklaşımlarla çalışıyorum.",
     hakkinda: [
       "On bir yıldır çocuk ve ergenlerle çalışıyorum. Okul uyumu, sınav kaygısı ve kardeş ilişkileri en sık çalıştığım konular arasında.",
@@ -145,7 +142,6 @@ const ORNEK_UZMANLAR = [
     deneyimYili: 6,
     cinsiyet: "Erkek",
     diller: ["Türkçe", "İngilizce"],
-    ucret: { min: 1800, max: 2200 },
     kisaTanitim: "Çiftlerle iletişim, güven ve çatışma konularında online olarak çalışıyorum.",
     hakkinda: [
       "Altı yıldır çift ve ilişki terapisi alanında çalışıyorum. Seanslarımı yalnızca online olarak yapıyorum.",
@@ -155,7 +151,7 @@ const ORNEK_UZMANLAR = [
     yasGruplari: ["Yetişkin", "Çift"],
     seans: { sure: "60 dakika (çift seansı)", onlinePlatform: "Zoom" },
     egitim: ["Lisans — Psikoloji, Uludağ Üniversitesi (2020)"],
-    iletisim: { whatsapp: "05550000004", telefon: "05550000004" },
+    iletisim: {},
   },
   {
     id: "ayse-demir",
@@ -170,7 +166,6 @@ const ORNEK_UZMANLAR = [
     deneyimYili: 12,
     cinsiyet: "Kadın",
     diller: ["Türkçe"],
-    ucret: { min: 2500, max: 3000 },
     kisaTanitim: "Obsesif kompulsif bozukluk ve panikte kanıta dayalı yöntemlerle çalışıyorum.",
     hakkinda: [
       "On iki yıldır yetişkin ve ergenlerle çalışıyorum. Özellikle obsesif kompulsif bozukluk ve panik bozuklukta kanıta dayalı yöntemleri kullanıyorum.",
@@ -180,13 +175,13 @@ const ORNEK_UZMANLAR = [
     yasGruplari: ["Ergen", "Yetişkin"],
     seans: { sure: "50 dakika", adres: "Beşiktaş / İstanbul" },
     egitim: ["Yüksek Lisans — Klinik Psikoloji, Hacettepe Üniversitesi (2014)"],
-    iletisim: { telefon: "05550000005" },
+    iletisim: { eposta: "ayse.demir@example.com" },
   },
   {
     id: "burak-yildiz",
     ad: "Burak Yıldız",
     foto: "assets/img/uzmanlar/burak-yildiz.svg",
-    unvan: "Aile Danışmanı",
+    unvan: "Sosyal Hizmet Uzmanı",
     dogrulandi: false,
     sehir: "Antalya",
     ilce: "Muratpaşa",
@@ -195,9 +190,8 @@ const ORNEK_UZMANLAR = [
     deneyimYili: 7,
     cinsiyet: "Erkek",
     diller: ["Türkçe"],
-    ucret: { min: 1500, max: 1800 },
-    kisaTanitim: "Aile içi iletişim, boşanma süreci ve ergenlik döneminde ailelerle çalışıyorum.",
-    uzmanliklar: ["Aile İçi İletişim", "Boşanma Süreci", "Ergenlik Dönemi"],
+    kisaTanitim: "Boşanma sürecindeki ailelere psikososyal destek veriyor, sosyal haklar konusunda yol gösteriyorum.",
+    uzmanliklar: ["Psikososyal Destek", "Boşanma Süreci", "Aile İçi İletişim"],
     yaklasimlar: ["Sistemik Aile Terapisi"],
     yasGruplari: ["Ergen", "Çift", "Aile"],
     seans: { sure: "60 dakika", onlinePlatform: "Zoom", adres: "Muratpaşa / Antalya" },
@@ -216,7 +210,6 @@ const ORNEK_UZMANLAR = [
     deneyimYili: 8,
     cinsiyet: "Kadın",
     diller: ["Türkçe", "Almanca"],
-    ucret: { min: 2200, max: 2600 },
     kisaTanitim: "Yas, kayıp ve benlik saygısı konularında yetişkinlerle derinlemesine çalışıyorum.",
     hakkinda: [
       "Sekiz yıldır yetişkinlerle çalışıyorum. Yurt dışında yaşayan Türkçe ve Almanca konuşan danışanlarla online seanslar yapıyorum.",
@@ -225,7 +218,7 @@ const ORNEK_UZMANLAR = [
     yaklasimlar: ["Psikodinamik Terapi", "EMDR"],
     yasGruplari: ["Yetişkin"],
     seans: { sure: "50 dakika", onlinePlatform: "Zoom" },
-    iletisim: { whatsapp: "05550000007", telefon: "05550000007" },
+    iletisim: { telefon: "05550000007", whatsapp: "05550000007" },
   },
   {
     id: "emre-celik",
@@ -240,7 +233,6 @@ const ORNEK_UZMANLAR = [
     deneyimYili: 5,
     cinsiyet: "Erkek",
     diller: ["Türkçe"],
-    ucret: { min: 1000, max: 1300 },
     kisaTanitim: "Dikkat ve öğrenme güçlükleri, sınav kaygısı ve kariyer seçiminde gençlerle çalışıyorum.",
     uzmanliklar: ["Dikkat ve Öğrenme Güçlükleri", "Sınav Kaygısı", "Kariyer Danışmanlığı"],
     yaklasimlar: ["Bilişsel Davranışçı Terapi (BDT)"],
@@ -261,13 +253,12 @@ const ORNEK_UZMANLAR = [
     deneyimYili: 10,
     cinsiyet: "Kadın",
     diller: ["Türkçe", "İngilizce"],
-    ucret: null,
     kisaTanitim: "Dikkat eksikliği ve hiperaktivite, otizm spektrumu ve çocukluk kaygılarında değerlendirme.",
     uzmanliklar: ["Dikkat Eksikliği ve Hiperaktivite", "Otizm Spektrum Bozukluğu", "Kaygı Bozuklukları"],
     yaklasimlar: ["Psikofarmakoloji", "Ebeveyn Eğitimi"],
     yasGruplari: ["Çocuk", "Ergen"],
     seans: { sure: "45 dakika", onlinePlatform: "Zoom", adres: "Karşıyaka / İzmir" },
-    iletisim: { telefon: "05550000009" },
+    iletisim: { telefon: "05550000009", eposta: "deniz.koc@example.com" },
   },
 ];
 

@@ -23,6 +23,9 @@ const BAGLANTI = {
   supabaseAdresi: "https://nzkkbnhwxmjcywvghxon.supabase.co",
   supabaseAnahtari: "sb_publishable_vPd4ryhRte0G3Cv4ZyN7yQ_tPVhkDGM",
   turnstileSiteAnahtari: "0x4AAAAAAFoFIAxaZOt3g_v_",
+  // "Uzmana Mesaj Gönder" sistemi (Supabase Edge Function) kurulup test edilince true yapılır.
+  // false iken form çalışır ama mesaj hiçbir yere gönderilmez; ziyaretçiye bu açıkça söylenir.
+  mesajSistemiAcik: false,
 };
 
 // Uzmanların seçebileceği unvanlar (filtrede ve kayıt formunda kullanılır)
@@ -32,7 +35,11 @@ const UNVANLAR = [
   "Psikolojik Danışman (PDR)",
   "Psikiyatrist",
   "Çocuk ve Ergen Psikiyatristi",
-  "Aile Danışmanı",
+  "Sosyal Hizmet Uzmanı",
+  "Dil ve Konuşma Terapisti",
+  "Ergoterapist",
+  "Özel Eğitim Uzmanı",
+  "Çocuk Gelişimci",
 ];
 
 // Çalışılan yaş grupları
@@ -41,9 +48,7 @@ const YAS_GRUPLARI = ["Çocuk", "Ergen", "Yetişkin", "Çift", "Aile"];
 // Bir sayfada gösterilecek en fazla uzman sayısı (fazlası sonraki sayfalara geçer)
 const SAYFA_BOYUTU = 36;
 
-// Ücret filtresi seçenekleri (seans başına üst sınır, TL).
-// Bir uzman, ücret aralığının ÜST sınırı seçilen tutarı aşmıyorsa listelenir.
-const UCRET_SINIRLARI = [1500, 2000, 2500, 3000];
+// Ücret bilgisi bilinçli olarak gösterilmez (sağlık hizmeti tanıtım kuralları; README'deki karar tablosu).
 
 // "Yeni danışan kabul ediyor" bilgisi bu kadar gün güncellenmezse "güncel değil" olarak gösterilir.
 const KABUL_GUNCELLIK_GUN = 60;
@@ -61,6 +66,8 @@ const KABUL_GUNCELLIK_GUN = 60;
 const IHTIYAC_KATEGORILERI = [
   // Dizi sırası EŞLEŞME önceliğidir ("Sınav Kaygısı" önce çocuk-ergen grubuna girsin diye);
   // açılır listedeki görünüm sırasını "sira" belirler.
+  { kod: "gelisim",       sira: 5, etiket: "Gelişim, konuşma ve öğrenme desteği", renk: "#8a7412",
+    kelimeler: ["konusma", "kekemelik", "duyu", "gunluk yasam", "ozel egitim", "gelisimsel"] },
   { kod: "cocuk_ergen",   sira: 4, etiket: "Çocuk ve ergenlerle ilgili konular", renk: "#b86e12",
     kelimeler: ["cocuk", "ergen", "sinav", "okul", "ebeveyn", "hiperaktivite", "otizm", "ogrenme"] },
   { kod: "travma_yas",    sira: 3, etiket: "Travma, yas ve kayıp",               renk: "#b0506a",
@@ -69,10 +76,10 @@ const IHTIYAC_KATEGORILERI = [
     kelimeler: ["kaygi", "panik", "obsesif", "fobi", "endise"] },
   { kod: "duygudurum",    sira: 2, etiket: "Depresif duygular ve duygudurum",    renk: "#7a5aa6",
     kelimeler: ["depresyon", "bipolar", "uyku", "duygudurum"] },
-  { kod: "iliski_aile",   sira: 5, etiket: "İlişki, çift ve aile sorunları",     renk: "#2a8383",
+  { kod: "iliski_aile",   sira: 6, etiket: "İlişki, çift ve aile sorunları",     renk: "#2a8383",
     kelimeler: ["cift", "iliski", "aile", "bosanma", "ofke"] },
-  { kod: "yasam_ozguven", sira: 6, etiket: "Özgüven, iş ve yaşam zorlukları",    renk: "#3f8a4c",
-    kelimeler: ["ozguven", "benlik", "kariyer", "tukenmislik", "yetiskin"] },
-  { kod: "diger",         sira: 7, etiket: "Bağımlılık, yeme ve diğer konular",  renk: "#6b6f78",
+  { kod: "yasam_ozguven", sira: 7, etiket: "Özgüven, iş ve yaşam zorlukları",    renk: "#3f8a4c",
+    kelimeler: ["ozguven", "benlik", "kariyer", "tukenmislik", "yetiskin", "psikososyal", "bakim veren"] },
+  { kod: "diger",         sira: 8, etiket: "Bağımlılık, yeme ve diğer konular",  renk: "#6b6f78",
     kelimeler: ["bagimlilik", "yeme"] },
 ];

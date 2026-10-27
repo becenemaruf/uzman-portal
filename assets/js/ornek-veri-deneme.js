@@ -8,7 +8,7 @@ ORNEK_UZMANLAR.push(...[
   "id": "gamze-coskun",
   "ad": "Gamze Coşkun",
   "foto": "assets/img/uzmanlar/gamze-coskun.svg",
-  "unvan": "Psikolojik Danışman (PDR)",
+  "unvan": "Ergoterapist",
   "dogrulandi": true,
   "sehir": "Eskişehir",
   "ilce": "Odunpazarı",
@@ -22,20 +22,16 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
-  "kisaTanitim": "İlişki Sorunları ve boşanma süreci konularında çiftler ve ailelerle çalışıyorum.",
+  "kisaTanitim": "Duyusal hassasiyetler ve günlük yaşam becerileri konusunda çocuklar ve ailelerle çalışıyorum.",
   "uzmanliklar": [
-   "İlişki Sorunları",
-   "Boşanma Süreci",
-   "Aile İçi İletişim"
+   "Duyu Bütünleme",
+   "Günlük Yaşam Becerileri",
+   "Otizm Spektrum Bozukluğu"
   ],
-  "yaklasimlar": [
-   "EMDR",
-   "Gottman Çift Terapisi"
-  ],
+  "yaklasimlar": [],
   "yasGruplari": [
-   "Çift",
-   "Aile"
+   "Çocuk",
+   "Yetişkin"
   ],
   "seans": {
    "sure": "60 dakika",
@@ -43,8 +39,9 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Odunpazarı / Eskişehir"
   },
   "iletisim": {
+   "telefon": "05551000000",
    "whatsapp": "05551000000",
-   "telefon": "05551000000"
+   "eposta": "gamze.coskun@example.com"
   }
  },
  {
@@ -65,7 +62,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Uyku Sorunları ve depresyon konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Uyku Sorunları",
@@ -84,7 +80,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Çukurova / Adana"
   },
   "iletisim": {
-   "telefon": "05551000001"
+   "whatsapp": "05551000001"
   }
  },
  {
@@ -104,10 +100,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 1500,
-   "max": 2000
-  },
   "kisaTanitim": "Sosyal Fobi ve obsesif kompulsif bozukluk konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Sosyal Fobi",
@@ -127,14 +119,16 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Muratpaşa / Antalya"
   },
   "iletisim": {
-   "whatsapp": "05551000002"
+   "telefon": "05551000002",
+   "whatsapp": "05551000002",
+   "eposta": "erdem.coskun@example.com"
   }
  },
  {
   "id": "asli-aydemir",
   "ad": "Aslı Aydemir",
   "foto": "assets/img/uzmanlar/asli-aydemir.svg",
-  "unvan": "Klinik Psikolog",
+  "unvan": "Ergoterapist",
   "dogrulandi": true,
   "sehir": "İzmir",
   "ilce": "Konak",
@@ -148,23 +142,16 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2750,
-   "max": 3250
-  },
-  "kisaTanitim": "Aile İçi İletişim ve çift terapisi konularında çiftler ve ailelerle çalışıyorum.",
+  "kisaTanitim": "Duyusal hassasiyetler ve günlük yaşam becerileri konusunda çocuklar ve ailelerle çalışıyorum.",
   "uzmanliklar": [
-   "Aile İçi İletişim",
-   "Çift Terapisi",
-   "Sosyal Fobi"
+   "Duyu Bütünleme",
+   "Günlük Yaşam Becerileri",
+   "Otizm Spektrum Bozukluğu"
   ],
-  "yaklasimlar": [
-   "Sistemik Aile Terapisi",
-   "Bilişsel Davranışçı Terapi (BDT)"
-  ],
+  "yaklasimlar": [],
   "yasGruplari": [
-   "Çift",
-   "Aile"
+   "Çocuk",
+   "Yetişkin"
   ],
   "seans": {
    "sure": "60 dakika",
@@ -179,7 +166,7 @@ ORNEK_UZMANLAR.push(...[
   "id": "alper-aksoy",
   "ad": "Alper Aksoy",
   "foto": "assets/img/uzmanlar/alper-aksoy.svg",
-  "unvan": "Psikolojik Danışman (PDR)",
+  "unvan": "Dil ve Konuşma Terapisti",
   "dogrulandi": true,
   "sehir": "İzmir",
   "ilce": "Buca",
@@ -192,23 +179,16 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 1250,
-   "max": 1500
-  },
-  "kisaTanitim": "Okul Uyumu ve ebeveyn danışmanlığı konularında çocuk, ergen ve ailelerle çalışıyorum.",
+  "kisaTanitim": "Konuşma gecikmesi ve kekemelik yaşayan çocuk ve yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
-   "Okul Uyumu",
-   "Ebeveyn Danışmanlığı",
-   "Yas ve Kayıp"
+   "Dil ve Konuşma Güçlükleri",
+   "Kekemelik",
+   "Otizm Spektrum Bozukluğu"
   ],
-  "yaklasimlar": [
-   "Kabul ve Kararlılık Terapisi (ACT)",
-   "EMDR"
-  ],
+  "yaklasimlar": [],
   "yasGruplari": [
    "Çocuk",
-   "Ergen"
+   "Yetişkin"
   ],
   "seans": {
    "sure": "60 dakika",
@@ -216,7 +196,9 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Buca / İzmir"
   },
   "iletisim": {
-   "whatsapp": "05551000004"
+   "telefon": "05551000004",
+   "whatsapp": "05551000004",
+   "eposta": "alper.aksoy@example.com"
   }
  },
  {
@@ -236,7 +218,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Panik Bozukluk ve uyku sorunları konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Panik Bozukluk",
@@ -256,7 +237,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": null
   },
   "iletisim": {
-   "whatsapp": "05551000005"
+   "telefon": "05551000005"
   }
  },
  {
@@ -276,10 +257,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 1500,
-   "max": 1750
-  },
   "kisaTanitim": "Kaygı Bozuklukları ve sosyal fobi konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Kaygı Bozuklukları",
@@ -300,6 +277,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Buca / İzmir"
   },
   "iletisim": {
+   "telefon": "05551000006",
    "whatsapp": "05551000006"
   }
  },
@@ -321,7 +299,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Kaygı Bozuklukları ve panik bozukluk konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Kaygı Bozuklukları",
@@ -340,8 +317,9 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Maltepe / İstanbul"
   },
   "iletisim": {
+   "telefon": "05551000007",
    "whatsapp": "05551000007",
-   "telefon": "05551000007"
+   "eposta": "hakan.keskin@example.com"
   }
  },
  {
@@ -361,7 +339,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Uyku Sorunları ve tükenmişlik konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Uyku Sorunları",
@@ -381,7 +358,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": null
   },
   "iletisim": {
-   "whatsapp": "05551000008"
+   "eposta": "gizem.coskun@example.com"
   }
  },
  {
@@ -402,7 +379,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Sosyal Fobi ve travma konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Sosyal Fobi",
@@ -420,16 +396,13 @@ ORNEK_UZMANLAR.push(...[
    "onlinePlatform": "Zoom",
    "adres": "Maltepe / İstanbul"
   },
-  "iletisim": {
-   "whatsapp": "05551000009",
-   "telefon": "05551000009"
-  }
+  "iletisim": {}
  },
  {
   "id": "busra-yilmaz",
   "ad": "Büşra Yılmaz",
   "foto": "assets/img/uzmanlar/busra-yilmaz.svg",
-  "unvan": "Klinik Psikolog",
+  "unvan": "Çocuk Gelişimci",
   "dogrulandi": true,
   "sehir": "Kocaeli",
   "ilce": "Gebze",
@@ -443,23 +416,18 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 1000,
-   "max": 1500
-  },
-  "kisaTanitim": "Tükenmişlik ve yas ve kayıp konularında yetişkinlerle çalışıyorum.",
+  "kisaTanitim": "0-6 yaş gelişim takibi ve okula uyum sürecinde çocuklar ve ebeveynlerle çalışıyorum.",
   "uzmanliklar": [
-   "Tükenmişlik",
-   "Yas ve Kayıp",
-   "Kaygı Bozuklukları"
+   "Gelişimsel Değerlendirme",
+   "Ebeveyn Danışmanlığı",
+   "Okul Uyumu"
   ],
   "yaklasimlar": [
-   "Çözüm Odaklı Kısa Süreli Terapi",
-   "Kabul ve Kararlılık Terapisi (ACT)"
+   "Oyun Terapisi"
   ],
   "yasGruplari": [
-   "Yetişkin",
-   "Ergen"
+   "Çocuk",
+   "Aile"
   ],
   "seans": {
    "sure": "60 dakika",
@@ -467,7 +435,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Gebze / Kocaeli"
   },
   "iletisim": {
-   "whatsapp": "05551000010"
+   "eposta": "busra.yilmaz@example.com"
   }
  },
  {
@@ -487,7 +455,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Özgüven ve Benlik Saygısı ve tükenmişlik konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Özgüven ve Benlik Saygısı",
@@ -506,8 +473,8 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Konak / İzmir"
   },
   "iletisim": {
-   "whatsapp": "05551000011",
-   "telefon": "05551000011"
+   "telefon": "05551000011",
+   "whatsapp": "05551000011"
   }
  },
  {
@@ -529,7 +496,6 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": null,
   "kisaTanitim": "Yas ve Kayıp ve travma konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Yas ve Kayıp",
@@ -549,7 +515,9 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Gebze / Kocaeli"
   },
   "iletisim": {
-   "telefon": "05551000012"
+   "telefon": "05551000012",
+   "whatsapp": "05551000012",
+   "eposta": "tugba.gunes@example.com"
   }
  },
  {
@@ -569,10 +537,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2250,
-   "max": 2500
-  },
   "kisaTanitim": "Özgüven ve Benlik Saygısı ve kaygı bozuklukları konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Özgüven ve Benlik Saygısı",
@@ -593,7 +557,6 @@ ORNEK_UZMANLAR.push(...[
    "adres": null
   },
   "iletisim": {
-   "whatsapp": "05551000013",
    "telefon": "05551000013"
   }
  },
@@ -615,7 +578,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Çocuk ve Ergen ve ebeveyn danışmanlığı konularında çocuk, ergen ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "Çocuk ve Ergen",
@@ -636,7 +598,8 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Çankaya / Ankara"
   },
   "iletisim": {
-   "telefon": "05551000014"
+   "telefon": "05551000014",
+   "whatsapp": "05551000014"
   }
  },
  {
@@ -656,10 +619,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 1500,
-   "max": 2000
-  },
   "kisaTanitim": "Boşanma Süreci ve aile içi iletişim konularında çiftler ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "Boşanma Süreci",
@@ -681,7 +640,8 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Bornova / İzmir"
   },
   "iletisim": {
-   "telefon": "05551000015"
+   "telefon": "05551000015",
+   "whatsapp": "05551000015"
   }
  },
  {
@@ -703,10 +663,6 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": {
-   "min": 2000,
-   "max": 2250
-  },
   "kisaTanitim": "Travma ve uyku sorunları konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Travma",
@@ -727,7 +683,9 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Beylikdüzü / İstanbul"
   },
   "iletisim": {
-   "telefon": "05551000016"
+   "telefon": "05551000016",
+   "whatsapp": "05551000016",
+   "eposta": "ece.tas@example.com"
   }
  },
  {
@@ -748,10 +706,6 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": {
-   "min": 1750,
-   "max": 2250
-  },
   "kisaTanitim": "Travma ve panik bozukluk konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Travma",
@@ -771,14 +725,15 @@ ORNEK_UZMANLAR.push(...[
    "adres": null
   },
   "iletisim": {
-   "telefon": "05551000017"
+   "telefon": "05551000017",
+   "whatsapp": "05551000017"
   }
  },
  {
   "id": "ugur-kurt",
   "ad": "Uğur Kurt",
   "foto": "assets/img/uzmanlar/ugur-kurt.svg",
-  "unvan": "Psikolojik Danışman (PDR)",
+  "unvan": "Özel Eğitim Uzmanı",
   "dogrulandi": true,
   "sehir": "İzmir",
   "ilce": "Buca",
@@ -791,23 +746,16 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2750,
-   "max": 3000
-  },
-  "kisaTanitim": "İlişki Sorunları ve çift terapisi konularında çiftler ve ailelerle çalışıyorum.",
+  "kisaTanitim": "Öğrenme güçlüğü ve otizm spektrumundaki çocuklar için bireysel eğitim programları hazırlıyorum.",
   "uzmanliklar": [
-   "İlişki Sorunları",
-   "Çift Terapisi",
-   "Obsesif Kompulsif Bozukluk"
+   "Özel Eğitim Programları",
+   "Dikkat ve Öğrenme Güçlükleri",
+   "Otizm Spektrum Bozukluğu"
   ],
-  "yaklasimlar": [
-   "Sistemik Aile Terapisi",
-   "Çözüm Odaklı Kısa Süreli Terapi"
-  ],
+  "yaklasimlar": [],
   "yasGruplari": [
-   "Çift",
-   "Aile"
+   "Çocuk",
+   "Ergen"
   ],
   "seans": {
    "sure": "45 dakika",
@@ -815,7 +763,9 @@ ORNEK_UZMANLAR.push(...[
    "adres": null
   },
   "iletisim": {
-   "whatsapp": "05551000018"
+   "telefon": "05551000018",
+   "whatsapp": "05551000018",
+   "eposta": "ugur.kurt@example.com"
   }
  },
  {
@@ -837,10 +787,6 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": {
-   "min": 2250,
-   "max": 2500
-  },
   "kisaTanitim": "İlişki Sorunları ve çift terapisi konularında çiftler ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "İlişki Sorunları",
@@ -862,14 +808,14 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Buca / İzmir"
   },
   "iletisim": {
-   "whatsapp": "05551000019"
+   "eposta": "alper.avci@example.com"
   }
  },
  {
   "id": "levent-bozkurt",
   "ad": "Levent Bozkurt",
   "foto": "assets/img/uzmanlar/levent-bozkurt.svg",
-  "unvan": "Psikolog",
+  "unvan": "Çocuk Gelişimci",
   "dogrulandi": true,
   "sehir": "Trabzon",
   "ilce": "Ortahisar",
@@ -884,22 +830,17 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": {
-   "min": 2750,
-   "max": 3250
-  },
-  "kisaTanitim": "Aile İçi İletişim ve boşanma süreci konularında çiftler ve ailelerle çalışıyorum.",
+  "kisaTanitim": "0-6 yaş gelişim takibi ve okula uyum sürecinde çocuklar ve ebeveynlerle çalışıyorum.",
   "uzmanliklar": [
-   "Aile İçi İletişim",
-   "Boşanma Süreci",
-   "Uyku Sorunları"
+   "Gelişimsel Değerlendirme",
+   "Ebeveyn Danışmanlığı",
+   "Okul Uyumu"
   ],
   "yaklasimlar": [
-   "Oyun Terapisi",
-   "Çözüm Odaklı Kısa Süreli Terapi"
+   "Oyun Terapisi"
   ],
   "yasGruplari": [
-   "Çift",
+   "Çocuk",
    "Aile"
   ],
   "seans": {
@@ -908,7 +849,8 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Ortahisar / Trabzon"
   },
   "iletisim": {
-   "telefon": "05551000020"
+   "telefon": "05551000020",
+   "whatsapp": "05551000020"
   }
  },
  {
@@ -928,10 +870,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2250,
-   "max": 2750
-  },
   "kisaTanitim": "Yas ve Kayıp ve depresyon konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Yas ve Kayıp",
@@ -958,7 +896,7 @@ ORNEK_UZMANLAR.push(...[
   "id": "nazli-polat",
   "ad": "Nazlı Polat",
   "foto": "assets/img/uzmanlar/nazli-polat.svg",
-  "unvan": "Klinik Psikolog",
+  "unvan": "Dil ve Konuşma Terapisti",
   "dogrulandi": true,
   "sehir": "Kocaeli",
   "ilce": "Gebze",
@@ -972,23 +910,16 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2500,
-   "max": 2750
-  },
-  "kisaTanitim": "Uyku Sorunları ve panik bozukluk konularında yetişkinlerle çalışıyorum.",
+  "kisaTanitim": "Konuşma gecikmesi ve kekemelik yaşayan çocuk ve yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
-   "Uyku Sorunları",
-   "Panik Bozukluk",
-   "Travma"
+   "Dil ve Konuşma Güçlükleri",
+   "Kekemelik",
+   "Otizm Spektrum Bozukluğu"
   ],
-  "yaklasimlar": [
-   "Şema Terapi",
-   "Gottman Çift Terapisi"
-  ],
+  "yaklasimlar": [],
   "yasGruplari": [
-   "Yetişkin",
-   "Ergen"
+   "Çocuk",
+   "Yetişkin"
   ],
   "seans": {
    "sure": "45 dakika",
@@ -996,6 +927,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Gebze / Kocaeli"
   },
   "iletisim": {
+   "telefon": "05551000022",
    "whatsapp": "05551000022"
   }
  },
@@ -1018,10 +950,6 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": {
-   "min": 1250,
-   "max": 1750
-  },
   "kisaTanitim": "Çift Terapisi ve ilişki sorunları konularında çiftler ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "Çift Terapisi",
@@ -1043,14 +971,14 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Keçiören / Ankara"
   },
   "iletisim": {
-   "telefon": "05551000023"
+   "eposta": "merve.kurt@example.com"
   }
  },
  {
   "id": "gamze-polat",
   "ad": "Gamze Polat",
   "foto": "assets/img/uzmanlar/gamze-polat.svg",
-  "unvan": "Aile Danışmanı",
+  "unvan": "Sosyal Hizmet Uzmanı",
   "dogrulandi": true,
   "sehir": "Bursa",
   "ilce": "Nilüfer",
@@ -1064,24 +992,18 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2500,
-   "max": 3000
-  },
-  "kisaTanitim": "Çift Terapisi ve boşanma süreci konularında çiftler ve ailelerle çalışıyorum.",
+  "kisaTanitim": "Bakım veren aile üyelerine psikososyal destek veriyor, sosyal haklar konusunda yol gösteriyorum.",
   "uzmanliklar": [
-   "Çift Terapisi",
-   "Boşanma Süreci",
+   "Psikososyal Destek",
+   "Bakım Veren Desteği",
    "Aile İçi İletişim"
   ],
   "yaklasimlar": [
-   "Oyun Terapisi",
    "Çözüm Odaklı Kısa Süreli Terapi"
   ],
   "yasGruplari": [
-   "Çift",
-   "Aile",
-   "Yetişkin"
+   "Yetişkin",
+   "Aile"
   ],
   "seans": {
    "sure": "60 dakika",
@@ -1089,7 +1011,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Nilüfer / Bursa"
   },
   "iletisim": {
-   "whatsapp": "05551000024"
+   "eposta": "gamze.polat@example.com"
   }
  },
  {
@@ -1110,10 +1032,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2250,
-   "max": 2750
-  },
   "kisaTanitim": "İlişki Sorunları ve boşanma süreci konularında çiftler ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "İlişki Sorunları",
@@ -1133,9 +1051,7 @@ ORNEK_UZMANLAR.push(...[
    "onlinePlatform": "Zoom",
    "adres": "Beylikdüzü / İstanbul"
   },
-  "iletisim": {
-   "whatsapp": "05551000025"
-  }
+  "iletisim": {}
  },
  {
   "id": "levent-kara",
@@ -1156,7 +1072,6 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": null,
   "kisaTanitim": "Otizm Spektrum Bozukluğu ve dikkat ve öğrenme güçlükleri konularında çocuk, ergen ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "Otizm Spektrum Bozukluğu",
@@ -1177,8 +1092,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "İzmit / Kocaeli"
   },
   "iletisim": {
-   "whatsapp": "05551000026",
-   "telefon": "05551000026"
+   "eposta": "levent.kara@example.com"
   }
  },
  {
@@ -1199,10 +1113,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2000,
-   "max": 2500
-  },
   "kisaTanitim": "Çift Terapisi ve ilişki sorunları konularında çiftler ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "Çift Terapisi",
@@ -1223,7 +1133,9 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Selçuklu / Konya"
   },
   "iletisim": {
-   "whatsapp": "05551000027"
+   "telefon": "05551000027",
+   "whatsapp": "05551000027",
+   "eposta": "dilara.kurt@example.com"
   }
  },
  {
@@ -1244,10 +1156,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2250,
-   "max": 2750
-  },
   "kisaTanitim": "Okul Uyumu ve otizm spektrum bozukluğu konularında çocuk, ergen ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "Okul Uyumu",
@@ -1268,8 +1176,8 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Bakırköy / İstanbul"
   },
   "iletisim": {
-   "whatsapp": "05551000028",
-   "telefon": "05551000028"
+   "telefon": "05551000028",
+   "whatsapp": "05551000028"
   }
  },
  {
@@ -1290,7 +1198,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Depresyon ve yas ve kayıp konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Depresyon",
@@ -1310,7 +1217,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Sarıyer / İstanbul"
   },
   "iletisim": {
-   "telefon": "05551000029"
+   "whatsapp": "05551000029"
   }
  },
  {
@@ -1332,10 +1239,6 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": {
-   "min": 2000,
-   "max": 2250
-  },
   "kisaTanitim": "Travma ve obsesif kompulsif bozukluk konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Travma",
@@ -1356,14 +1259,16 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Buca / İzmir"
   },
   "iletisim": {
-   "whatsapp": "05551000030"
+   "telefon": "05551000030",
+   "whatsapp": "05551000030",
+   "eposta": "sinan.coskun@example.com"
   }
  },
  {
   "id": "tugba-bozkurt",
   "ad": "Tuğba Bozkurt",
   "foto": "assets/img/uzmanlar/tugba-bozkurt.svg",
-  "unvan": "Psikolog",
+  "unvan": "Özel Eğitim Uzmanı",
   "dogrulandi": true,
   "sehir": "Ankara",
   "ilce": "Keçiören",
@@ -1377,31 +1282,23 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 1000,
-   "max": 1500
-  },
-  "kisaTanitim": "Sosyal Fobi ve panik bozukluk konularında yetişkinlerle çalışıyorum.",
+  "kisaTanitim": "Öğrenme güçlüğü ve otizm spektrumundaki çocuklar için bireysel eğitim programları hazırlıyorum.",
   "uzmanliklar": [
-   "Sosyal Fobi",
-   "Panik Bozukluk",
-   "Uyku Sorunları"
+   "Özel Eğitim Programları",
+   "Dikkat ve Öğrenme Güçlükleri",
+   "Otizm Spektrum Bozukluğu"
   ],
-  "yaklasimlar": [
-   "EMDR",
-   "Şema Terapi"
-  ],
+  "yaklasimlar": [],
   "yasGruplari": [
-   "Yetişkin"
+   "Çocuk",
+   "Ergen"
   ],
   "seans": {
    "sure": "50 dakika",
    "onlinePlatform": "Zoom",
    "adres": "Keçiören / Ankara"
   },
-  "iletisim": {
-   "telefon": "05551000031"
-  }
+  "iletisim": {}
  },
  {
   "id": "ece-aydemir",
@@ -1421,7 +1318,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Obsesif Kompulsif Bozukluk ve yas ve kayıp konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Obsesif Kompulsif Bozukluk",
@@ -1442,6 +1338,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Çukurova / Adana"
   },
   "iletisim": {
+   "telefon": "05551000032",
    "whatsapp": "05551000032"
   }
  },
@@ -1449,7 +1346,7 @@ ORNEK_UZMANLAR.push(...[
   "id": "asli-ozkan",
   "ad": "Aslı Özkan",
   "foto": "assets/img/uzmanlar/asli-ozkan.svg",
-  "unvan": "Psikolojik Danışman (PDR)",
+  "unvan": "Sosyal Hizmet Uzmanı",
   "dogrulandi": true,
   "sehir": "Ankara",
   "ilce": "Çankaya",
@@ -1462,22 +1359,18 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 1500,
-   "max": 2000
-  },
-  "kisaTanitim": "Obsesif Kompulsif Bozukluk ve depresyon konularında yetişkinlerle çalışıyorum.",
+  "kisaTanitim": "Bakım veren aile üyelerine psikososyal destek veriyor, sosyal haklar konusunda yol gösteriyorum.",
   "uzmanliklar": [
-   "Obsesif Kompulsif Bozukluk",
-   "Depresyon",
-   "Uyku Sorunları"
+   "Psikososyal Destek",
+   "Bakım Veren Desteği",
+   "Aile İçi İletişim"
   ],
   "yaklasimlar": [
-   "Bilişsel Davranışçı Terapi (BDT)",
-   "Oyun Terapisi"
+   "Çözüm Odaklı Kısa Süreli Terapi"
   ],
   "yasGruplari": [
-   "Yetişkin"
+   "Yetişkin",
+   "Aile"
   ],
   "seans": {
    "sure": "45 dakika",
@@ -1507,7 +1400,6 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": null,
   "kisaTanitim": "Sosyal Fobi ve yas ve kayıp konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Sosyal Fobi",
@@ -1527,7 +1419,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Ataşehir / İstanbul"
   },
   "iletisim": {
-   "telefon": "05551000034"
+   "eposta": "ugur.sari@example.com"
   }
  },
  {
@@ -1548,10 +1440,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 1750,
-   "max": 2250
-  },
   "kisaTanitim": "Dikkat ve Öğrenme Güçlükleri ve otizm spektrum bozukluğu konularında çocuk, ergen ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "Dikkat ve Öğrenme Güçlükleri",
@@ -1572,7 +1460,9 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Konyaaltı / Antalya"
   },
   "iletisim": {
-   "whatsapp": "05551000035"
+   "telefon": "05551000035",
+   "whatsapp": "05551000035",
+   "eposta": "pinar.erbil@example.com"
   }
  },
  {
@@ -1592,7 +1482,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Uyku Sorunları ve sosyal fobi konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Uyku Sorunları",
@@ -1611,8 +1500,9 @@ ORNEK_UZMANLAR.push(...[
    "adres": "Bornova / İzmir"
   },
   "iletisim": {
+   "telefon": "05551000036",
    "whatsapp": "05551000036",
-   "telefon": "05551000036"
+   "eposta": "yasemin.gunes@example.com"
   }
  },
  {
@@ -1633,7 +1523,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": null,
   "kisaTanitim": "Öfke Kontrolü ve boşanma süreci konularında çiftler ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "Öfke Kontrolü",
@@ -1655,7 +1544,7 @@ ORNEK_UZMANLAR.push(...[
    "adres": "İzmit / Kocaeli"
   },
   "iletisim": {
-   "whatsapp": "05551000037"
+   "eposta": "tolga.gunes@example.com"
   }
  },
  {
@@ -1676,10 +1565,6 @@ ORNEK_UZMANLAR.push(...[
   "diller": [
    "Türkçe"
   ],
-  "ucret": {
-   "min": 2250,
-   "max": 2500
-  },
   "kisaTanitim": "Yas ve Kayıp ve depresyon konularında yetişkinlerle çalışıyorum.",
   "uzmanliklar": [
    "Yas ve Kayıp",
@@ -1721,7 +1606,6 @@ ORNEK_UZMANLAR.push(...[
    "Türkçe",
    "İngilizce"
   ],
-  "ucret": null,
   "kisaTanitim": "Boşanma Süreci ve aile içi iletişim konularında çiftler ve ailelerle çalışıyorum.",
   "uzmanliklar": [
    "Boşanma Süreci",

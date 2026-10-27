@@ -22,8 +22,9 @@
   document.title = `${u.ad} — ${u.unvan}, ${u.sehir} | ${SITE.ad}`;
   document.querySelector('meta[name="description"]').setAttribute("content", u.kisaTanitim);
 
+  // u.iletisim YALNIZCA uzmanın yayımlanmasına izin verdiği kanalları içerir.
+  // İzin verilmeyen numara/adres veri katmanından hiç gelmez, bu yüzden sayfaya da yazılamaz.
   const iletisim = u.iletisim || {};
-  const iletisimVar = Boolean(iletisim.whatsapp || iletisim.telefon);
   const konum = u.gorusme.includes("yuzyuze") ? `${u.ilce}, ${u.sehir}` : u.sehir;
 
   // --- Yardımcı parçalar ---
@@ -37,20 +38,57 @@
     return Array.isArray(dizi) && dizi.length > 0;
   }
 
-  function iletisimButonlari(kisa = false) {
-    let html = "";
-    if (iletisim.whatsapp) {
-      const mesaj = `Merhaba ${u.ad}, ${SITE.ad} üzerindeki profilinizi gördüm. Görüşme hakkında bilgi almak istiyorum.`;
-      const adres = `https://wa.me/${uluslararasiNumara(iletisim.whatsapp)}?text=${encodeURIComponent(mesaj)}`;
-      html += `<a class="btn btn-wa ${kisa ? "" : "btn-blok"}" href="${adres}" target="_blank" rel="noopener">${ikon("mesaj")}${kisa ? "WhatsApp" : "WhatsApp'tan yazın"}</a>`;
+  /* İLETİŞİM KANALLARI
+   * Her kanal, uzmanın profil ayarlarında verdiği izne göre bağımsız çalışır:
+   *  - İzin verilen kanal: renkli, tıklanabilir bağlantı.
+   *  - İzin verilmeyen kanal: gri, tıklanamaz; içinde hiçbir bağlantı, numara ya da adres bulunmaz.
+   */
+  const ilkMesaj = `Merhaba ${u.ad}, ${SITE.ad} üzerindeki profilinizi gördüm. Görüşme hakkında bilgi almak istiyorum.`;
+  const KANALLAR = [
+    {
+      kod: "telefon", etiket: "Uzmanı Ara", kisaEtiket: "Ara", ikon: "telefon", sinif: "btn-ara",
+      adres: (n) => `tel:+${uluslararasiNumara(n)}`,
+      altMetin: (n) => okunurNumara(n),
+    },
+    {
+      kod: "whatsapp", etiket: "WhatsApp ile İletişim", kisaEtiket: "WhatsApp", ikon: "mesaj", sinif: "btn-wa",
+      adres: (n) => `https://wa.me/${uluslararasiNumara(n)}?text=${encodeURIComponent(ilkMesaj)}`,
+      altMetin: () => "Hazır bir mesajla açılır",
+      yeniSekme: true,
+    },
+    {
+      kod: "eposta", etiket: "E-posta Gönder", kisaEtiket: "E-posta", ikon: "posta", sinif: "btn-eposta",
+      adres: (e) => `mailto:${e}?subject=${encodeURIComponent("Görüşme talebi")}&body=${encodeURIComponent(ilkMesaj)}`,
+      altMetin: (e) => e,
+    },
+  ];
+  const aktifKanallar = KANALLAR.filter((k) => iletisim[k.kod]);
+  const kanalYok = aktifKanallar.length === 0;
+
+  function kanalButonu(k) {
+    const deger = iletisim[k.kod];
+    if (!deger) {
+      // Pasif buton: <a> değil <span>; href, numara ya da adres içermez.
+      return `<span class="btn btn-blok btn-iletisim pasif" aria-disabled="true">
+          ${ikon(k.ikon)}<span class="btn-metin">${k.etiket}<small>Uzman bu kanalı kullanmıyor</small></span>
+        </span>`;
     }
-    if (iletisim.telefon) {
-      const adres = `tel:+${uluslararasiNumara(iletisim.telefon)}`;
-      html += kisa
-        ? `<a class="btn ${iletisim.whatsapp ? "btn-cizgi" : "btn-ana"}" href="${adres}">${ikon("telefon")}Ara</a>`
-        : `<a class="btn ${iletisim.whatsapp ? "btn-cizgi" : "btn-ana"} btn-blok" href="${adres}">${ikon("telefon")}<span class="btn-metin">Telefonla arayın<small>${esc(okunurNumara(iletisim.telefon))}</small></span></a>`;
-    }
-    return html;
+    return `<a class="btn btn-blok btn-iletisim ${k.sinif}" href="${esc(k.adres(deger))}"${k.yeniSekme ? ' target="_blank" rel="noopener"' : ""}>
+        ${ikon(k.ikon)}<span class="btn-metin">${k.etiket}<small>${esc(k.altMetin(deger))}</small></span>
+      </a>`;
+  }
+
+  const mesajButonu = (kisa = false) =>
+    `<button class="btn ${kisa ? "" : "btn-blok"} btn-iletisim btn-mesaj" type="button" data-mesaj-ac>
+      ${ikon("gonder")}<span class="btn-metin">${kisa ? "Mesaj gönder" : `Uzmana Mesaj Gönder<small>Platform üzerinden iletilir</small>`}</span>
+    </button>`;
+
+  // Mobilde ekranın altına sabitlenen kısa çubuk: yalnızca kullanılabilir kanallar.
+  function mobilCubuk() {
+    if (kanalYok) return mesajButonu(true);
+    return aktifKanallar
+      .map((k) => `<a class="btn btn-iletisim ${k.sinif}" href="${esc(k.adres(iletisim[k.kod]))}"${k.yeniSekme ? ' target="_blank" rel="noopener"' : ""}>${ikon(k.ikon)}${k.kisaEtiket}</a>`)
+      .join("");
   }
 
   // --- Üst kısım ---
@@ -110,7 +148,6 @@
   const seansSatirlari = [
     ["Görüşme şekli", gorusmeMetni(u.gorusme)],
     ["Seans süresi", s.sure],
-    ["Seans ücreti", u.ucret ? `${ucretMetni(u.ucret)} / seans` : "Görüşmede bilgi verilir"],
     ["Online platform", u.gorusme.includes("online") ? s.onlinePlatform : ""],
     ["Muayenehane", u.gorusme.includes("yuzyuze") ? s.adres : ""],
   ].filter(([, deger]) => deger);
@@ -165,9 +202,12 @@
       <section class="blok iletisim-kutu" aria-labelledby="iletisimBaslik">
         <h2 id="iletisimBaslik">İletişime geçin</h2>
         ${durum}
-        ${u.ucret ? `<div class="ucret">${ucretMetni(u.ucret)} <small>/ seans</small></div>` : ""}
         ${kabulNotu}
-        ${iletisimVar ? iletisimButonlari() : `<p class="kapali-uyari">Bu uzman henüz iletişim bilgisi eklemedi.</p>`}
+        <div class="iletisim-butonlari">
+          ${KANALLAR.map(kanalButonu).join("")}
+          ${kanalYok ? mesajButonu() : ""}
+        </div>
+        ${kanalYok ? `<p class="alt-not">Uzman doğrudan iletişim bilgisi paylaşmıyor. Mesajınız platform üzerinden uzmana iletilir; iletişim bilgileriniz yalnızca bu uzmana iletilir.</p>` : ""}
         <p class="alt-not">İlk mesajınızda sağlık bilgilerinizi paylaşmanız gerekmez; kısaca görüşme talebinizi iletmeniz yeterli.</p>
         ${iletisim.whatsapp ? `<p class="alt-not">WhatsApp butonu sizi WhatsApp uygulamasına yönlendirir; yazışmalarınız WhatsApp'ın gizlilik koşullarına tabidir.</p>` : ""}
       </section>
@@ -180,9 +220,11 @@
       </div>
       ${yan}
     </div>
-    ${iletisimVar ? `<div class="mobil-iletisim">${iletisimButonlari(true)}</div>` : ""}`;
+    <div class="mobil-iletisim">${mobilCubuk()}</div>
+    ${kanalYok ? MesajFormu.html(u) : ""}`;
 
-  if (iletisimVar) document.body.classList.add("mobil-cubuk-var");
+  document.body.classList.add("mobil-cubuk-var");
+  if (kanalYok) MesajFormu.bagla(u);
 
   // "Uzman listesine dön": Listeden gelindiyse tarayıcının geri adımını kullan,
   // böylece listedeki filtreler ve sayfa numarası korunur.

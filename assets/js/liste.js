@@ -30,7 +30,6 @@
   secenekleriDoldur("filtreYas", YAS_GRUPLARI);
   secenekleriDoldur("filtreYaklasim", benzersiz(uzmanlar.flatMap((u) => u.yaklasimlar || [])));
   secenekleriDoldur("filtreDil", benzersiz(uzmanlar.flatMap((u) => u.diller || [])));
-  secenekleriDoldur("filtreUcret", UCRET_SINIRLARI, (s) => `${sayiBicimle(s)} ₺ ve altı`);
 
   // İhtiyaç seçenekleri: "sira"ya göre dizilir, "Henüz emin değilim" en sonda kalır.
   const ihtiyacSecimi = $("filtreIhtiyac");
@@ -41,7 +40,7 @@
 
   // --- Filtre alanları ---
   const temelFiltreler = ["aramaMetni", "filtreIhtiyac", "filtreSehir", "filtreUnvan", "filtreGorusme", "filtreYeniDanisan"];
-  const ekFiltreler = ["filtreUzmanlik", "filtreYas", "filtreYaklasim", "filtreCinsiyet", "filtreDil", "filtreUcret"];
+  const ekFiltreler = ["filtreUzmanlik", "filtreYas", "filtreYaklasim", "filtreCinsiyet", "filtreDil"];
 
   function degerOku(id) {
     const el = $(id);
@@ -68,10 +67,6 @@
     if (f.filtreYaklasim && !(u.yaklasimlar || []).includes(f.filtreYaklasim)) return false;
     if (f.filtreCinsiyet && u.cinsiyet !== f.filtreCinsiyet) return false;
     if (f.filtreDil && !(u.diller || []).includes(f.filtreDil)) return false;
-    // Ücret filtresi: Uzmanın ücret aralığının ÜST sınırı bütçeyi aşmamalı.
-    // (2.000–4.000 ₺ alan bir uzman, "2.500 ₺ ve altı" aramasında çıkmaz.)
-    // Ücret bilgisi paylaşmayan uzmanlar bu filtre seçiliyken gösterilmez.
-    if (f.filtreUcret && (!u.ucret || (u.ucret.max ?? u.ucret.min) > Number(f.filtreUcret))) return false;
     return true;
   }
 
@@ -106,7 +101,6 @@
         </div>
         <div class="kart-alt">
           <div class="kart-alt-bilgi">
-            ${u.ucret ? `<span class="ucret">${ucretMetni(u.ucret)} <small>/ seans</small></span>` : `<span class="ucret ucret-yok">Ücret görüşmede</span>`}
             <span class="durum ${kabulDurumu(u).sinif}">${kabulDurumu(u).metin}</span>
           </div>
           <span class="kart-git" aria-hidden="true">Profili gör ${ikon("ileri")}</span>
@@ -157,7 +151,7 @@
   const ADRES_ANAHTARLARI = {
     aramaMetni: "q", filtreIhtiyac: "ihtiyac", filtreSehir: "sehir", filtreUnvan: "unvan",
     filtreGorusme: "gorusme", filtreYeniDanisan: "yeni", filtreUzmanlik: "alan", filtreYas: "grup",
-    filtreYaklasim: "yaklasim", filtreCinsiyet: "cinsiyet", filtreDil: "dil", filtreUcret: "ucret",
+    filtreYaklasim: "yaklasim", filtreCinsiyet: "cinsiyet", filtreDil: "dil",
   };
   function adreseYaz() {
     const p = new URLSearchParams();

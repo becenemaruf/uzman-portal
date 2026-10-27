@@ -65,12 +65,6 @@ function sayiBicimle(sayi) {
   return Number(sayi).toLocaleString("tr-TR");
 }
 
-function ucretMetni(ucret) {
-  if (!ucret) return "";
-  if (ucret.min === ucret.max) return `${sayiBicimle(ucret.min)} ₺`;
-  return `${sayiBicimle(ucret.min)}–${sayiBicimle(ucret.max)} ₺`;
-}
-
 function gorusmeMetni(gorusme) {
   const online = gorusme.includes("online");
   const yuzyuze = gorusme.includes("yuzyuze");
@@ -185,9 +179,10 @@ const IKON_YOLLARI = {
   gozKapali: '<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.9M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a9.6 9.6 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
   posta: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
   kisi: '<circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/>',
-  ucret: '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9.5v5M18 9.5v5"/>',
   yazi: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',
   tik: '<path d="m5 12 4.5 4.5L19 7"/>',
+  gonder: '<path d="M21 3 10 14"/><path d="M21 3l-7 18-4-7-7-4z"/>',
+  kapat: '<path d="M6 6l12 12M18 6 6 18"/>',
   bilgi: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>',
 };
 function ikon(ad) {

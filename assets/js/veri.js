@@ -31,6 +31,27 @@ const Veri = {
       .slice(0, adet);
   },
 
+  /* Uzmana platform üzerinden mesaj gönderir (yalnızca hiçbir doğrudan iletişim kanalı açık olmayan uzmanlar için).
+   * Mesaj tarayıcıdan veritabanına DOĞRUDAN yazılmaz: Önce sunucudaki "mesaj-gonder" fonksiyonu
+   * CAPTCHA'yı doğrular, gönderim sınırını kontrol eder, sonra kaydeder.
+   * Dönüş: { durum: "tamam" | "prototip" | "hata", mesaj? }
+   */
+  async mesajGonder(uzmanId, bilgi) {
+    if (!BAGLANTI.mesajSistemiAcik) return { durum: "prototip" };
+    try {
+      const yanit = await fetch(`${BAGLANTI.supabaseAdresi}/functions/v1/mesaj-gonder`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: BAGLANTI.supabaseAnahtari },
+        body: JSON.stringify({ uzman: uzmanId, ...bilgi }),
+      });
+      const veri = await yanit.json().catch(() => ({}));
+      if (yanit.ok) return { durum: "tamam" };
+      return { durum: "hata", mesaj: veri.hata };
+    } catch (e) {
+      return { durum: "hata" };
+    }
+  },
+
   // Ana sayfa manşetleri: yalnızca tarih aralığı bugünü kapsayanlar.
   async mansetleriGetir() {
     const bugun = new Date().toISOString().slice(0, 10); // "2026-10-27"
