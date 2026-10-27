@@ -140,6 +140,8 @@
   kartAlani.addEventListener("click", (e) => {
     if (e.target.closest("[data-temizle]")) temizle();
   });
+  // Başlık butonu: tıklanınca arama kutusuna odaklanır, danışan hemen yazmaya başlar
+  $("baslikDugme").addEventListener("click", () => $("aramaMetni").focus());
   $("ekFiltreDugme").addEventListener("click", () => {
     const panel = $("ekFiltreler");
     panel.hidden = !panel.hidden;

@@ -18,6 +18,10 @@
   --hata: #a33a2b;
   --hata-acik: #f8e9e6;
   --bilgi-acik: #eef3f1;
+  --mor: #5b3f86;            /* arama alanı vurgusu: koyu mor */
+  --mor-koyu: #4a3270;
+  --mor-acik: #f3eef9;       /* arama paneli zemini: açık eflatun */
+  --mor-cizgi: #ddd2ec;
   --wa: #13804a;             /* WhatsApp butonu */
   --wa-koyu: #0f6b3d;
   --yaricap: 14px;
@@ -138,6 +142,53 @@ select.girdi {
 .onay-kutusu { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; min-height: 44px; padding: 10px 0; font-size: 0.95rem; }
 .onay-kutusu input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--vurgu); flex: none; cursor: pointer; }
 
+/* ---------- Arama paneli (eflatun) ---------- */
+.arama-bolumu { padding-top: 24px; }
+.arama-paneli {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, var(--mor-acik) 0%, #e8dff3 100%);
+  border: 1px solid var(--mor-cizgi); border-radius: 24px;
+  padding: 20px 14px 8px;
+}
+@media (min-width: 700px) { .arama-paneli { padding: 34px 34px 12px; } }
+/* Arka plandaki yumuşak süs daireleri */
+.arama-paneli::before, .arama-paneli::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+.arama-paneli::before { width: 340px; height: 340px; right: -110px; top: -170px; background: rgba(255, 255, 255, 0.55); }
+.arama-paneli::after { width: 220px; height: 220px; left: -90px; bottom: -120px; background: rgba(91, 63, 134, 0.07); }
+.arama-paneli > * { position: relative; z-index: 1; }
+
+.baslik-kap { margin: 0 0 14px; font-size: inherit; }
+.baslik-buton {
+  display: inline-flex; align-items: center; gap: 14px; max-width: 100%;
+  padding: 10px 28px 10px 10px; border: none; border-radius: 999px; cursor: pointer;
+  background: var(--mor); color: #fff; text-align: left;
+  font-family: var(--serif); font-weight: 600; letter-spacing: -0.01em;
+  font-size: clamp(1.12rem, 3.3vw, 1.95rem); line-height: 1.2;
+  box-shadow: 0 8px 22px rgba(91, 63, 134, 0.28);
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+.baslik-buton:hover { background: var(--mor-koyu); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(91, 63, 134, 0.34); }
+.baslik-buton:active { transform: translateY(0); }
+.baslik-ikon {
+  width: clamp(40px, 5.5vw, 54px); height: clamp(40px, 5.5vw, 54px); flex: none;
+  display: grid; place-items: center; border-radius: 50%; background: rgba(255, 255, 255, 0.16);
+}
+.baslik-ikon .ikon { width: 46%; height: 46%; }
+@media (max-width: 600px) {
+  .baslik-buton { display: flex; width: 100%; border-radius: 18px; padding: 10px 16px 10px 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .baslik-buton, .baslik-buton:hover { transform: none; } }
+.arama-aciklama { color: #4d4360; margin: 0 0 20px; max-width: 62ch; font-size: 1.02rem; }
+
+/* Panelin içindeki öğeler mor vurgu alır */
+.arama-paneli .arama { border-color: var(--mor-cizgi); box-shadow: 0 6px 20px rgba(91, 63, 134, 0.08); }
+.arama-paneli .girdi:focus { border-color: var(--mor); box-shadow: 0 0 0 3px rgba(91, 63, 134, 0.18); }
+.arama-paneli .link-buton { color: var(--mor); }
+.arama-paneli .filtre-sayac { background: var(--mor); }
+.arama-paneli .onay-kutusu input { accent-color: var(--mor); }
+.arama-paneli .ek-filtreler { border-color: var(--mor-cizgi); margin-bottom: 14px; }
+.arama-paneli .alan-etiket { color: #4d4360; }
+
 /* ---------- Arama ve filtreler ---------- */
 .arama {
   display: grid; gap: 10px; grid-template-columns: 1fr;
@@ -149,7 +200,7 @@ select.girdi {
   .arama .arama-kutu { grid-column: 1 / -1; }
 }
 @media (min-width: 1020px) {
-  .arama { grid-template-columns: 2fr 1fr 1fr 1fr; }
+  .arama { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr); }
   .arama .arama-kutu { grid-column: auto; }
 }
 .arama-kutu { position: relative; }
