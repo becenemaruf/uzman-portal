@@ -190,4 +190,18 @@ function ikon(ad) {
   return `<svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IKON_YOLLARI[ad] || ""}</svg>`;
 }
 
+// Mobilde kartlara dönüşen tablolarda her hücrenin üstünde sütun adı görünsün diye
+// sütun başlıklarını hücrelere "data-etiket" olarak kopyalar.
+function tabloEtiketleri() {
+  document.querySelectorAll(".veri-tablosu").forEach((tablo) => {
+    const basliklar = [...tablo.querySelectorAll("thead th")].map((th) => th.textContent.trim());
+    tablo.querySelectorAll("tbody tr").forEach((tr) => {
+      [...tr.children].forEach((hucre, i) => {
+        if (basliklar[i]) hucre.setAttribute("data-etiket", basliklar[i]);
+      });
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", siteAdiniYerlestir);
+document.addEventListener("DOMContentLoaded", tabloEtiketleri);
