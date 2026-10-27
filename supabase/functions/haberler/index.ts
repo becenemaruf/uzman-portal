@@ -8,20 +8,19 @@
 //    Ziyaretçi yalnızca bir habere tıkladığında o siteye geçer.
 //
 // Güvenlik:
-//  - Yalnızca sabit bir adresten (KAYNAK) okur; dışarıdan adres almaz.
+//  - Yalnızca sabit adreslerden (RSS ve ana sayfa) okur; dışarıdan adres almaz.
 //  - Haber metinlerindeki HTML tamamen temizlenir; yalnızca düz metin döner.
 //  - Bağlantılar yalnızca aktuelpsikoloji.com alan adına aitse kabul edilir.
 //  - Sonuç 15 dakika önbellekte tutulur; haber sitesine her ziyarette istek gitmez.
 // =====================================================================
-// Aday besleme adresleri sırayla denenir; haber bulunan ilk adres kullanılır.
+// Önce RSS denenir. CM News'in RSS'i yalnızca güncel (o günün) haberleri verdiği için
+// boş gelebilir; bu durumda haber sitesinin ana sayfasındaki haber bağlantıları okunur.
 const KAYNAKLAR = [
   "https://www.aktuelpsikoloji.com/service/rss.php",
-  "https://www.aktuelpsikoloji.com/service/rss.php?feed=atom",
-  "https://www.aktuelpsikoloji.com/rss",
-  "https://www.aktuelpsikoloji.com/rss.xml",
-  "https://www.aktuelpsikoloji.com/sitemap/news.xml",
-  "https://www.aktuelpsikoloji.com/sitemap-news.xml",
 ];
+const ANA_SAYFA = "https://www.aktuelpsikoloji.com/";
+// CM News haber adresleri: https://www.aktuelpsikoloji.com/<kisa-ad>-<numara>h.htm
+const HABER_ADRESI = /^https?:\/\/(www\.)?aktuelpsikoloji\.com\/[a-z0-9-]+-(\d+)h\.htm$/i;
 const TARAYICI_KIMLIGI =
   "Mozilla/5.0 (compatible; UzmanPortali-HaberOnizleme/1.0; +https://becenemaruf.github.io/uzman-portal/)";
 const IZINLI_ALAN = /^https?:\/\/(www\.)?aktuelpsikoloji\.com\//;
@@ -80,7 +79,52 @@ async function haberleriGetir() {
       console.log(JSON.stringify({ kaynak, hata: String(e).slice(0, 150) }));
     }
   }
+  try {
+    return await anaSayfadanGetir();
+  } catch (e) {
+    console.log(JSON.stringify({ kaynak: ANA_SAYFA, hata: String(e).slice(0, 150) }));
+  }
   return { kaynak: "Aktüel Psikoloji", kaynakAdresi: "https://www.aktuelpsikoloji.com/", haberler: [] };
+}
+
+// Ana sayfadaki haber bağlantılarını toplar. Aynı haber birden çok yerde geçebilir;
+// her haber bir kez alınır, başlık için bağlantı metni ya da title niteliği kullanılır.
+// Sıralama haber numarasına göredir (büyük numara = daha yeni haber).
+async function anaSayfadanGetir() {
+  const yanit = await fetch(ANA_SAYFA, {
+    headers: { "User-Agent": TARAYICI_KIMLIGI, Accept: "text/html" },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!yanit.ok) throw new Error(`Ana sayfa yanıt vermedi (${yanit.status})`);
+  const html = await yanit.text();
+  const bulunan = new Map<string, { baslik: string; numara: number }>();
+  const baglantiDeseni = /<a\b([^>]*?)href=["']([^"'#?]+)["']([^>]*)>([\s\S]*?)<\/a>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = baglantiDeseni.exec(html))) {
+    let adres = m[2].trim();
+    if (adres.startsWith("/")) adres = "https://www.aktuelpsikoloji.com" + adres;
+    const eslesme = adres.match(HABER_ADRESI);
+    if (!eslesme) continue;
+    adres = adres.replace(/^http:\/\//i, "https://");
+    const nitelikler = m[1] + " " + m[3];
+    const titleNiteligi = nitelikler.match(/title=["']([^"']+)["']/i)?.[1] ?? "";
+    const metin = duzMetin(m[4]);
+    // Başlığın başındaki saat ya da tarih bilgisi ("16:01", "27.10.2026") ayıklanır.
+    const baslik = duzMetin(metin.length >= 15 ? metin : titleNiteligi || metin)
+      .replace(/^(\d{1,2}[:.]\d{2}([.]\d{2,4})?\s+)+/, "")
+      .trim();
+    if (baslik.length < 15) continue;
+    const onceki = bulunan.get(adres);
+    if (!onceki || baslik.length > onceki.baslik.length) {
+      bulunan.set(adres, { baslik, numara: Number(eslesme[2]) });
+    }
+  }
+  const haberler = [...bulunan.entries()]
+    .sort((a, b) => b[1].numara - a[1].numara)
+    .slice(0, EN_FAZLA)
+    .map(([baglanti, h]) => ({ baslik: kisalt(h.baslik, 160), ozet: "", baglanti, tarih: null, kategori: null }));
+  console.log(JSON.stringify({ kaynak: ANA_SAYFA, durum: yanit.status, boyut: html.length, haber: haberler.length }));
+  return { kaynak: "Aktüel Psikoloji", kaynakAdresi: "https://www.aktuelpsikoloji.com/", haberler };
 }
 
 async function kaynaktanGetir(KAYNAK: string) {
@@ -132,7 +176,7 @@ async function kaynaktanGetir(KAYNAK: string) {
     kaynak: KAYNAK, durum: yanit.status, tur: yanit.headers.get("content-type"), kodlama, boyut: ham.length,
     oge: ogeler.length, haber: haberler.length,
     ilkBaglanti: ogeler[0] ? (etiket(ogeler[0], "link") || atomIlk(ogeler[0])).slice(0, 120) : null,
-    icerik: ogeler.length ? null : xml.slice(0, 1200),
+    icerik: ogeler.length ? null : xml.slice(0, 300),
   }));
   return { kaynak: "Aktüel Psikoloji", kaynakAdresi: "https://www.aktuelpsikoloji.com/", haberler };
 }
