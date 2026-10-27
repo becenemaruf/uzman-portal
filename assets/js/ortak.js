@@ -103,6 +103,7 @@ const IKON_YOLLARI = {
   telefon: '<path d="M5 4h3.5l2 5-2.3 1.4a11 11 0 0 0 5.4 5.4L15 13.5l5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
   mesaj: '<path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.1-5.2A8.5 8.5 0 1 1 21 11.5z"/>',
   geri: '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
+  ileri: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
   filtre: '<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
   asagi: '<path d="m6 9 6 6 6-6"/>',
   saat: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',

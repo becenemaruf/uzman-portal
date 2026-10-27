@@ -63,30 +63,31 @@
     const profilAdresi = `uzman.html?id=${encodeURIComponent(u.id)}`;
     const etiketler = (u.uzmanliklar || []).slice(0, 3).map((e) => `<span class="etiket">${esc(e)}</span>`).join("");
     const konum = u.gorusme.includes("yuzyuze") ? `${u.ilce}, ${u.sehir}` : u.sehir;
+    // Kartın tamamı tıklanabilir: isimdeki bağlantı (kart-baglanti) görünmez bir katmanla tüm kartı kaplar.
     return `
       <article class="kart">
         <div class="kart-ust">
           ${avatarHtml(u)}
-          <div>
-            <h2><a href="${profilAdresi}">${esc(u.ad)}</a></h2>
+          <div class="kart-kimlik">
+            <h2><a class="kart-baglanti" href="${profilAdresi}">${esc(u.ad)}</a></h2>
             <div class="rozetler">
               <span class="rozet">${esc(u.unvan)}</span>
-              <span class="dogrulama-isaret" title="Unvanı doğrulandı">${ikon("dogrulama")}Doğrulandı</span>
+              <span class="dogrulama-isaret" title="Unvanı doğrulandı">${ikon("dogrulama")}<span class="gorunmez">Unvanı doğrulandı</span></span>
             </div>
           </div>
         </div>
-        <div class="meta">
+        <p class="kart-meta">
           <span>${ikon("konum")}${esc(konum)}</span>
           <span>${ikon("video")}${esc(gorusmeMetni(u.gorusme))}</span>
-        </div>
+        </p>
         ${etiketler ? `<div class="etiketler">${etiketler}</div>` : ""}
         <p class="tanitim">${esc(u.kisaTanitim)}</p>
         <div class="kart-alt">
-          <div>
-            ${u.ucret ? `<div class="ucret">${ucretMetni(u.ucret)} <small>/ seans</small></div>` : ""}
+          <div class="kart-alt-bilgi">
+            ${u.ucret ? `<span class="ucret">${ucretMetni(u.ucret)} <small>/ seans</small></span>` : `<span class="ucret ucret-yok">Ücret görüşmede</span>`}
             <span class="durum ${u.yeniDanisan ? "acik" : ""}">${u.yeniDanisan ? "Yeni danışan kabul ediyor" : "Şu an yeni danışan almıyor"}</span>
           </div>
-          <a class="btn btn-ana btn-kucuk" href="${profilAdresi}" aria-label="${esc(u.ad)} profilini gör">Profili Gör</a>
+          <span class="kart-git" aria-hidden="true">Profili gör ${ikon("ileri")}</span>
         </div>
       </article>`;
   }

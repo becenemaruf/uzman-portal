@@ -7,6 +7,7 @@
  * Bir uzman kaydında bulunabilecek alanlar:
  *  id            : adres çubuğunda görünen kısa ad (uzman.html?id=elif-aydin)
  *  ad, unvan     : ad soyad ve unvan
+ *  foto          : profil fotoğrafının adresi (yoksa baş harfler gösterilir)
  *  dogrulandi    : unvanı yönetici tarafından doğrulandı mı
  *  sehir, ilce   : konum
  *  gorusme       : ["online", "yuzyuze"] — ikisi birden olabilir
@@ -27,6 +28,7 @@ const ORNEK_UZMANLAR = [
   {
     id: "elif-aydin",
     ad: "Elif Aydın",
+    foto: "assets/img/uzmanlar/elif-aydin.svg",
     unvan: "Klinik Psikolog",
     dogrulandi: true,
     sehir: "İstanbul",
@@ -71,6 +73,7 @@ const ORNEK_UZMANLAR = [
   {
     id: "murat-kaya",
     ad: "Uzm. Dr. Murat Kaya",
+    foto: "assets/img/uzmanlar/murat-kaya.svg",
     unvan: "Psikiyatrist",
     dogrulandi: true,
     sehir: "Ankara",
@@ -99,6 +102,7 @@ const ORNEK_UZMANLAR = [
   {
     id: "zeynep-sahin",
     ad: "Zeynep Şahin",
+    foto: "assets/img/uzmanlar/zeynep-sahin.svg",
     unvan: "Psikolojik Danışman (PDR)",
     dogrulandi: true,
     sehir: "İzmir",
@@ -125,6 +129,7 @@ const ORNEK_UZMANLAR = [
   {
     id: "can-ozturk",
     ad: "Can Öztürk",
+    foto: "assets/img/uzmanlar/can-ozturk.svg",
     unvan: "Psikolog",
     dogrulandi: true,
     sehir: "Bursa",
@@ -149,6 +154,7 @@ const ORNEK_UZMANLAR = [
   {
     id: "ayse-demir",
     ad: "Ayşe Demir",
+    foto: "assets/img/uzmanlar/ayse-demir.svg",
     unvan: "Klinik Psikolog",
     dogrulandi: true,
     sehir: "İstanbul",
@@ -173,6 +179,7 @@ const ORNEK_UZMANLAR = [
   {
     id: "burak-yildiz",
     ad: "Burak Yıldız",
+    foto: "assets/img/uzmanlar/burak-yildiz.svg",
     unvan: "Aile Danışmanı",
     dogrulandi: false,
     sehir: "Antalya",
@@ -193,6 +200,7 @@ const ORNEK_UZMANLAR = [
   {
     id: "selin-arslan",
     ad: "Selin Arslan",
+    foto: "assets/img/uzmanlar/selin-arslan.svg",
     unvan: "Klinik Psikolog",
     dogrulandi: true,
     sehir: "İstanbul",
@@ -216,6 +224,7 @@ const ORNEK_UZMANLAR = [
   {
     id: "emre-celik",
     ad: "Emre Çelik",
+    foto: "assets/img/uzmanlar/emre-celik.svg",
     unvan: "Psikolojik Danışman (PDR)",
     dogrulandi: true,
     sehir: "Eskişehir",
@@ -236,6 +245,7 @@ const ORNEK_UZMANLAR = [
   {
     id: "deniz-koc",
     ad: "Uzm. Dr. Deniz Koç",
+    foto: "assets/img/uzmanlar/deniz-koc.svg",
     unvan: "Çocuk ve Ergen Psikiyatristi",
     dogrulandi: true,
     sehir: "İzmir",
