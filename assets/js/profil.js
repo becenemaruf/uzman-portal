@@ -134,18 +134,6 @@
       )
     : "";
 
-  // --- Danışan görüşleri (puansız, onaylı) ---
-  const yorumlar =
-    doluMu(u.yorumlar) && u.yorumlarAcik !== false
-      ? blok(
-          "Danışan görüşleri",
-          u.yorumlar
-            .map((y) => `<blockquote class="yorum"><p>${esc(y.metin)}</p><footer>Danışan · ${esc(y.tarih)}</footer></blockquote>`)
-            .join("") +
-            `<p class="not-metni">Görüşler yayınlanmadan önce incelenir. Danışan gizliliği için isimler gösterilmez.</p>`
-        )
-      : "";
-
   // --- Sık sorulan sorular ---
   const sss = doluMu(u.sss)
     ? blok(
@@ -173,7 +161,7 @@
   alan.innerHTML = `
     <div class="profil-duzen">
       <div class="profil-ana">
-        ${ust}${hakkinda}${alanlar}${seans}${egitim}${yazilar}${yorumlar}${sss}
+        ${ust}${hakkinda}${alanlar}${seans}${egitim}${yazilar}${sss}
       </div>
       ${yan}
     </div>

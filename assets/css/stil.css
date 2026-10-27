@@ -340,14 +340,6 @@ select.girdi {
 .yazi-listesi a:hover span:first-child { text-decoration: underline; text-underline-offset: 3px; }
 .yazi-listesi small { color: var(--soluk); white-space: nowrap; }
 
-.yorum {
-  margin: 0 0 12px; padding: 16px 18px;
-  background: var(--yuzey-ikincil); border: 1px solid var(--cizgi); border-radius: 12px;
-}
-.yorum:last-of-type { margin-bottom: 0; }
-.yorum p { margin: 0 0 8px; }
-.yorum footer { color: var(--soluk); font-size: 0.85rem; }
-.not-metni { color: var(--soluk); font-size: 0.88rem; margin-top: 14px !important; }
 
 .sss details { border-bottom: 1px solid var(--cizgi); }
 .sss details:last-child { border-bottom: none; }

@@ -20,7 +20,7 @@
  *  seans         : { sure, onlinePlatform, adres }
  *  egitim, sertifikalar
  *  iletisim      : { whatsapp, telefon } — ikisi de isteğe bağlı
- *  yazilar, yorumlar, sss
+ *  yazilar, sss
  * Boş bırakılan bölümler profil sayfasında hiç görünmez.
  */
 const ORNEK_UZMANLAR = [
@@ -61,10 +61,6 @@ const ORNEK_UZMANLAR = [
     yazilar: [
       { baslik: "Panik atak sırasında beden neler yaşar?", tarih: "Eylül 2026" },
       { baslik: "Tükenmişliği yorgunluktan ayıran beş işaret", tarih: "Temmuz 2026" },
-    ],
-    yorumlar: [
-      { metin: "İlk görüşmeden itibaren yargılanmadığımı hissettim. Kaygımı yönetmek için öğrendiğim yöntemleri hâlâ kullanıyorum.", tarih: "Ağustos 2026" },
-      { metin: "Süreç boyunca ne yaptığımızı ve neden yaptığımızı hep açıkça anlattı. Bu bana güven verdi.", tarih: "Haziran 2026" },
     ],
     sss: [
       { soru: "İlk görüşme nasıl geçiyor?", cevap: "İlk görüşmede sizi neyin getirdiğini konuşuruz. Birlikte çalışmanın size uygun olup olmadığına bu görüşmenin sonunda beraber karar veririz." },

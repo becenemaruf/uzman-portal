@@ -12,7 +12,7 @@ Ruh sağlığı uzmanlarının (psikolog, klinik psikolog, psikolojik danışman
 | 2 | Herkese açık uzman dizini (arama, filtreler, kartlar) ve profil sayfası — örnek verilerle | ✅ İlk taslak |
 | 3 | Uzman Girişi ekranları: giriş, kayıt, e-posta doğrulama, şifremi unuttum, CAPTCHA yeri | ✅ İlk taslak (sunucusuz) |
 | 4 | Uzman paneli: profil düzenleme, fotoğraf, yazılar, görünürlük istatistikleri | — |
-| 5 | Yönetici paneli: unvan/diploma doğrulama, profil ve yorum onayı | — |
+| 5 | Yönetici paneli: unvan/diploma doğrulama, profil onayı | — |
 | 6 | Veritabanı bağlantısı (Supabase önerisi): gerçek kayıt, giriş, fotoğraf depolama | — |
 | 7 | Alan adı bağlantısı ve yayına alma | — |
 
@@ -21,7 +21,7 @@ Ruh sağlığı uzmanlarının (psikolog, klinik psikolog, psikolojik danışman
 - **Üyelik yalnızca uzmanlara açık:** Danışanlar için hiçbir üyelik yok; siteyi üye olmadan kullanırlar.
 - **Kimler profil açabilir:** Tüm ruh sağlığı uzmanları; profiller unvan doğrulamasından sonra yayına girer. Doğrulanmamış profiller danışanlara hiç gösterilmez.
 - **İletişim:** Profilde, uzman eklediyse WhatsApp mesaj butonu ve/veya telefonla arama butonu bulunur.
-- **Danışan yorumları:** Yönetici onayından geçmeden yayınlanmaz, yıldız puanı yoktur, uzman isterse kendi profilinde kapatabilir.
+- **Danışan yorumu yok:** Yorumlar taraflıdır ve sağlık okuryazarlığını zedeler; platformda yorum ya da puanlama bulunmaz.
 - **Veri katmanı ayrı tutulur:** Sayfalar verileri yalnızca `veri.js` üzerinden ister. Veritabanına geçişte sadece bu dosya değişir.
 - **Gizli bilgi koda yazılmaz:** Repo herkese açık olduğu için şifre, gizli anahtar vb. hiçbir zaman bu dosyalarda yer almaz.
 
