@@ -9,6 +9,22 @@ const SITE = {
   slogan: "Ruh sağlığı uzmanlarını keşfedin",
 };
 
+/*
+ * BAĞLANTI BİLGİLERİ
+ * Bu değerlerin hepsi HERKESE AÇIK olacak şekilde tasarlanmıştır; sitenin koduna konmaları güvenlidir.
+ * - supabaseAdresi / supabaseAnahtari: Siteyi veritabanına bağlar. Bu anahtarla yalnızca
+ *   veritabanındaki güvenlik kurallarının (RLS) izin verdiği işlemler yapılabilir.
+ * - turnstileSiteAnahtari: Formlardaki CAPTCHA kutusunu gösterir.
+ *
+ * GİZLİ anahtarlar (Turnstile Secret Key, Supabase service_role / secret anahtarları,
+ * veritabanı şifresi) ASLA bu dosyaya ya da repodaki herhangi bir dosyaya yazılmaz.
+ */
+const BAGLANTI = {
+  supabaseAdresi: "https://nzkkbnhwxmjcywvghxon.supabase.co",
+  supabaseAnahtari: "sb_publishable_vPd4ryhRte0G3Cv4ZyN7yQ_tPVhkDGM",
+  turnstileSiteAnahtari: "0x4AAAAAAFoFIAxaZOt3g_v_",
+};
+
 // Uzmanların seçebileceği unvanlar (filtrede ve kayıt formunda kullanılır)
 const UNVANLAR = [
   "Psikolog",
