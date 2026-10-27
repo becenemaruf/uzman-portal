@@ -14,7 +14,7 @@
 //  - Sonuç 15 dakika önbellekte tutulur; haber sitesine her ziyarette istek gitmez.
 // =====================================================================
 const KAYNAK = "https://www.aktuelpsikoloji.com/service/rss.php";
-const IZINLI_ALAN = /^https:\/\/(www\.)?aktuelpsikoloji\.com\//;
+const IZINLI_ALAN = /^https?:\/\/(www\.)?aktuelpsikoloji\.com\//;
 const ONBELLEK_SURESI = 15 * 60 * 1000;
 const EN_FAZLA = 12;
 
@@ -57,6 +57,10 @@ function kisalt(metin: string, sinir: number) {
   return kesik.slice(0, Math.max(kesik.lastIndexOf(" "), sinir - 20)).replace(/[,.;:\s]+$/, "") + "…";
 }
 
+function atomIlk(oge: string) {
+  return oge.match(/<link[^>]*href=["']([^"']+)["']/i)?.[1] ?? "";
+}
+
 async function haberleriGetir() {
   const yanit = await fetch(KAYNAK, {
     headers: { "User-Agent": "UzmanPortali-HaberOnizleme/1.0", Accept: "application/rss+xml, application/xml, text/xml" },
@@ -77,23 +81,33 @@ async function haberleriGetir() {
   } catch {
     xml = new TextDecoder("utf-8").decode(ham);
   }
-  const ogeler = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) ?? [];
+  // RSS (<item>) ve Atom (<entry>) biçimleri desteklenir.
+  const ogeler = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) ?? xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) ?? [];
   const haberler = [];
   for (const oge of ogeler) {
     const baslik = duzMetin(etiket(oge, "title"));
-    const baglanti = duzMetin(etiket(oge, "link")) || duzMetin(etiket(oge, "guid"));
-    if (!baslik || !IZINLI_ALAN.test(baglanti)) continue;
-    const tarihHam = duzMetin(etiket(oge, "pubDate"));
+    const atomLink = oge.match(/<link[^>]*href=["']([^"']+)["']/i)?.[1] ?? "";
+    const baglantiHam = duzMetin(etiket(oge, "link")) || atomLink || duzMetin(etiket(oge, "guid"));
+    if (!baslik || !IZINLI_ALAN.test(baglantiHam)) continue;
+    const baglanti = baglantiHam.replace(/^http:\/\//i, "https://");
+    const tarihHam = duzMetin(etiket(oge, "pubDate")) || duzMetin(etiket(oge, "updated")) || duzMetin(etiket(oge, "published"));
     const tarih = tarihHam && !isNaN(Date.parse(tarihHam)) ? new Date(tarihHam).toISOString() : null;
     haberler.push({
       baslik: kisalt(baslik, 160),
-      ozet: kisalt(duzMetin(etiket(oge, "description")), 200),
+      ozet: kisalt(duzMetin(etiket(oge, "description")) || duzMetin(etiket(oge, "summary")), 200),
       baglanti,
       tarih,
       kategori: kisalt(duzMetin(etiket(oge, "category")), 40) || null,
     });
     if (haberler.length >= EN_FAZLA) break;
   }
+  // Teşhis notu (sunucu kayıtlarında görünür; kişisel veri içermez)
+  console.log(JSON.stringify({
+    durum: yanit.status, tur: yanit.headers.get("content-type"), kodlama, boyut: ham.length,
+    oge: ogeler.length, haber: haberler.length,
+    ilkBaglanti: ogeler[0] ? (etiket(ogeler[0], "link") || atomIlk(ogeler[0])).slice(0, 120) : null,
+    bas: ogeler.length ? null : xml.slice(0, 300),
+  }));
   return { kaynak: "Aktüel Psikoloji", kaynakAdresi: "https://www.aktuelpsikoloji.com/", haberler };
 }
 
@@ -106,9 +120,11 @@ Deno.serve(async (req) => {
   }
   try {
     const veri = await haberleriGetir();
-    onbellek = { zaman: Date.now(), veri };
+    // Boş sonuç önbelleğe alınmaz; bir sonraki istekte yeniden denenir.
+    if (veri.haberler.length) onbellek = { zaman: Date.now(), veri };
     return new Response(JSON.stringify(veri), { headers: BASLIKLAR });
-  } catch (_e) {
+  } catch (e) {
+    console.log("haber kaynağı hatası:", String(e).slice(0, 200));
     // Kaynak geçici olarak ulaşılamıyorsa eski önbellek varsa onu döndür; yoksa boş liste.
     if (onbellek) return new Response(JSON.stringify(onbellek.veri), { headers: BASLIKLAR });
     return new Response(JSON.stringify({ kaynak: "Aktüel Psikoloji", haberler: [] }), { status: 502, headers: BASLIKLAR });
