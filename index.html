@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ruh Sağlığı Uzmanı Bul | Uzman Portalı</title>
+  <meta name="description" content="Şehrinize, ihtiyacınıza ve görüşme tercihinize göre unvanı doğrulanmış psikolog, psikiyatrist ve psikolojik danışmanları bulun.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/stil.css">
+</head>
+<body>
+
+  <div class="ornek-uyari">Taslak sürüm: Bu sayfadaki uzmanlar tasarımı denemek için hazırlanmış örnek kişilerdir.</div>
+
+  <header class="ust">
+    <div class="kapsayici">
+      <a class="logo" href="index.html">
+        <span class="logo-isaret"><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-8"/><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7z"/><path d="M12 14c0-3-2.5-5.5-6-5.5 0 3 2.5 5.5 6 5.5z"/></svg></span>
+        <span data-site-adi>Uzman Portalı</span>
+      </a>
+      <nav class="ust-menu" aria-label="Ana menü">
+        <a class="metin-link" href="index.html">Uzmanlar</a>
+        <a class="metin-link" href="#uzmanlar-icin">Uzmanlar İçin</a>
+        <a class="btn btn-cizgi btn-kucuk" href="giris.html">Uzman Girişi</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="sayfa-bas kapsayici">
+      <h1>Size uygun ruh sağlığı uzmanını bulun</h1>
+      <p>Unvanı doğrulanmış psikolog, psikiyatrist ve psikolojik danışmanları şehrinize, ihtiyacınıza ve görüşme tercihinize göre arayın.</p>
+    </section>
+
+    <section class="kapsayici" aria-label="Uzman arama">
+      <form class="arama" id="aramaFormu" role="search" onsubmit="return false">
+        <div class="arama-kutu">
+          <label class="gorunmez" for="aramaMetni">İsim, uzmanlık alanı veya ilçe ara</label>
+          <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="girdi" id="aramaMetni" type="search" placeholder="İsim, uzmanlık alanı veya ilçe ara…" autocomplete="off">
+        </div>
+        <div>
+          <label class="gorunmez" for="filtreSehir">Şehir</label>
+          <select class="girdi" id="filtreSehir"><option value="">Tüm şehirler</option></select>
+        </div>
+        <div>
+          <label class="gorunmez" for="filtreUnvan">Unvan</label>
+          <select class="girdi" id="filtreUnvan"><option value="">Tüm unvanlar</option></select>
+        </div>
+        <div>
+          <label class="gorunmez" for="filtreGorusme">Görüşme şekli</label>
+          <select class="girdi" id="filtreGorusme">
+            <option value="">Online veya yüz yüze</option>
+            <option value="online">Online görüşme</option>
+            <option value="yuzyuze">Yüz yüze görüşme</option>
+          </select>
+        </div>
+      </form>
+
+      <div class="filtre-satir">
+        <button class="link-buton" id="ekFiltreDugme" type="button" aria-expanded="false" aria-controls="ekFiltreler">
+          <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+          Daha fazla filtre
+          <span class="filtre-sayac" id="filtreSayac" hidden></span>
+          <svg class="ikon ikon-asagi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <label class="onay-kutusu">
+          <input type="checkbox" id="filtreYeniDanisan">
+          Sadece yeni danışan kabul edenler
+        </label>
+      </div>
+
+      <div class="ek-filtreler" id="ekFiltreler" hidden>
+        <div>
+          <label class="alan-etiket" for="filtreUzmanlik">Uzmanlık alanı</label>
+          <select class="girdi" id="filtreUzmanlik"><option value="">Tümü</option></select>
+        </div>
+        <div>
+          <label class="alan-etiket" for="filtreYas">Çalıştığı grup</label>
+          <select class="girdi" id="filtreYas"><option value="">Tümü</option></select>
+        </div>
+        <div>
+          <label class="alan-etiket" for="filtreYaklasim">Terapi yaklaşımı</label>
+          <select class="girdi" id="filtreYaklasim"><option value="">Tümü</option></select>
+        </div>
+        <div>
+          <label class="alan-etiket" for="filtreCinsiyet">Uzmanın cinsiyeti</label>
+          <select class="girdi" id="filtreCinsiyet">
+            <option value="">Fark etmez</option>
+            <option value="Kadın">Kadın</option>
+            <option value="Erkek">Erkek</option>
+          </select>
+        </div>
+        <div>
+          <label class="alan-etiket" for="filtreDil">Seans dili</label>
+          <select class="girdi" id="filtreDil"><option value="">Tümü</option></select>
+        </div>
+        <div>
+          <label class="alan-etiket" for="filtreUcret">Seans ücreti</label>
+          <select class="girdi" id="filtreUcret"><option value="">Fark etmez</option></select>
+        </div>
+      </div>
+
+      <div class="sonuc-satir">
+        <span id="sonucSayisi" aria-live="polite"></span>
+        <button class="link-buton" id="temizleDugme" type="button" hidden>Filtreleri temizle</button>
+      </div>
+
+      <div class="kartlar" id="kartlar"></div>
+    </section>
+
+    <section class="uzman-cagri" id="uzmanlar-icin">
+      <div class="kapsayici">
+        <div>
+          <h2>Ruh sağlığı uzmanı mısınız?</h2>
+          <p>Profilinizi oluşturun, sizi arayan danışanlara ulaşın. Unvanınız doğrulandıktan sonra profiliniz yayına alınır.</p>
+          <a class="btn btn-beyaz" href="giris.html#kayit">Profilinizi oluşturun</a>
+        </div>
+        <ul class="fayda-listesi">
+          <li>
+            <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+            <div><strong>Doğrulanmış uzman rozeti</strong><span>Danışanlar karşısındakinin gerçekten uzman olduğunu bilir.</span></div>
+          </li>
+          <li>
+            <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            <div><strong>Görünürlük istatistikleri</strong><span>Profilinizin kaç kez görüntülendiğini ve kaç kişinin size ulaştığını görün.</span></div>
+          </li>
+          <li>
+            <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>
+            <div><strong>Yazılarınızı yayınlayın</strong><span>Uzmanlık alanınızdaki yazılarla güven oluşturun.</span></div>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="alt">
+    <div class="kapsayici">
+      <p class="acil-not"><strong>Acil bir durumdaysanız</strong> lütfen 112 Acil Çağrı Merkezi'ni arayın. Bu platform acil durum hizmeti vermez.</p>
+      <nav class="alt-linkler" aria-label="Alt menü">
+        <a href="#">Hakkımızda</a>
+        <a href="#">KVKK Aydınlatma Metni</a>
+        <a href="#">Gizlilik Politikası</a>
+        <a href="#">Çerez Politikası</a>
+        <a href="#">İletişim</a>
+      </nav>
+      <p>© <span data-yil></span> <span data-site-adi>Uzman Portalı</span></p>
+    </div>
+  </footer>
+
+  <!-- Sıra önemli: önce ayarlar ve veriler, sonra onları kullanan sayfa kodu -->
+  <script src="assets/js/ayarlar.js"></script>
+  <script src="assets/js/ornek-veri.js"></script>
+  <script src="assets/js/veri.js"></script>
+  <script src="assets/js/ortak.js"></script>
+  <script src="assets/js/liste.js"></script>
+</body>
+</html>

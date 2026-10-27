@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Uzman Girişi | Uzman Portalı</title>
+  <meta name="description" content="Ruh sağlığı uzmanları için giriş ve kayıt sayfası.">
+  <!-- Arama motorları giriş sayfalarını dizine eklemesin -->
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/stil.css">
+</head>
+<body>
+
+  <header class="ust">
+    <div class="kapsayici">
+      <a class="logo" href="index.html">
+        <span class="logo-isaret"><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-8"/><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7z"/><path d="M12 14c0-3-2.5-5.5-6-5.5 0 3 2.5 5.5 6 5.5z"/></svg></span>
+        <span data-site-adi>Uzman Portalı</span>
+      </a>
+      <nav class="ust-menu" aria-label="Ana menü">
+        <a class="metin-link" href="index.html">Uzmanlar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="giris-duzen">
+    <section class="giris-tanitim">
+      <h2>Danışanlarınız sizi daha kolay bulsun</h2>
+      <p>Profilinizi güncel tutun, görünürlük istatistiklerinizi takip edin ve yazılarınızı yayınlayın.</p>
+      <ul class="fayda-listesi">
+        <li>
+          <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+          <div><strong>Yalnızca doğrulanmış uzmanlar</strong><span>Her başvuru unvan belgesiyle incelenir.</span></div>
+        </li>
+        <li>
+          <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <div><strong>Bilgileriniz güvende</strong><span>E-posta doğrulama, güvenlik kontrolü ve güçlü şifre kuralları.</span></div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="giris-form-alani">
+      <div class="giris-kart">
+
+        <!-- GÖRÜNÜM 1: GİRİŞ -->
+        <div data-gorunum="giris">
+          <h1>Uzman Girişi</h1>
+          <p class="aciklama">Profilinizi yönetmek için hesabınıza giriş yapın.</p>
+          <div class="mesaj mesaj-hata" id="girisHata" role="alert" hidden></div>
+          <form id="girisFormu" novalidate>
+            <div class="form-alani">
+              <label class="alan-etiket" for="girisEposta">E-posta adresi</label>
+              <input class="girdi" id="girisEposta" type="email" autocomplete="email" inputmode="email" required>
+            </div>
+            <div class="form-alani">
+              <label class="alan-etiket" for="girisSifre">Şifre</label>
+              <div class="sifre-kutu">
+                <input class="girdi" id="girisSifre" type="password" autocomplete="current-password" required>
+                <button class="sifre-goster" type="button" data-sifre-goster="girisSifre" aria-label="Şifreyi göster"></button>
+              </div>
+            </div>
+            <div class="form-satir">
+              <label class="onay-kutusu"><input type="checkbox" id="beniHatirla"> Beni hatırla</label>
+              <a class="link-buton" href="#sifremi-unuttum">Şifremi unuttum</a>
+            </div>
+            <div class="captcha-yeri" role="note">
+              <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+              <div><strong>Güvenlik doğrulaması (CAPTCHA)</strong>Cloudflare Turnstile bu alana yerleştirilecek.</div>
+            </div>
+            <button class="btn btn-ana btn-blok" type="submit">Giriş yap</button>
+          </form>
+          <p class="form-alt">Henüz hesabınız yok mu? <a class="link-buton" href="#kayit">Uzman olarak kaydolun</a></p>
+        </div>
+
+        <!-- GÖRÜNÜM 2: KAYIT -->
+        <div data-gorunum="kayit" hidden>
+          <h1>Uzman kaydı</h1>
+          <p class="aciklama">Kayıt yalnızca ruh sağlığı uzmanlarına açıktır. Unvanınız doğrulandıktan sonra profiliniz yayına alınır.</p>
+          <div class="mesaj mesaj-hata" id="kayitHata" role="alert" hidden></div>
+          <form id="kayitFormu" novalidate>
+            <div class="iki-sutun">
+              <div class="form-alani">
+                <label class="alan-etiket" for="kayitAd">Ad</label>
+                <input class="girdi" id="kayitAd" type="text" autocomplete="given-name" required>
+              </div>
+              <div class="form-alani">
+                <label class="alan-etiket" for="kayitSoyad">Soyad</label>
+                <input class="girdi" id="kayitSoyad" type="text" autocomplete="family-name" required>
+              </div>
+            </div>
+            <div class="form-alani">
+              <label class="alan-etiket" for="kayitUnvan">Unvan</label>
+              <select class="girdi" id="kayitUnvan" required><option value="">Seçiniz</option></select>
+            </div>
+            <div class="form-alani">
+              <label class="alan-etiket" for="kayitEposta">E-posta adresi</label>
+              <input class="girdi" id="kayitEposta" type="email" autocomplete="email" inputmode="email" required>
+            </div>
+            <div class="form-alani">
+              <label class="alan-etiket" for="kayitSifre">Şifre</label>
+              <div class="sifre-kutu">
+                <input class="girdi" id="kayitSifre" type="password" autocomplete="new-password" required aria-describedby="sifreKurallari">
+                <button class="sifre-goster" type="button" data-sifre-goster="kayitSifre" aria-label="Şifreyi göster"></button>
+              </div>
+              <div class="guc-cubugu" aria-hidden="true"><span id="gucCubugu"></span></div>
+              <ul class="sifre-kurallari" id="sifreKurallari">
+                <li data-kural="uzunluk">En az 10 karakter</li>
+                <li data-kural="buyuk">En az bir büyük harf</li>
+                <li data-kural="kucuk">En az bir küçük harf</li>
+                <li data-kural="rakam">En az bir rakam</li>
+              </ul>
+            </div>
+            <div class="form-alani">
+              <label class="alan-etiket" for="kayitSifre2">Şifre (tekrar)</label>
+              <input class="girdi" id="kayitSifre2" type="password" autocomplete="new-password" required>
+            </div>
+            <label class="onay-kutusu">
+              <input type="checkbox" id="kayitKvkk" required>
+              <span><a href="#" target="_blank">KVKK Aydınlatma Metni</a>'ni okudum.</span>
+            </label>
+            <label class="onay-kutusu">
+              <input type="checkbox" id="kayitRiza" required>
+              <span>Profil bilgilerimin danışanların görebileceği şekilde yayınlanmasına <a href="#" target="_blank">açık rıza</a> veriyorum.</span>
+            </label>
+            <div class="captcha-yeri" role="note">
+              <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+              <div><strong>Güvenlik doğrulaması (CAPTCHA)</strong>Cloudflare Turnstile bu alana yerleştirilecek.</div>
+            </div>
+            <button class="btn btn-ana btn-blok" type="submit">Hesap oluştur</button>
+          </form>
+          <p class="form-alt">Zaten hesabınız var mı? <a class="link-buton" href="#giris">Giriş yapın</a></p>
+        </div>
+
+        <!-- GÖRÜNÜM 3: E-POSTA DOĞRULAMA -->
+        <div data-gorunum="dogrulama" hidden>
+          <div class="buyuk-ikon"><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+          <h1>E-postanızı doğrulayın</h1>
+          <p class="aciklama"><strong id="dogrulamaAdresi">E-posta adresinize</strong> bir doğrulama bağlantısı gönderdik. Hesabınızı etkinleştirmek için bağlantıya tıklayın. Bağlantı 24 saat geçerlidir.</p>
+          <div class="mesaj mesaj-bilgi">E-posta gelmediyse istenmeyen (spam) klasörünü kontrol edin.</div>
+          <button class="btn btn-cizgi btn-blok" type="button" id="tekrarGonder">Bağlantıyı tekrar gönder</button>
+          <hr class="ayrac">
+          <p class="aciklama" style="margin:0"><strong>Sonraki adım:</strong> E-postanızı doğruladıktan sonra unvan belgenizi yükleyip profilinizi doldurursunuz. Profiliniz incelendikten sonra yayına alınır.</p>
+          <p class="form-alt"><a class="link-buton" href="#giris">Giriş ekranına dön</a></p>
+        </div>
+
+        <!-- GÖRÜNÜM 4: ŞİFREMİ UNUTTUM -->
+        <div data-gorunum="sifremi-unuttum" hidden>
+          <h1>Şifrenizi mi unuttunuz?</h1>
+          <p class="aciklama">Hesabınıza kayıtlı e-posta adresini yazın, size şifre yenileme bağlantısı gönderelim.</p>
+          <div class="mesaj mesaj-hata" id="unuttumHata" role="alert" hidden></div>
+          <form id="unuttumFormu" novalidate>
+            <div class="form-alani">
+              <label class="alan-etiket" for="unuttumEposta">E-posta adresi</label>
+              <input class="girdi" id="unuttumEposta" type="email" autocomplete="email" inputmode="email" required>
+            </div>
+            <div class="captcha-yeri" role="note">
+              <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+              <div><strong>Güvenlik doğrulaması (CAPTCHA)</strong>Cloudflare Turnstile bu alana yerleştirilecek.</div>
+            </div>
+            <button class="btn btn-ana btn-blok" type="submit">Yenileme bağlantısı gönder</button>
+          </form>
+          <p class="form-alt"><a class="link-buton" href="#giris">Giriş ekranına dön</a></p>
+        </div>
+
+        <!-- GÖRÜNÜM 5: YENİLEME BAĞLANTISI GÖNDERİLDİ -->
+        <div data-gorunum="baglanti-gonderildi" hidden>
+          <div class="buyuk-ikon"><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+          <h1>E-postanızı kontrol edin</h1>
+          <!-- Bilerek belirsiz bir mesaj: adresin kayıtlı olup olmadığını açık etmez -->
+          <p class="aciklama">Bu adrese kayıtlı bir hesap varsa şifre yenileme bağlantısı birkaç dakika içinde gelecek. Bağlantı 1 saat geçerlidir ve yalnızca bir kez kullanılabilir.</p>
+          <div class="mesaj mesaj-bilgi">E-posta gelmediyse istenmeyen (spam) klasörünü kontrol edin.</div>
+          <p class="form-alt"><a class="link-buton" href="#giris">Giriş ekranına dön</a></p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/ayarlar.js"></script>
+  <script src="assets/js/ortak.js"></script>
+  <script src="assets/js/giris.js"></script>
+</body>
+</html>
