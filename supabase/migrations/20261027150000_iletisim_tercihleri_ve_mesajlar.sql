@@ -1,13 +1,8 @@
 -- =====================================================================
--- 10) İLETİŞİM TERCİHLERİ, PLATFORM MESAJLARI, YENİ UNVANLAR, ÜCRETİN KALDIRILMASI
+-- 10) İLETİŞİM TERCİHLERİ, PLATFORM MESAJLARI, YENİ UNVANLAR
 -- =====================================================================
 
--- ---------------------------------------------------------------------
--- A) Ücret bilgisi platformdan tamamen kaldırılır
--- Arayüzde gösterilmeyen bir bilgiyi herkese açık tabloda tutmak, onu API üzerinden
--- yine de yayımlamak demektir. Bu yüzden sütunlar silinir.
--- ---------------------------------------------------------------------
-alter table public.uzmanlar drop column ucret_min, drop column ucret_max;
+-- (Ücret sütunlarının silinmesi ayrı dosyada: 20261027150100_ucret_sutunlarini_kaldir.sql)
 
 -- ---------------------------------------------------------------------
 -- B) Unvan listesi: "Aile Danışmanı" çıkar, beş yeni meslek eklenir
@@ -222,3 +217,12 @@ create policy "mesaj_okundu" on public.iletisim_mesajlari for update to authenti
 create policy "mesaj_silme" on public.iletisim_mesajlari for delete to authenticated
   using ((select ozel.yonetici_mi())
          or exists (select 1 from public.uzmanlar u where u.id = uzman_id and u.kullanici_id = (select auth.uid())));
+
+-- ---------------------------------------------------------------------
+-- E) Sunucu fonksiyonunun (mesaj-gonder) yetkileri
+-- Bu projede yeni tablolar otomatik olarak hiçbir role açılmıyor. Fonksiyonun ihtiyaç duyduğu
+-- en dar yetkiler tek tek verilir: uzmanın uygunluğunu okumak, mesajı eklemek, gönderim
+-- sınırını saymak ve 90 günden eski mesajları silmek.
+-- ---------------------------------------------------------------------
+grant select (id, slug, durum, kullanici_id, telefon, whatsapp, eposta) on public.uzmanlar to service_role;
+grant select (id, uzman_id, ip_ozeti, olusturulma), insert, delete on public.iletisim_mesajlari to service_role;
