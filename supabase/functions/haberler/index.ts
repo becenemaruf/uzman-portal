@@ -63,7 +63,20 @@ async function haberleriGetir() {
     signal: AbortSignal.timeout(8000),
   });
   if (!yanit.ok) throw new Error(`Kaynak yanıt vermedi (${yanit.status})`);
-  const xml = await yanit.text();
+  // Karakter kodlaması: Türkçe siteler bazen UTF-8 yerine ISO-8859-9 / windows-1254 kullanır.
+  // Önce sunucunun bildirdiği, yoksa XML başlığında yazan kodlama kullanılır.
+  const ham = new Uint8Array(await yanit.arrayBuffer());
+  const bas = new TextDecoder("latin1").decode(ham.slice(0, 200));
+  const kodlama =
+    (yanit.headers.get("content-type") || "").match(/charset=([\w-]+)/i)?.[1] ||
+    bas.match(/encoding=["']([\w-]+)["']/i)?.[1] ||
+    "utf-8";
+  let xml: string;
+  try {
+    xml = new TextDecoder(kodlama.toLowerCase()).decode(ham);
+  } catch {
+    xml = new TextDecoder("utf-8").decode(ham);
+  }
   const ogeler = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) ?? [];
   const haberler = [];
   for (const oge of ogeler) {
