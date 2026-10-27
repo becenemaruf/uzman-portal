@@ -1025,3 +1025,23 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
 }
 .haklar-listesi { margin: 0 0 10px; padding-left: 1.2em; display: grid; gap: 6px; }
 .haklar-listesi li::marker { color: var(--vurgu); }
+
+/* Gizlilik: erişim düzeyleri, kontrol listesi, durum rozetleri */
+.erisim-kartlari { display: grid; gap: 12px; margin: 6px 0 16px; }
+@media (min-width: 760px) { .erisim-kartlari { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.erisim-kart { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: var(--yaricap); padding: 16px 16px 14px; border-top: 4px solid var(--basari); }
+.erisim-kart.kisitli { border-top-color: var(--mor); }
+.erisim-kart.kapali { border-top-color: #6b6f78; }
+.erisim-kart h3 { font-size: 1.05rem; margin: 0 0 2px; }
+.erisim-not { margin: 0 0 10px; font-size: 0.82rem; color: var(--soluk); }
+.erisim-kart ul { margin: 0; padding-left: 1.1em; display: grid; gap: 5px; font-size: 0.93rem; line-height: 1.5; }
+.kontrol-listesi { list-style: none; margin: 4px 0 16px; padding: 0; display: grid; gap: 10px; }
+.kontrol-listesi li { position: relative; padding-left: 32px; line-height: 1.65; color: #2a3430; }
+.kontrol-listesi li::before {
+  content: ""; position: absolute; left: 0; top: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--vurgu-acik) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d5c48' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 4.5 4.5L19 7'/%3E%3C/svg%3E") center / 12px no-repeat;
+}
+.durum-rozet { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+.durum-rozet.uygulaniyor { background: #e3f3ea; color: #1e6a43; }
+.durum-rozet.hesapla { background: #fff3cd; color: #6b4e00; }
+.durum-rozet.planlaniyor { background: #eceae4; color: #4f5551; }
