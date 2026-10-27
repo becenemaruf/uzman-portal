@@ -166,6 +166,21 @@ const Veri = (() => {
       }
     },
 
+    // Psikoloji gündemi: aktuelpsikoloji.com haberleri (sunucu fonksiyonu "haberler" üzerinden).
+    // Ek başlık gönderilmez; böylece tarayıcı ön kontrol isteği (preflight) yapmaz.
+    async haberleriGetir(adet = 6) {
+      try {
+        const yanit = await fetch(`${BAGLANTI.supabaseAdresi}/functions/v1/haberler`);
+        if (!yanit.ok) return [];
+        const veri = await yanit.json();
+        return (veri.haberler || [])
+          .filter((h) => h && h.baslik && /^https:\/\/(www\.)?aktuelpsikoloji\.com\//.test(h.baglanti || ""))
+          .slice(0, adet);
+      } catch (e) {
+        return [];
+      }
+    },
+
     /* Uzmana platform üzerinden mesaj gönderir (yalnızca hiçbir doğrudan iletişim kanalı açık olmayan uzmanlar için).
      * Mesaj tarayıcıdan veritabanına DOĞRUDAN yazılmaz: Önce sunucudaki "mesaj-gonder" fonksiyonu
      * CAPTCHA'yı doğrular, gönderim sınırını kontrol eder, sonra kaydeder.

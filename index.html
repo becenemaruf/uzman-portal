@@ -174,6 +174,23 @@
       </div>
     </section>
 
+    <!-- Psikoloji gündemi: aktuelpsikoloji.com'dan otomatik alınan haber önizlemeleri.
+         Haberler sunucu tarafında alınır; ziyaretçinin tarayıcısı habere tıklamadıkça haber sitesine bağlanmaz. -->
+    <section class="haber-bolumu" id="haberler" aria-labelledby="haberlerBaslik" hidden>
+      <div class="kapsayici">
+        <div class="bolum-bas">
+          <div>
+            <span class="bolum-ust-yazi">Gündem</span>
+            <h2 id="haberlerBaslik">Psikoloji gündeminden</h2>
+            <p>Ruh sağlığı ve psikoloji dünyasından son haberler, <a href="https://www.aktuelpsikoloji.com/" target="_blank" rel="noopener">Aktüel Psikoloji</a>'den.</p>
+          </div>
+          <a class="btn btn-cizgi" href="https://www.aktuelpsikoloji.com/" target="_blank" rel="noopener">Tüm haberler</a>
+        </div>
+        <div class="haber-duzen" id="haberListesi"></div>
+        <p class="haber-not">Haber başlıkları ve özetleri kaynağından otomatik olarak alınır; bağlantılar Aktüel Psikoloji sitesinde açılır.</p>
+      </div>
+    </section>
+
     <section class="uzman-cagri" id="uzmanlar-icin">
       <div class="kapsayici">
         <div>
@@ -206,7 +223,7 @@
         <a href="hakkimizda.html">Hakkımızda</a>
         <a href="kvkk-aydinlatma.html">KVKK Aydınlatma Metni</a>
         <a href="gizlilik-politikasi.html">Gizlilik Politikası</a>
-        <a href="#">Çerez Politikası</a>
+        <a href="cerez-politikasi.html">Çerez Politikası</a>
         <a href="#">İletişim</a>
       </nav>
       <p>© <span data-yil></span> <span data-site-adi>Uzman Portalı</span></p>
@@ -220,5 +237,6 @@
   <script src="assets/js/manset.js"></script>
   <script src="assets/js/liste.js"></script>
   <script src="assets/js/blog.js"></script>
+  <script src="assets/js/haberler.js"></script>
 </body>
 </html>

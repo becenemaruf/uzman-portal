@@ -1045,3 +1045,52 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
 .durum-rozet.uygulaniyor { background: #e3f3ea; color: #1e6a43; }
 .durum-rozet.hesapla { background: #fff3cd; color: #6b4e00; }
 .durum-rozet.planlaniyor { background: #eceae4; color: #4f5551; }
+
+/* Çerez politikası */
+.kurumsal-bolum code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.88em; background: var(--yuzey-ikincil); border: 1px solid var(--cizgi); border-radius: 6px; padding: 1px 6px; }
+.ozet-kartlari { display: grid; gap: 10px; margin: 4px 0 16px; }
+@media (min-width: 600px) { .ozet-kartlari { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.ozet-kart { display: grid; gap: 4px; padding: 16px; border-radius: var(--yaricap); background: var(--yuzey); border: 1px solid var(--cizgi); }
+.ozet-kart strong { font-family: var(--serif); font-size: 2.2rem; line-height: 1; color: var(--vurgu); }
+.ozet-kart span { color: #3a433f; font-size: 0.94rem; line-height: 1.5; }
+.tercih-paneli { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: var(--yaricap); padding: 16px 18px; margin: 4px 0 16px; }
+.tercih-satir { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.tercih-satir > div { display: grid; gap: 2px; }
+.tercih-satir span { color: var(--soluk); font-size: 0.92rem; }
+.tercih-not { margin: 8px 0 0; font-size: 0.9rem; color: #23704a; }
+.tercih-not:empty { display: none; }
+
+/* ---------- Psikoloji gündemi (haber önizlemeleri) ---------- */
+.haber-bolumu { background: var(--zemin); border-top: 1px solid var(--cizgi); padding: 56px 0 56px; }
+.haber-bolumu .bolum-bas a:not(.btn) { color: var(--vurgu); }
+.haber-duzen { display: grid; gap: 16px; }
+@media (min-width: 900px) { .haber-duzen { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; align-items: stretch; } }
+.haber-one-cikan {
+  position: relative; display: flex; flex-direction: column; gap: 12px;
+  padding: 26px 26px 24px; border-radius: 18px; color: #fff; overflow: hidden;
+  background: linear-gradient(140deg, var(--mor-koyu) 0%, var(--mor) 60%, #6e55a0 100%);
+}
+.haber-one-cikan::after {
+  content: ""; position: absolute; right: -60px; bottom: -80px; width: 220px; height: 220px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08); pointer-events: none;
+}
+.haber-one-cikan h3 { font-size: clamp(1.35rem, 3vw, 1.75rem); margin: 0; line-height: 1.25; }
+.haber-one-cikan p { margin: 0; color: rgba(255, 255, 255, 0.86); line-height: 1.6; }
+.haber-one-cikan .haber-meta { color: rgba(255, 255, 255, 0.8); }
+.haber-one-cikan .haber-kategori { background: rgba(255, 255, 255, 0.16); color: #fff; }
+.haber-baglanti { color: inherit; text-decoration: none; }
+.haber-baglanti::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.haber-one-cikan:hover .haber-baglanti { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.haber-baglanti:focus-visible { outline: none; }
+.haber-one-cikan:focus-within { outline: 3px solid var(--metin); outline-offset: 3px; }
+.haber-oku { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.92rem; }
+.haber-oku .ikon { width: 16px; height: 16px; }
+.haber-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.84rem; color: var(--soluk); }
+.haber-kategori { padding: 2px 9px; border-radius: 999px; background: var(--mor-acik); color: var(--mor-koyu); font-weight: 600; font-size: 0.78rem; }
+.haber-listesi { list-style: none; margin: 0; padding: 0; background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 18px; overflow: hidden; }
+.haber-listesi li + li { border-top: 1px solid var(--cizgi); }
+.haber-listesi a { display: grid; gap: 6px; padding: 15px 18px; color: var(--metin); text-decoration: none; min-height: 44px; }
+.haber-listesi a:hover { background: var(--yuzey-ikincil); }
+.haber-listesi a:hover .haber-liste-baslik { color: var(--mor); text-decoration: underline; text-underline-offset: 3px; }
+.haber-liste-baslik { font-weight: 600; line-height: 1.4; }
+.haber-not { margin: 14px 0 0; font-size: 0.82rem; color: var(--soluk); }

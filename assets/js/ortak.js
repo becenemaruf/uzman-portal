@@ -184,6 +184,7 @@ const IKON_YOLLARI = {
   tik: '<path d="m5 12 4.5 4.5L19 7"/>',
   gonder: '<path d="M21 3 10 14"/><path d="M21 3l-7 18-4-7-7-4z"/>',
   kapat: '<path d="M6 6l12 12M18 6 6 18"/>',
+  disari: '<path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>',
   bilgi: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>',
 };
 function ikon(ad) {

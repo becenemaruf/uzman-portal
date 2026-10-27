@@ -58,6 +58,9 @@ supabase/migrations/  Veritabanının kurulum adımları (sırayla uygulanan SQL
 supabase/tests/       Güvenlik kurallarını deneyen test (SQL Editor'da çalıştırılır)
 supabase/ornek-veri/  Veritabanına aktarılan 49 hayali örnek uzman ve 6 yazı (hepsi ornek = true)
 supabase/functions/mesaj-gonder/  Mesaj formunu CAPTCHA ve gönderim sınırıyla kaydeden sunucu fonksiyonu
+supabase/functions/haberler/      aktuelpsikoloji.com RSS beslemesini sade JSON'a çeviren sunucu fonksiyonu (15 dk önbellek)
+hakkimizda.html, kvkk-aydinlatma.html, gizlilik-politikasi.html, cerez-politikasi.html  Kurumsal ve yasal sayfalar (taslak; sarı etiketli alanlar yayın öncesi tamamlanacak)
+assets/js/haberler.js Ana sayfadaki "Psikoloji gündeminden" haber önizlemeleri
 ```
 
 ## Veritabanı (Supabase)
