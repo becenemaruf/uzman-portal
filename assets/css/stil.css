@@ -116,7 +116,7 @@ input, select, button, textarea { font: inherit; color: inherit; }
 }
 
 /* ---------- Sayfa başlığı ---------- */
-.sayfa-bas { padding: 40px 0 24px; }
+.sayfa-bas { padding-top: 40px; padding-bottom: 24px; }
 .sayfa-bas h1 { font-size: clamp(1.9rem, 5vw, 2.9rem); margin: 0 0 12px; }
 .sayfa-bas p { color: var(--soluk); margin: 0; max-width: 60ch; font-size: 1.05rem; }
 
@@ -454,3 +454,59 @@ body.mobil-cubuk-var { padding-bottom: 84px; }
 .buyuk-ikon .ikon { width: 26px; height: 26px; }
 .iki-sutun { display: grid; gap: 0 12px; grid-template-columns: 1fr; }
 @media (min-width: 520px) { .iki-sutun { grid-template-columns: 1fr 1fr; } }
+
+/* ---------- Manşet alanı (kayan duyurular) ---------- */
+.manset-alani { padding-top: 20px; }
+.manset { border-radius: var(--yaricap); overflow: hidden; box-shadow: var(--golge); }
+.manset-ray {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.manset-ray::-webkit-scrollbar { display: none; }
+.manset-slayt {
+  flex: 0 0 100%; scroll-snap-align: start; min-width: 0;
+  display: grid; grid-template-columns: 1fr; align-items: center;
+  min-height: 210px;
+}
+.manset-icerik { padding: 28px 22px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+@media (min-width: 700px) {
+  .manset-slayt { min-height: 250px; }
+  .manset-icerik { padding: 40px 48px; }
+  .manset-slayt.gorselli { grid-template-columns: 1.15fr 1fr; }
+}
+.manset-slayt h2 { font-size: clamp(1.45rem, 3.6vw, 2.1rem); margin: 0; max-width: 24ch; }
+.manset-slayt p { margin: 0 0 6px; max-width: 54ch; font-size: 1.02rem; }
+.manset-gorsel { width: 100%; height: 100%; max-height: 260px; object-fit: cover; }
+@media (max-width: 699px) { .manset-gorsel { display: none; } }
+
+.tema-yesil { background: var(--vurgu); color: #fff; }
+.tema-yesil p { opacity: 0.9; }
+.tema-kum { background: #efe5d3; color: var(--metin); }
+.tema-gri { background: #e2e9ec; color: var(--metin); }
+
+.manset-etiket {
+  display: inline-block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.03em;
+  padding: 3px 10px; border-radius: 999px; background: rgba(0, 0, 0, 0.08);
+}
+.tema-yesil .manset-etiket { background: rgba(255, 255, 255, 0.18); }
+.manset-etiket.reklam { background: #fff; color: var(--metin); border: 1px solid var(--cizgi-koyu); }
+
+.manset-kontroller { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 8px; }
+.manset-ok {
+  width: 40px; height: 40px; display: grid; place-items: center;
+  background: none; border: none; border-radius: 50%; color: var(--soluk); cursor: pointer;
+}
+.manset-ok:hover { background: #ece8df; color: var(--metin); }
+.manset-ok .ikon { width: 18px; height: 18px; }
+#mansetDurdur .ikon { width: 14px; height: 14px; }
+.manset-noktalar { display: flex; gap: 2px; }
+.manset-nokta {
+  width: 28px; height: 40px; display: grid; place-items: center;
+  background: none; border: none; cursor: pointer; padding: 0;
+}
+.manset-nokta::before {
+  content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--cizgi-koyu);
+  transition: width 0.2s, background-color 0.2s;
+}
+.manset-nokta[aria-current="true"]::before { width: 22px; background: var(--vurgu); }
+.manset-alani + .sayfa-bas { padding-top: 24px; }

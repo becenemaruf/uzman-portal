@@ -254,3 +254,37 @@ const ORNEK_UZMANLAR = [
     iletisim: { telefon: "05550000009" },
   },
 ];
+
+/*
+ * ÖRNEK MANŞETLER (ana sayfadaki kayan duyuru alanı)
+ *  tur        : "duyuru" | "yenilik" | "reklam"  — reklamlar her zaman "Reklam" etiketiyle gösterilir
+ *  baslik     : kısa ve dikkat çekici başlık
+ *  metin      : en fazla iki satırlık açıklama
+ *  buton      : { yazi, adres } — isteğe bağlı
+ *  tema       : "yesil" | "kum" | "gri" — arka plan rengi
+ *  gorsel     : isteğe bağlı görsel adresi (yatay, en az 1200 px genişlik önerilir)
+ *  baslangic, bitis : isteğe bağlı tarihler ("2026-11-01"); bu aralık dışında manşet görünmez
+ */
+const ORNEK_MANSETLER = [
+  {
+    tur: "duyuru",
+    baslik: "Uzman başvuruları açıldı",
+    metin: "Profilinizi oluşturun; unvanınız doğrulandıktan sonra profiliniz danışanların karşısına çıksın.",
+    buton: { yazi: "Profilinizi oluşturun", adres: "giris.html#kayit" },
+    tema: "yesil",
+  },
+  {
+    tur: "yenilik",
+    baslik: "Yeni filtre: Seans dili",
+    metin: "Artık uzmanları görüşme yapabildikleri dile göre de arayabilirsiniz.",
+    buton: { yazi: "Filtreleri aç", adres: "#aramaFormu" },
+    tema: "kum",
+  },
+  {
+    tur: "reklam",
+    baslik: "Örnek reklam alanı",
+    metin: "Eğitim, kitap ve etkinlik duyuruları bu alanda yer alabilir.",
+    buton: { yazi: "Bilgi alın", adres: "#" },
+    tema: "gri",
+  },
+];

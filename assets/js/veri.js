@@ -21,4 +21,12 @@ const Veri = {
     const uzman = ORNEK_UZMANLAR.find((u) => u.id === id);
     return uzman && uzman.dogrulandi ? uzman : null;
   },
+
+  // Ana sayfa manşetleri: yalnızca tarih aralığı bugünü kapsayanlar.
+  async mansetleriGetir() {
+    const bugun = new Date().toISOString().slice(0, 10); // "2026-10-27"
+    return ORNEK_MANSETLER.filter(
+      (m) => (!m.baslangic || m.baslangic <= bugun) && (!m.bitis || m.bitis >= bugun)
+    );
+  },
 };
