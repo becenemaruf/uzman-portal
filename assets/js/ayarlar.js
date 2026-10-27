@@ -41,17 +41,38 @@ const YAS_GRUPLARI = ["Çocuk", "Ergen", "Yetişkin", "Çift", "Aile"];
 // Bir sayfada gösterilecek en fazla uzman sayısı (fazlası sonraki sayfalara geçer)
 const SAYFA_BOYUTU = 36;
 
-// Ücret filtresi seçenekleri (seans başına üst sınır, TL)
+// Ücret filtresi seçenekleri (seans başına üst sınır, TL).
+// Bir uzman, ücret aralığının ÜST sınırı seçilen tutarı aşmıyorsa listelenir.
 const UCRET_SINIRLARI = [1500, 2000, 2500, 3000];
 
-// Çalışma alanı renkleri: Etiket adında bu kelimelerden biri geçiyorsa o rengi alır.
-// Etiketin arka planı rengin %15 opaklığı, yazısı rengin koyu tonudur.
-// Hiçbir gruba uymayan alanlar, adına göre aşağıdaki renklerden birini sabit olarak alır.
-const UZMANLIK_RENKLERI = [
-  { renk: "#3b6ea8", kelimeler: ["kaygi", "panik", "obsesif", "fobi"] },
-  { renk: "#7a5aa6", kelimeler: ["depresyon", "bipolar", "uyku"] },
-  { renk: "#b0506a", kelimeler: ["travma", "yas", "kayip"] },
-  { renk: "#b86e12", kelimeler: ["cocuk", "ergen", "sinav", "okul", "ebeveyn", "dikkat", "otizm", "ogrenme"] },
-  { renk: "#2a8383", kelimeler: ["cift", "iliski", "aile", "bosanma", "ofke"] },
-  { renk: "#3f8a4c", kelimeler: ["ozguven", "benlik", "kariyer", "tukenmislik"] },
+// "Yeni danışan kabul ediyor" bilgisi bu kadar gün güncellenmezse "güncel değil" olarak gösterilir.
+const KABUL_GUNCELLIK_GUN = 60;
+
+/*
+ * İHTİYAÇ KATEGORİLERİ
+ * Danışanın klinik terim bilmeden arama yapabilmesi için çalışma alanları günlük dille gruplanır.
+ * Bu gruplar tanı koymak ya da yönlendirmek için DEĞİL, aramayı kolaylaştırmak için vardır.
+ * Aynı gruplar etiket renklerini de belirler (arka plan rengin %15 opaklığı, yazı koyu tonu).
+ *
+ * "kod" değerleri veritabanındaki uzmanlik_alanlari.kategori sütunuyla aynıdır.
+ * "kelimeler": Örnek veri kullanılırken bir alanın hangi gruba girdiği bu kelimelerle bulunur
+ * (Türkçe karakter ve büyük/küçük harf farkı gözetilmez). Sıra önemlidir: İlk eşleşen grup alınır.
+ */
+const IHTIYAC_KATEGORILERI = [
+  // Dizi sırası EŞLEŞME önceliğidir ("Sınav Kaygısı" önce çocuk-ergen grubuna girsin diye);
+  // açılır listedeki görünüm sırasını "sira" belirler.
+  { kod: "cocuk_ergen",   sira: 4, etiket: "Çocuk ve ergenlerle ilgili konular", renk: "#b86e12",
+    kelimeler: ["cocuk", "ergen", "sinav", "okul", "ebeveyn", "hiperaktivite", "otizm", "ogrenme"] },
+  { kod: "travma_yas",    sira: 3, etiket: "Travma, yas ve kayıp",               renk: "#b0506a",
+    kelimeler: ["travma", "kayip", "yas ve"] },
+  { kod: "kaygi",         sira: 1, etiket: "Kaygı, yoğun endişe ve panik",       renk: "#3b6ea8",
+    kelimeler: ["kaygi", "panik", "obsesif", "fobi", "endise"] },
+  { kod: "duygudurum",    sira: 2, etiket: "Depresif duygular ve duygudurum",    renk: "#7a5aa6",
+    kelimeler: ["depresyon", "bipolar", "uyku", "duygudurum"] },
+  { kod: "iliski_aile",   sira: 5, etiket: "İlişki, çift ve aile sorunları",     renk: "#2a8383",
+    kelimeler: ["cift", "iliski", "aile", "bosanma", "ofke"] },
+  { kod: "yasam_ozguven", sira: 6, etiket: "Özgüven, iş ve yaşam zorlukları",    renk: "#3f8a4c",
+    kelimeler: ["ozguven", "benlik", "kariyer", "tukenmislik", "yetiskin"] },
+  { kod: "diger",         sira: 7, etiket: "Bağımlılık, yeme ve diğer konular",  renk: "#6b6f78",
+    kelimeler: ["bagimlilik", "yeme"] },
 ];

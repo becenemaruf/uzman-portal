@@ -1,7 +1,7 @@
 -- =====================================================================
 -- GÜVENLİK KURALLARI TESTİ
 -- Üç sahte kullanıcı (Uzman A, Uzman B, Yönetici) ve danışan (giriş yapmamış ziyaretçi)
--- rolleriyle 22 senaryoyu dener.
+-- rolleriyle 31 senaryoyu dener.
 --
 -- NASIL ÇALIŞTIRILIR: Supabase panelindeki SQL Editor'a yapıştırıp çalıştırın.
 -- Sonuç bir "hata" olarak görünür: Bu bilinçlidir. Rapor hata olarak döndürüldüğü için
@@ -175,6 +175,87 @@ begin
   select (select count(*) from public.uzmanlik_alanlari) * 1000 + (select count(*) from public.mansetler) into n;
   r := r || case when n / 1000 > 0 and n % 1000 > 0 then '✅' else '❌' end
          || format(' 22) Danışan listeleri ve manşetleri görüyor → %s alan, %s manşet', n / 1000, n % 1000) || E'\n';
+
+  -- 23-24) Uzman kendini "örnek" işaretleyemez; kabul durumu tarihini geriye alamaz
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', a, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  begin
+    update public.uzmanlar set ornek = true where id = pa;
+    r := r || '❌ 23) Uzman profilini "örnek" olarak işaretleyebildi!' || E'\n';
+  exception when others then
+    r := r || '✅ 23) Uzman "örnek" işaretini değiştiremedi' || E'\n';
+  end;
+  update public.uzmanlar set kabul_durumu_guncellenme = '2020-01-01' where id = pa
+    returning (kabul_durumu_guncellenme > now() - interval '1 minute') into t;
+  r := r || case when t then '✅' else '❌' end || ' 24) Uzman kabul tarihini 2020''ye çekmeye çalıştı → tarih "şimdi" olarak yazıldı: ' || t || E'\n';
+
+  -- 25) "Ek belge gerekli" durumundan uzman yeniden incelemeye gönderebilir
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', y, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  update public.uzmanlar set durum = 'ek_belge' where id = pa;
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', a, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  update public.uzmanlar set durum = 'incelemede' where id = pa returning durum::text into d;
+  r := r || case when d = 'incelemede' then '✅' else '❌' end || ' 25) Ek belge istenen uzman yeniden incelemeye gönderdi → ' || d || E'\n';
+
+  -- 26) "Düzeltme istendi" yazısı yeniden incelemeye gönderilebilir
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', y, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  update public.yazilar set durum = 'duzeltme_istendi' where id = yz;
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', a, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  update public.yazilar set durum = 'incelemede' where id = yz returning durum::text into d;
+  r := r || case when d = 'incelemede' then '✅' else '❌' end || ' 26) Düzeltme istenen yazı yeniden incelemeye gönderildi → ' || d || E'\n';
+
+  -- 27) Uzman değişiklik kayıtlarını okuyamaz
+  select count(*) into n from public.degisiklik_kayitlari;
+  r := r || case when n = 0 then '✅' else '❌' end || format(' 27) Uzman değişiklik kayıtlarını görebiliyor mu? görünen: %s', n) || E'\n';
+
+  -- 28) Danışan değişiklik kayıtlarını okuyamaz
+  reset role;
+  perform set_config('request.jwt.claims', '{"role":"anon"}', true);
+  set local role anon;
+  begin
+    select count(*) into n from public.degisiklik_kayitlari;
+    r := r || '❌ 28) Danışan değişiklik kayıtlarını okuyabildi!' || E'\n';
+  exception when others then
+    r := r || '✅ 28) Danışan değişiklik kayıtlarını okuyamadı' || E'\n';
+  end;
+
+  -- 29) Yönetici kayıtları görür; yapan kişi ve rolü doğru yazılmış
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', y, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  select count(*) into n from public.degisiklik_kayitlari
+   where tablo = 'uzmanlar' and kayit_id = pa::text
+     and ((yapan = a and yapan_rol = 'uzman') or (yapan = y and yapan_rol = 'yonetici'));
+  r := r || case when n >= 5 then '✅' else '❌' end
+         || format(' 29) Yönetici, profilin değişiklik geçmişini görüyor (yapan ve rol doğru) → %s kayıt', n) || E'\n';
+  select count(*) into n from public.degisiklik_kayitlari
+   where tablo = 'uzmanlar' and kayit_id = pa::text and degisiklikler ? 'durum'
+     and degisiklikler -> 'durum' ->> 'yeni' = 'yayinda';
+  r := r || case when n >= 1 then '✅' else '❌' end || ' 29b) "Yayına alındı" kaydı eski/yeni değeriyle tutulmuş' || E'\n';
+
+  -- 30) Yönetici bile değişiklik kayıtlarını silemez ya da değiştiremez
+  begin
+    delete from public.degisiklik_kayitlari;
+    get diagnostics n = row_count;
+    r := r || case when n = 0 then '✅ 30) Yönetici kayıtları silemedi' else '❌ 30) Kayıtlar silinebildi!' end || E'\n';
+  exception when others then
+    r := r || '✅ 30) Yönetici kayıtları silemedi' || E'\n';
+  end;
+
+  -- 31) Danışan, çalışma alanlarının ihtiyaç kategorisini görebilir
+  reset role;
+  perform set_config('request.jwt.claims', '{"role":"anon"}', true);
+  set local role anon;
+  select count(*) into n from public.uzmanlik_alanlari where kategori <> 'diger';
+  r := r || case when n > 0 then '✅' else '❌' end || format(' 31) Danışan ihtiyaç kategorilerini görüyor → kategorili alan: %s', n) || E'\n';
 
   reset role;
   -- Rapor hata olarak döndürülür: böylece testin yaptığı her şey otomatik olarak geri alınır.

@@ -12,6 +12,8 @@
  *  sehir, ilce   : konum
  *  gorusme       : ["online", "yuzyuze"] — ikisi birden olabilir
  *  yeniDanisan   : yeni danışan kabul ediyor mu
+ *  kabulGuncellenme : yeniDanisan bilgisinin en son doğrulandığı tarih (eskiyse "güncel değil" gösterilir)
+ *  guncellenme   : profilin son güncellenme tarihi
  *  deneyimYili   : meslekteki yıl
  *  cinsiyet, diller
  *  ucret         : { min, max } ya da null (uzman göstermek istemezse)
@@ -27,6 +29,8 @@
 const ORNEK_UZMANLAR = [
   {
     id: "elif-aydin",
+    guncellenme: "2026-10-20",
+    kabulGuncellenme: "2026-10-20",
     ad: "Elif Aydın",
     foto: "assets/img/uzmanlar/elif-aydin.svg",
     unvan: "Klinik Psikolog",
@@ -72,6 +76,8 @@ const ORNEK_UZMANLAR = [
   },
   {
     id: "murat-kaya",
+    guncellenme: "2026-06-02",
+    kabulGuncellenme: "2026-06-02",
     ad: "Uzm. Dr. Murat Kaya",
     foto: "assets/img/uzmanlar/murat-kaya.svg",
     unvan: "Psikiyatrist",

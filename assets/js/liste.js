@@ -5,6 +5,8 @@
  * 3) Kullanıcı her yazdığında ya da seçim yaptığında listeyi yeniden süzer
  * 4) Sonuçları sayfalara böler (sayfa başına SAYFA_BOYUTU kadar uzman)
  * 5) Kutu (grid) ve liste görünümü arasında geçiş sağlar; seçim tarayıcıda hatırlanır
+ * 6) Filtreleri ve sayfa numarasını adres çubuğunda tutar: Profilden geri dönünce seçimler
+ *    korunur, arama bağlantısı başkasıyla paylaşılabilir.
  */
 (async function () {
   const $ = (id) => document.getElementById(id);
@@ -28,10 +30,17 @@
   secenekleriDoldur("filtreYas", YAS_GRUPLARI);
   secenekleriDoldur("filtreYaklasim", benzersiz(uzmanlar.flatMap((u) => u.yaklasimlar || [])));
   secenekleriDoldur("filtreDil", benzersiz(uzmanlar.flatMap((u) => u.diller || [])));
-  secenekleriDoldur("filtreUcret", UCRET_SINIRLARI, (s) => `${sayiBicimle(s)} ₺'ye kadar`);
+  secenekleriDoldur("filtreUcret", UCRET_SINIRLARI, (s) => `${sayiBicimle(s)} ₺ ve altı`);
+
+  // İhtiyaç seçenekleri: "sira"ya göre dizilir, "Henüz emin değilim" en sonda kalır.
+  const ihtiyacSecimi = $("filtreIhtiyac");
+  const eminDegilim = ihtiyacSecimi.querySelector('[value="emin-degilim"]');
+  [...IHTIYAC_KATEGORILERI]
+    .sort((a, b) => a.sira - b.sira)
+    .forEach((k) => eminDegilim.insertAdjacentHTML("beforebegin", `<option value="${k.kod}">${esc(k.etiket)}</option>`));
 
   // --- Filtre alanları ---
-  const temelFiltreler = ["aramaMetni", "filtreSehir", "filtreUnvan", "filtreGorusme", "filtreYeniDanisan"];
+  const temelFiltreler = ["aramaMetni", "filtreIhtiyac", "filtreSehir", "filtreUnvan", "filtreGorusme", "filtreYeniDanisan"];
   const ekFiltreler = ["filtreUzmanlik", "filtreYas", "filtreYaklasim", "filtreCinsiyet", "filtreDil", "filtreUcret"];
 
   function degerOku(id) {
@@ -48,6 +57,8 @@
       // Birden fazla kelime yazıldıysa hepsi geçmeli: "kaygı kadıköy"
       if (!aranan.split(/\s+/).every((kelime) => havuz.includes(kelime))) return false;
     }
+    if (f.filtreIhtiyac && f.filtreIhtiyac !== "emin-degilim"
+        && !(u.uzmanliklar || []).some((alan) => kategoriBul(alan).kod === f.filtreIhtiyac)) return false;
     if (f.filtreSehir && u.sehir !== f.filtreSehir) return false;
     if (f.filtreUnvan && u.unvan !== f.filtreUnvan) return false;
     if (f.filtreGorusme && !u.gorusme.includes(f.filtreGorusme)) return false;
@@ -57,8 +68,10 @@
     if (f.filtreYaklasim && !(u.yaklasimlar || []).includes(f.filtreYaklasim)) return false;
     if (f.filtreCinsiyet && u.cinsiyet !== f.filtreCinsiyet) return false;
     if (f.filtreDil && !(u.diller || []).includes(f.filtreDil)) return false;
-    // Ücret filtresi seçiliyse ücret bilgisi paylaşmayan uzmanlar gösterilmez
-    if (f.filtreUcret && (!u.ucret || u.ucret.min > Number(f.filtreUcret))) return false;
+    // Ücret filtresi: Uzmanın ücret aralığının ÜST sınırı bütçeyi aşmamalı.
+    // (2.000–4.000 ₺ alan bir uzman, "2.500 ₺ ve altı" aramasında çıkmaz.)
+    // Ücret bilgisi paylaşmayan uzmanlar bu filtre seçiliyken gösterilmez.
+    if (f.filtreUcret && (!u.ucret || (u.ucret.max ?? u.ucret.min) > Number(f.filtreUcret))) return false;
     return true;
   }
 
@@ -94,7 +107,7 @@
         <div class="kart-alt">
           <div class="kart-alt-bilgi">
             ${u.ucret ? `<span class="ucret">${ucretMetni(u.ucret)} <small>/ seans</small></span>` : `<span class="ucret ucret-yok">Ücret görüşmede</span>`}
-            <span class="durum ${u.yeniDanisan ? "acik" : ""}">${u.yeniDanisan ? "Yeni danışan kabul ediyor" : "Şu an yeni danışan almıyor"}</span>
+            <span class="durum ${kabulDurumu(u).sinif}">${kabulDurumu(u).metin}</span>
           </div>
           <span class="kart-git" aria-hidden="true">Profili gör ${ikon("ileri")}</span>
         </div>
@@ -110,11 +123,26 @@
     const f = {};
     [...temelFiltreler, ...ekFiltreler].forEach((id) => (f[id] = degerOku(id)));
 
-    // Sıralama: yeni danışan kabul edenler önce, sonra isme göre.
+    // SIRALAMA
+    // 1) Arama metni varsa: adı eşleşenler önce, sonra unvanı/alanı eşleşenler.
+    // 2) Yeni danışan kabul edenler önce, kabul durumu güncel olmayanlar sonra.
+    // 3) Aynı gruptakiler arasında her gün değişen adil sıra (gunlukSira).
+    // Alfabetik sıra bilerek kullanılmaz: Adı A ile başlayan uzmanlar kalıcı avantaj kazanmasın.
+    const aranan = normallestir(f.aramaMetni);
+    const skor = (u) => {
+      if (!aranan) return 0;
+      if (normallestir(u.ad).includes(aranan)) return 3;
+      if (normallestir([u.unvan, ...(u.uzmanliklar || [])].join(" ")).includes(aranan)) return 2;
+      return 1;
+    };
+    const kabulOnceligi = (u) => ({ acik: 0, eski: 1 })[kabulDurumu(u).sinif] ?? 2;
+
     sonuclar = uzmanlar
       .filter((u) => uygunMu(u, f))
-      .sort((a, b) => (b.yeniDanisan - a.yeniDanisan) || a.ad.localeCompare(b.ad, "tr"));
+      .sort((a, b) => skor(b) - skor(a) || kabulOnceligi(a) - kabulOnceligi(b) || gunlukSira(a.id) - gunlukSira(b.id));
     sayfa = 1;
+
+    $("eminDegilimNotu").hidden = f.filtreIhtiyac !== "emin-degilim";
 
     // Kaç ek filtre seçili? "Daha fazla filtre (2)" sayacı
     const ekSecili = ekFiltreler.filter((id) => degerOku(id)).length;
@@ -123,6 +151,40 @@
     $("temizleDugme").hidden = ![...temelFiltreler, ...ekFiltreler].some((id) => degerOku(id));
 
     ciz();
+  }
+
+  // --- Filtrelerin adres çubuğunda tutulması ---
+  const ADRES_ANAHTARLARI = {
+    aramaMetni: "q", filtreIhtiyac: "ihtiyac", filtreSehir: "sehir", filtreUnvan: "unvan",
+    filtreGorusme: "gorusme", filtreYeniDanisan: "yeni", filtreUzmanlik: "alan", filtreYas: "grup",
+    filtreYaklasim: "yaklasim", filtreCinsiyet: "cinsiyet", filtreDil: "dil", filtreUcret: "ucret",
+  };
+  function adreseYaz() {
+    const p = new URLSearchParams();
+    Object.entries(ADRES_ANAHTARLARI).forEach(([id, anahtar]) => {
+      const deger = degerOku(id);
+      if (deger === true) p.set(anahtar, "1");
+      else if (deger) p.set(anahtar, deger);
+    });
+    if (sayfa > 1) p.set("sayfa", sayfa);
+    const yeniAdres = location.pathname + (p.toString() ? "?" + p : "") + location.hash;
+    history.replaceState(null, "", yeniAdres);
+  }
+  function adrestenOku() {
+    const p = new URLSearchParams(location.search);
+    Object.entries(ADRES_ANAHTARLARI).forEach(([id, anahtar]) => {
+      if (!p.has(anahtar)) return;
+      const el = $(id);
+      if (el.type === "checkbox") el.checked = p.get(anahtar) === "1";
+      // Listede olmayan bir değer gelirse (eski ya da hatalı bağlantı) yok sayılır
+      else if (el.tagName !== "SELECT" || [...el.options].some((o) => o.value === p.get(anahtar))) el.value = p.get(anahtar);
+    });
+    // Ek filtrelerden biri seçiliyse paneli açık getir
+    if (ekFiltreler.some((id) => degerOku(id))) {
+      $("ekFiltreler").hidden = false;
+      $("ekFiltreDugme").setAttribute("aria-expanded", "true");
+    }
+    return Math.max(1, parseInt(p.get("sayfa"), 10) || 1);
   }
 
   // Seçili sayfadaki uzmanları ve sayfa numaralarını çizer
@@ -147,6 +209,7 @@
          </div>`;
 
     sayfalamaCiz(sayfaSayisi);
+    adreseYaz();
   }
 
   // Sayfa numaraları: çok sayfa varsa "1 … 4 5 6 … 12" şeklinde kısaltılır
@@ -239,5 +302,10 @@
     $("ekFiltreDugme").setAttribute("aria-expanded", String(!panel.hidden));
   });
 
+  const baslangicSayfasi = adrestenOku();
   filtrele();
+  if (baslangicSayfasi > 1) {
+    sayfa = baslangicSayfasi;
+    ciz();
+  }
 })();

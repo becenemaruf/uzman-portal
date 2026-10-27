@@ -94,14 +94,21 @@ function okunurNumara(numara) {
   return `${r.slice(0, 4)} ${r.slice(4, 7)} ${r.slice(7, 9)} ${r.slice(9)}`;
 }
 
-/* ÇALIŞMA ALANI RENKLERİ */
-function uzmanlikRengi(alan) {
+/* İHTİYAÇ KATEGORİLERİ VE ÇALIŞMA ALANI RENKLERİ */
+// Bir çalışma alanının ihtiyaç kategorisini bulur. Veritabanı kategoriyi doğrudan verirse o kullanılır.
+function kategoriBul(alan, kod) {
+  if (kod) {
+    const kayitli = IHTIYAC_KATEGORILERI.find((k) => k.kod === kod);
+    if (kayitli) return kayitli;
+  }
   const ad = normallestir(alan);
-  const grup = UZMANLIK_RENKLERI.find((g) => g.kelimeler.some((k) => ad.includes(k)));
-  if (grup) return grup.renk;
-  let toplam = 0;
-  for (const harf of ad) toplam = (toplam * 31 + harf.charCodeAt(0)) >>> 0;
-  return UZMANLIK_RENKLERI[toplam % UZMANLIK_RENKLERI.length].renk;
+  return (
+    IHTIYAC_KATEGORILERI.find((g) => g.kelimeler.some((k) => ad.includes(k))) ||
+    IHTIYAC_KATEGORILERI.find((g) => g.kod === "diger")
+  );
+}
+function uzmanlikRengi(alan) {
+  return kategoriBul(alan).renk;
 }
 // "#3b6ea8" → "rgba(59, 110, 168, 0.15)"
 function saydamRenk(hex, oran) {
@@ -117,6 +124,45 @@ function koyuRenk(hex, oran = 0.3) {
 function renkliEtiket(alan) {
   const renk = uzmanlikRengi(alan);
   return `<span class="etiket etiket-renkli" style="background:${saydamRenk(renk, 0.15)};color:${koyuRenk(renk)}">${esc(alan)}</span>`;
+}
+
+/* TARİH */
+// "2026-10-20" ya da tam tarih → "20 Ekim 2026"
+function tarihMetni(deger) {
+  const t = new Date(String(deger).length === 10 ? deger + "T12:00:00" : deger);
+  if (isNaN(t)) return "";
+  return t.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" });
+}
+
+/* YENİ DANIŞAN KABUL DURUMU
+ * Uzman bu bilgiyi KABUL_GUNCELLIK_GUN günden uzun süre güncellemediyse
+ * "kabul ediyor" demek yerine bilginin güncel olmadığını söyleriz.
+ */
+function kabulDurumu(u) {
+  if (u.kabulGuncellenme) {
+    const gecenGun = (Date.now() - new Date(u.kabulGuncellenme).getTime()) / 86400000;
+    if (gecenGun > KABUL_GUNCELLIK_GUN) {
+      return { sinif: "eski", metin: "Kabul durumu bir süredir güncellenmedi" };
+    }
+  }
+  return u.yeniDanisan
+    ? { sinif: "acik", metin: "Yeni danışan kabul ediyor" }
+    : { sinif: "", metin: "Şu an yeni danışan almıyor" };
+}
+
+/* ADİL SIRALAMA
+ * Her uzmana, kimliği ve bugünün tarihinden türetilen bir sıra numarası verilir.
+ * Böylece sıralama her gün değişir ama gün içinde sabit kalır: Sayfa yenilense ya da
+ * sayfalar arasında gezilse bile aynı uzman iki kez görünmez, kimse kalıcı olarak önde kalmaz.
+ */
+function gunlukSira(id) {
+  const anahtar = id + "|" + new Date().toISOString().slice(0, 10);
+  let h = 2166136261;
+  for (let i = 0; i < anahtar.length; i++) {
+    h ^= anahtar.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h;
 }
 
 /* İKONLAR — dışarıdan kütüphane yüklemeden, sayfa içine gömülü küçük çizimler */
@@ -142,6 +188,7 @@ const IKON_YOLLARI = {
   ucret: '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9.5v5M18 9.5v5"/>',
   yazi: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',
   tik: '<path d="m5 12 4.5 4.5L19 7"/>',
+  bilgi: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>',
 };
 function ikon(ad) {
   return `<svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IKON_YOLLARI[ad] || ""}</svg>`;

@@ -69,12 +69,18 @@
           <h1>${esc(u.ad)}</h1>
           <div class="rozetler">
             <span class="rozet">${esc(u.unvan)}</span>
-            <span class="dogrulama-isaret">${ikon("dogrulama")}Unvanı doğrulandı</span>
           </div>
+          <!-- Rozetin neyi doğruladığını, neyi doğrulamadığını açıklayan bölüm (taslak metin, hukuki incelemeye açık) -->
+          <details class="dogrulama-detay">
+            <summary>${ikon("dogrulama")}Unvanı doğrulandı ${ikon("bilgi")}<span class="gorunmez">Ne anlama geliyor?</span></summary>
+            <p>Bu profilde belirtilen mesleki unvana ilişkin belgeler platform yönetimi tarafından incelenmiştir.
+               Doğrulama; uzmanın sunduğu hizmetlerin niteliğine, kullandığı yöntemlere ya da sonuçlarına ilişkin bir garanti anlamına gelmez.</p>
+          </details>
         </div>
       </div>
       <p class="tanitim">${esc(u.kisaTanitim)}</p>
       <div class="ozet-bilgiler">${ozet}</div>
+      ${u.guncellenme ? `<p class="guncellik">Profil bilgileri en son ${tarihMetni(u.guncellenme)} tarihinde güncellendi.</p>` : ""}
     </section>`;
 
   // --- Hakkımda ---
@@ -145,16 +151,25 @@
     : "";
 
   // --- Yan kutu: iletişim ---
-  const durum = `<span class="durum ${u.yeniDanisan ? "acik" : ""}">${u.yeniDanisan ? "Yeni danışan kabul ediyor" : "Şu an yeni danışan almıyor"}</span>`;
+  const kabul = kabulDurumu(u);
+  const durum = `<span class="durum ${kabul.sinif}">${kabul.metin}</span>`;
+  // Var olmayan bir hizmeti (ör. bekleme listesi) vaat etmeden, uzmanın beyanını aktarırız.
+  let kabulNotu = "";
+  if (kabul.sinif === "eski") {
+    kabulNotu = `<p class="kapali-uyari">Uzman bu bilgiyi en son ${tarihMetni(u.kabulGuncellenme)} tarihinde güncelledi. Yeni danışan kabul edip etmediğini iletişime geçerek öğrenebilirsiniz.</p>`;
+  } else if (!u.yeniDanisan) {
+    kabulNotu = `<p class="kapali-uyari">Bu uzman şu an yeni danışan almadığını belirtiyor.</p>`;
+  }
   const yan = `
     <aside class="profil-yan">
       <section class="blok iletisim-kutu" aria-labelledby="iletisimBaslik">
         <h2 id="iletisimBaslik">İletişime geçin</h2>
         ${durum}
         ${u.ucret ? `<div class="ucret">${ucretMetni(u.ucret)} <small>/ seans</small></div>` : ""}
-        ${!u.yeniDanisan ? `<p class="kapali-uyari">Bu uzman şu an yeni danışan almıyor. Bekleme listesi için yine de iletişime geçebilirsiniz.</p>` : ""}
+        ${kabulNotu}
         ${iletisimVar ? iletisimButonlari() : `<p class="kapali-uyari">Bu uzman henüz iletişim bilgisi eklemedi.</p>`}
         <p class="alt-not">İlk mesajınızda sağlık bilgilerinizi paylaşmanız gerekmez; kısaca görüşme talebinizi iletmeniz yeterli.</p>
+        ${iletisim.whatsapp ? `<p class="alt-not">WhatsApp butonu sizi WhatsApp uygulamasına yönlendirir; yazışmalarınız WhatsApp'ın gizlilik koşullarına tabidir.</p>` : ""}
       </section>
     </aside>`;
 
@@ -168,6 +183,23 @@
     ${iletisimVar ? `<div class="mobil-iletisim">${iletisimButonlari(true)}</div>` : ""}`;
 
   if (iletisimVar) document.body.classList.add("mobil-cubuk-var");
+
+  // "Uzman listesine dön": Listeden gelindiyse tarayıcının geri adımını kullan,
+  // böylece listedeki filtreler ve sayfa numarası korunur.
+  const geriLink = document.querySelector(".geri-link");
+  if (geriLink && document.referrer) {
+    try {
+      const onceki = new URL(document.referrer);
+      if (onceki.origin === location.origin && /\/(index\.html)?$/.test(onceki.pathname)) {
+        geriLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          history.back();
+        });
+      }
+    } catch (e) {
+      /* geçersiz referans: bağlantı normal çalışır */
+    }
+  }
 
   // "Devamını oku" düğmesi
   const devami = document.getElementById("devamiDugme");

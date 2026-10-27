@@ -195,13 +195,15 @@ select.girdi {
   background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: var(--yaricap);
   padding: 12px; box-shadow: var(--golge);
 }
+/* Tablet: arama ve ihtiyaç tam genişlikte, şehir/unvan/görüşme alt satırda yan yana
+   Masaüstü: üst satırda arama + ihtiyaç, alt satırda üç seçim */
 @media (min-width: 700px) {
-  .arama { grid-template-columns: repeat(3, 1fr); }
-  .arama .arama-kutu { grid-column: 1 / -1; }
+  .arama { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .arama > * { grid-column: span 2; }
+  .arama .arama-kutu, .arama .ihtiyac-kutu { grid-column: span 6; }
 }
 @media (min-width: 1020px) {
-  .arama { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr); }
-  .arama .arama-kutu { grid-column: auto; }
+  .arama .arama-kutu, .arama .ihtiyac-kutu { grid-column: span 3; }
 }
 .arama-kutu { position: relative; }
 .arama-kutu .ikon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--soluk); pointer-events: none; }
@@ -759,3 +761,39 @@ body.mobil-cubuk-var { padding-bottom: 84px; }
 }
 .yazi-alt .avatar { width: 34px; height: 34px; font-size: 0.8rem; }
 .yazi-alt strong { display: block; color: var(--metin); font-weight: 600; font-size: 0.9rem; }
+
+/* ---------- İhtiyaç seçimi, "emin değilim" notu, sıralama bilgisi ---------- */
+.ihtiyac-kutu select.girdi { font-weight: 500; }
+.emin-degilim-notu {
+  margin: 16px 0 0; padding: 14px 16px; border-radius: 12px;
+  background: var(--mor-acik); border: 1px solid var(--mor-cizgi); color: #3f3550; font-size: 0.95rem;
+}
+.emin-degilim-notu strong { display: block; margin-bottom: 2px; color: var(--mor-koyu); }
+
+.siralama-bilgisi { margin: -6px 0 14px; font-size: 0.9rem; color: var(--soluk); }
+.siralama-bilgisi summary {
+  cursor: pointer; display: inline-flex; align-items: center; gap: 6px; min-height: 36px;
+  color: var(--soluk); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 4px;
+}
+.siralama-bilgisi summary:hover { color: var(--metin); }
+.siralama-bilgisi p {
+  margin: 6px 0 0; max-width: 72ch; padding: 0 0 0 12px; border-left: 2px solid var(--cizgi-koyu);
+}
+
+/* Kabul durumu güncel değilse: gri nokta yerine boş halka */
+.durum.eski { color: var(--soluk); font-style: italic; }
+.durum.eski::before { background: transparent; border: 1.5px solid #a9a397; }
+
+/* ---------- Profil: doğrulama açıklaması, güncellik bilgisi ---------- */
+.dogrulama-detay { margin-top: 14px; font-size: 0.9rem; }
+.dogrulama-detay summary {
+  list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  color: var(--vurgu); font-weight: 600; min-height: 32px;
+}
+.dogrulama-detay summary::-webkit-details-marker { display: none; }
+.dogrulama-detay summary .ikon { width: 16px; height: 16px; }
+.dogrulama-detay p {
+  margin: 6px 0 0; padding: 12px 14px; border-radius: 10px;
+  background: var(--vurgu-acik); color: #24473b; max-width: 64ch;
+}
+.guncellik { margin: 14px 0 0; font-size: 0.85rem; color: var(--soluk); }

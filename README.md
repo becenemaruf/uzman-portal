@@ -14,8 +14,10 @@ Ruh sağlığı uzmanlarının (psikolog, klinik psikolog, psikolojik danışman
 | 4 | Uzman paneli: profil düzenleme, fotoğraf, yazılar, görünürlük istatistikleri | — |
 | 5 | Yönetici paneli: unvan/diploma doğrulama, profil onayı | — |
 | 6a | Veritabanı kurulumu (Supabase, Frankfurt): tablolar, güvenlik kuralları, dosya depoları — 22 senaryoluk testten geçti | ✅ Tamam |
-| 6b | Siteyi veritabanına bağlama: gerçek kayıt, giriş, CAPTCHA, fotoğraf yükleme | ⏳ Sırada |
-| 7 | Alan adı bağlantısı ve yayına alma | — |
+| 6b | Siteyi veritabanına bağlama: örnek verilerin aktarımı, gerçek kayıt, giriş, CAPTCHA | ⏳ Sırada |
+| 7 | Google'da bulunabilirlik: her uzmana kalıcı adres (`/uzman/elif-aydin`), sayfa başlıkları, paylaşım önizlemesi, site haritası. GitHub Actions ile otomatik sayfa üretimi (framework değişikliği gerekmez) | — |
+| 8 | Bildirim sistemi: "Bu profilde sorun var" (taklit profil, yanlış unvan, güncel olmayan bilgi); CAPTCHA'lı, kayıtlı, itiraz hakkı olan süreç | — |
+| 9 | Alan adı, güvenlik başlıkları (Cloudflare), Pro plan (yedekleme, sızdırılmış şifre kontrolü) ve yayına alma | — |
 
 ## Temel kararlar
 
@@ -23,6 +25,12 @@ Ruh sağlığı uzmanlarının (psikolog, klinik psikolog, psikolojik danışman
 - **Kimler profil açabilir:** Tüm ruh sağlığı uzmanları; profiller unvan doğrulamasından sonra yayına girer. Doğrulanmamış profiller danışanlara hiç gösterilmez.
 - **İletişim:** Profilde, uzman eklediyse WhatsApp mesaj butonu ve/veya telefonla arama butonu bulunur.
 - **Danışan yorumu yok:** Yorumlar taraflıdır ve sağlık okuryazarlığını zedeler; platformda yorum ya da puanlama bulunmaz.
+- **Ücretli öne çıkarma yok, platform içi mesajlaşma yok.**
+- **Adil sıralama:** Uzmanlar, yeni danışan kabul edenler önde olmak üzere her gün değişen ama gün içinde sabit kalan bir sırayla listelenir. Alfabetik sıra kullanılmaz. Ücret, üyelik, yazı sayısı ve profil doluluk oranı sıralamayı **etkilemez**.
+- **Güncellik:** "Yeni danışan kabul ediyor" bilgisi 60 günden uzun süre güncellenmezse "Kabul durumu bir süredir güncellenmedi" olarak gösterilir.
+- **İhtiyaç kategorileri tanı değildir:** Danışanın günlük dille arama yapması içindir; tanı koymak ya da yönlendirmek için kullanılmaz.
+- **Var olmayan hizmet vaat edilmez** (ör. bekleme listesi). Henüz çalışmayan özellikler çalışıyormuş gibi gösterilmez.
+- **Örnek veriler gerçek uzman gibi sunulmaz:** Veritabanında `ornek = true` olarak işaretlidir ve yayın öncesi topluca silinir.
 - **Veri katmanı ayrı tutulur:** Sayfalar verileri yalnızca `veri.js` üzerinden ister. Veritabanına geçişte sadece bu dosya değişir.
 - **Gizli bilgi koda yazılmaz:** Repo herkese açık olduğu için şifre, gizli anahtar vb. hiçbir zaman bu dosyalarda yer almaz.
 
@@ -71,6 +79,11 @@ Proje: `uzman-portal` · Bölge: Central EU (Frankfurt) · PostgreSQL 17
 - Yayındaki bir yazı düzenlenirse otomatik olarak yeniden incelemeye düşer.
 - Uzman doğrulama belgesinin durumunu değiştiremez; yüklenmiş belge sonradan değiştirilemez, sadece silinebilir.
 - Hiçbir kullanıcı internet üzerinden kendini yönetici yapamaz.
+- "Ek belge gerekli" ve "Düzeltme istendi" durumlarından uzman yeniden incelemeye gönderebilir.
+- Kabul durumu tarihi elle geriye ya da ileriye alınamaz; her güncellemede "şimdi" yazılır.
+- **Değişiklik kayıtları** (`degisiklik_kayitlari`): Profil, gizli bilgi, eğitim, belge, yazı ve yönetici tablolarındaki her değişiklik; kimin (uzman/yönetici/sistem), ne zaman, hangi alanı eskiden neye çevirdiği ile kaydedilir. Sadece yöneticiler okuyabilir; kimse silemez ya da değiştiremez.
+
+**Test:** `supabase/tests/guvenlik_testi.sql` — 31 senaryo, tamamı geçiyor.
 
 ## Güvenlik planı (büyük portallardan derlenen)
 
@@ -90,6 +103,21 @@ Taslakta ekranları hazır olanlar ✅, veritabanı aşamasında eklenecekler �
 | Oturum yönetimi | Uzun süre işlem yapılmazsa çıkış; "tüm cihazlardan çıkış yap" | ⏳ |
 | E-posta değişikliğinde çift onay | Hem eski hem yeni adres onaylamadan değişmez | ⏳ |
 | KVKK onayı ve açık rıza | Kayıtta zorunlu | ✅ |
+
+## Karar ve hukuki inceleme bekleyen konular
+
+Bu konular yayına geçmeden önce netleşmeli. Kesinliği olmayan hukuki varsayımlar koda dönüştürülmedi.
+
+| Konu | Neden önemli | Durum |
+|---|---|---|
+| Seans ücreti gösterimi | Sağlık hizmetlerinde tanıtım ve reklam sınırlamaları; özellikle hekim olan psikiyatristler için ayrıca değerlendirilmeli | Hukuki görüş gerekli. Ücret alanı ve filtresi prototipte açık, yayında kapatılabilir |
+| KVKK: açık rıza ile hizmet şartı | Profilin yayınlanması sözleşmenin ifası kapsamında olabilir; açık rızanın kayıt şartına bağlanması sorunlu olabilir. Veri işleme amaçlarına göre hukuki dayanaklar ayrı belirlenmeli | KVKK avukatı görüşü gerekli |
+| Yurt dışı veri aktarımı | Supabase (Frankfurt) ve Cloudflare yurt dışında; 2024 değişiklikleri sonrası aktarım yolları (ör. standart sözleşme) | KVKK avukatı görüşü gerekli |
+| Meslek bazında doğrulama matrisi | Her unvan için hangi belgenin isteneceği, nasıl doğrulanacağı, hangi faaliyetlerin ayrı yetki gerektirdiği | Resmî kaynaklarla araştırılmalı |
+| "Aile Danışmanı" ve PDR unvanları | Sağlık meslekleriyle aynı dizinde sunulmaları ve "terapi" ifadelerinin kullanımı | Karar ve hukuki görüş gerekli |
+| Reklam manşetleri | Sağlık hizmeti reklamı sınırlamaları; hangi içeriklerin reklam alanında yer alabileceği | Hukuki görüş gerekli |
+| Doğrulama rozeti metni | "Neyi doğruladık, neyi doğrulamadık" açıklaması taslak olarak eklendi | Hukuki gözden geçirme |
+| Belge saklama ve silme süresi | Diplomalar ve değişiklik kayıtları ne kadar süre tutulacak | Karar gerekli |
 
 ## Yayın
 

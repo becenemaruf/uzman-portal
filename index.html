@@ -61,6 +61,13 @@
           <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           <input class="girdi" id="aramaMetni" type="search" placeholder="İsim, alan veya ilçe ara…" autocomplete="off">
         </div>
+        <div class="ihtiyac-kutu">
+          <label class="gorunmez" for="filtreIhtiyac">Ne konuda destek arıyorsunuz?</label>
+          <select class="girdi" id="filtreIhtiyac">
+            <option value="">Ne konuda destek arıyorsunuz?</option>
+            <option value="emin-degilim">Henüz emin değilim</option>
+          </select>
+        </div>
         <div>
           <label class="gorunmez" for="filtreSehir">Şehir</label>
           <select class="girdi" id="filtreSehir"><option value="">Tüm şehirler</option></select>
@@ -118,11 +125,16 @@
           <select class="girdi" id="filtreDil"><option value="">Tümü</option></select>
         </div>
         <div>
-          <label class="alan-etiket" for="filtreUcret">Seans ücreti</label>
+          <label class="alan-etiket" for="filtreUcret">Seans ücreti (en fazla)</label>
           <select class="girdi" id="filtreUcret"><option value="">Fark etmez</option></select>
         </div>
       </div>
       </div><!-- /arama-paneli -->
+
+      <div class="emin-degilim-notu" id="eminDegilimNotu" role="note" hidden>
+        <strong>Emin olmamanız çok doğal.</strong>
+        Yetişkinlerle çalışan bir psikolog ya da klinik psikologla yapacağınız ilk görüşmede, neye ihtiyacınız olduğunu birlikte netleştirebilirsiniz. Şehrinizi ve görüşme tercihinizi seçerek başlayabilirsiniz.
+      </div>
 
       <div class="sonuc-satir" id="sonucSatiri">
         <span id="sonucSayisi" aria-live="polite"></span>
@@ -140,6 +152,12 @@
           </div>
         </div>
       </div>
+
+      <details class="siralama-bilgisi">
+        <summary>Sıralama nasıl belirleniyor?</summary>
+        <p>Uzmanlar, yeni danışan kabul edenler önde olmak üzere <strong>her gün değişen</strong> bir sırayla gösterilir. Böylece hiçbir uzman, adı ya da kayıt tarihi nedeniyle kalıcı olarak öne çıkmaz. Arama kutusuna bir şey yazdığınızda, aradığınıza daha yakın sonuçlar önce gelir.</p>
+        <p>Sıralama; ücret, üyelik, yazı sayısı ya da profilin doluluk oranından <strong>etkilenmez</strong>. Platformda ücretli öne çıkarma yoktur.</p>
+      </details>
 
       <div class="kartlar" id="kartlar"></div>
       <nav class="sayfalama" id="sayfalama" aria-label="Sayfalar" hidden></nav>
