@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="Farklı dillerde konuşma balonları çizimi">
+  <circle cx="360" cy="110" r="88" fill="#ffffff" opacity="0.35"/>
+  <circle cx="120" cy="248" r="56" fill="#d8c9ad" opacity="0.35"/>
+  <!-- büyük yeşil balon -->
+  <path d="M110 70h170a22 22 0 0 1 22 22v76a22 22 0 0 1-22 22h-112l-34 30v-30h-24a22 22 0 0 1-22-22V92a22 22 0 0 1 22-22z" fill="#1d5c48"/>
+  <rect x="122" y="100" width="120" height="11" rx="5.5" fill="#ffffff" opacity="0.9"/>
+  <rect x="122" y="122" width="150" height="11" rx="5.5" fill="#ffffff" opacity="0.55"/>
+  <rect x="122" y="144" width="96" height="11" rx="5.5" fill="#ffffff" opacity="0.55"/>
+  <!-- beyaz balon -->
+  <path d="M250 150h126a20 20 0 0 1 20 20v58a20 20 0 0 1-20 20h-16v26l-30-26h-80a20 20 0 0 1-20-20v-58a20 20 0 0 1 20-20z" fill="#ffffff"/>
+  <rect x="262" y="176" width="96" height="10" rx="5" fill="#1c2321" opacity="0.8"/>
+  <rect x="262" y="196" width="116" height="10" rx="5" fill="#e4e0d6"/>
+  <rect x="262" y="216" width="70" height="10" rx="5" fill="#e4e0d6"/>
+  <!-- dil etiketleri -->
+  <g font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="600" text-anchor="middle">
+    <rect x="316" y="58" width="48" height="30" rx="15" fill="#ffffff"/>
+    <text x="340" y="78" fill="#1d5c48">TR</text>
+    <rect x="372" y="98" width="48" height="30" rx="15" fill="#1d5c48"/>
+    <text x="396" y="118" fill="#ffffff">EN</text>
+    <rect x="96" y="232" width="48" height="30" rx="15" fill="#ffffff"/>
+    <text x="120" y="252" fill="#1d5c48">DE</text>
+  </g>
+</svg>

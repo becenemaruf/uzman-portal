@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="Kitap ve etkinlik takvimi çizimi">
+  <circle cx="350" cy="110" r="100" fill="#ffffff" opacity="0.45"/>
+  <circle cx="110" cy="80" r="44" fill="#c9d7dd" opacity="0.6"/>
+  <!-- açık kitap -->
+  <path d="M90 228c40-18 82-18 122 0V118c-40-18-82-18-122 0z" fill="#ffffff"/>
+  <path d="M212 228c40-18 82-18 122 0V118c-40-18-82-18-122 0z" fill="#f4f7f8"/>
+  <path d="M212 118v110" stroke="#c9d7dd" stroke-width="3"/>
+  <path d="M90 236c40-18 82-18 122 0 40-18 82-18 122 0" fill="none" stroke="#5a6f8c" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#cfd8dc" stroke-width="7" stroke-linecap="round">
+    <path d="M110 140c26-8 56-8 82 0"/>
+    <path d="M110 162c26-8 56-8 82 0"/>
+    <path d="M110 184c26-8 56-8 60 0"/>
+    <path d="M232 140c26-8 56-8 82 0"/>
+    <path d="M232 162c26-8 56-8 82 0"/>
+  </g>
+  <!-- takvim kartı -->
+  <rect x="300" y="44" width="116" height="112" rx="14" fill="#ffffff"/>
+  <rect x="300" y="44" width="116" height="34" rx="14" fill="#1d5c48"/>
+  <rect x="300" y="64" width="116" height="14" fill="#1d5c48"/>
+  <rect x="326" y="34" width="8" height="22" rx="4" fill="#5a6f8c"/>
+  <rect x="382" y="34" width="8" height="22" rx="4" fill="#5a6f8c"/>
+  <g fill="#e2e9ec">
+    <rect x="318" y="92" width="18" height="16" rx="4"/>
+    <rect x="346" y="92" width="18" height="16" rx="4"/>
+    <rect x="374" y="92" width="18" height="16" rx="4"/>
+    <rect x="318" y="118" width="18" height="16" rx="4"/>
+    <rect x="374" y="118" width="18" height="16" rx="4"/>
+  </g>
+  <rect x="346" y="118" width="18" height="16" rx="4" fill="#2e9e64"/>
+</svg>

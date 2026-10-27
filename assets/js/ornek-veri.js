@@ -272,6 +272,7 @@ const ORNEK_MANSETLER = [
     metin: "Profilinizi oluşturun; unvanınız doğrulandıktan sonra profiliniz danışanların karşısına çıksın.",
     buton: { yazi: "Profilinizi oluşturun", adres: "giris.html#kayit" },
     tema: "yesil",
+    gorsel: "assets/img/manset-basvuru.svg",
   },
   {
     tur: "yenilik",
@@ -279,6 +280,7 @@ const ORNEK_MANSETLER = [
     metin: "Artık uzmanları görüşme yapabildikleri dile göre de arayabilirsiniz.",
     buton: { yazi: "Filtreleri aç", adres: "#aramaFormu" },
     tema: "kum",
+    gorsel: "assets/img/manset-dil.svg",
   },
   {
     tur: "reklam",
@@ -286,5 +288,6 @@ const ORNEK_MANSETLER = [
     metin: "Eğitim, kitap ve etkinlik duyuruları bu alanda yer alabilir.",
     buton: { yazi: "Bilgi alın", adres: "#" },
     tema: "gri",
+    gorsel: "assets/img/manset-etkinlik.svg",
   },
 ];
