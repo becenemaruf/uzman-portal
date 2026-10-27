@@ -208,12 +208,22 @@ select.girdi {
 .kart::before, .kart::after { content: ""; position: absolute; pointer-events: none; }
 .kart::before {
   top: 0; left: 22px; right: 22px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--cizgi-koyu) 18%, var(--cizgi-koyu) 82%, transparent);
+  /* asimetrik: solda belirgin başlar, sağa doğru söner */
+  background: linear-gradient(90deg, var(--cizgi-koyu), var(--cizgi-koyu) 35%, transparent);
 }
 .kart::after {
   display: none; top: 28px; bottom: 28px; right: 0; width: 1px;
-  background: linear-gradient(180deg, transparent, var(--cizgi-koyu) 18%, var(--cizgi-koyu) 82%, transparent);
+  /* asimetrik: üstte belirgin başlar, aşağı doğru söner */
+  background: linear-gradient(180deg, var(--cizgi-koyu), var(--cizgi-koyu) 30%, transparent);
 }
+/* Sol üst köşedeki renkli vurgu çizgisi (ilk çalışma alanının rengi) */
+.kart-vurgu {
+  position: absolute; top: 0; left: 22px; width: 52px; height: 3px;
+  background: var(--kart-renk, var(--vurgu)); border-radius: 0 0 3px 3px;
+  transition: width 0.3s;
+}
+@media (min-width: 700px) { .kart-vurgu { left: 28px; } }
+.kart:hover .kart-vurgu { width: 88px; }
 /* Mobil (1 sütun): sadece yatay çizgiler */
 .kart:first-child::before { display: none; }
 /* Tablet (2 sütun) */
@@ -274,6 +284,7 @@ select.girdi {
   background: var(--yuzey-ikincil); border: 1px solid var(--cizgi);
   font-size: 0.82rem; padding: 4px 10px; border-radius: 999px;
 }
+.etiket-renkli { border-color: transparent; font-weight: 500; }
 .kart .tanitim {
   margin: 0; color: #3a433f;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;

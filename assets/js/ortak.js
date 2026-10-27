@@ -94,6 +94,31 @@ function okunurNumara(numara) {
   return `${r.slice(0, 4)} ${r.slice(4, 7)} ${r.slice(7, 9)} ${r.slice(9)}`;
 }
 
+/* ÇALIŞMA ALANI RENKLERİ */
+function uzmanlikRengi(alan) {
+  const ad = normallestir(alan);
+  const grup = UZMANLIK_RENKLERI.find((g) => g.kelimeler.some((k) => ad.includes(k)));
+  if (grup) return grup.renk;
+  let toplam = 0;
+  for (const harf of ad) toplam = (toplam * 31 + harf.charCodeAt(0)) >>> 0;
+  return UZMANLIK_RENKLERI[toplam % UZMANLIK_RENKLERI.length].renk;
+}
+// "#3b6ea8" → "rgba(59, 110, 168, 0.15)"
+function saydamRenk(hex, oran) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${oran})`;
+}
+// Rengi koyulaştırır (yazının açık zeminde rahat okunması için)
+function koyuRenk(hex, oran = 0.3) {
+  const n = parseInt(hex.slice(1), 16);
+  const k = (d) => Math.round(d * (1 - oran));
+  return `rgb(${k((n >> 16) & 255)}, ${k((n >> 8) & 255)}, ${k(n & 255)})`;
+}
+function renkliEtiket(alan) {
+  const renk = uzmanlikRengi(alan);
+  return `<span class="etiket etiket-renkli" style="background:${saydamRenk(renk, 0.15)};color:${koyuRenk(renk)}">${esc(alan)}</span>`;
+}
+
 /* İKONLAR — dışarıdan kütüphane yüklemeden, sayfa içine gömülü küçük çizimler */
 const IKON_YOLLARI = {
   ara: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',

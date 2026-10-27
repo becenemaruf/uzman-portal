@@ -93,7 +93,7 @@
   if (doluMu(u.uzmanliklar) || doluMu(u.yaklasimlar) || doluMu(u.yasGruplari)) {
     alanlar = blok(
       "Çalışma alanları",
-      (doluMu(u.uzmanliklar) ? `<h3>Uzmanlık alanları</h3>${etiketler(u.uzmanliklar)}` : "") +
+      (doluMu(u.uzmanliklar) ? `<h3>Uzmanlık alanları</h3><div class="etiketler">${u.uzmanliklar.map(renkliEtiket).join("")}</div>` : "") +
         (doluMu(u.yaklasimlar) ? `<h3>Terapi yaklaşımları</h3>${etiketler(u.yaklasimlar)}` : "") +
         (doluMu(u.yasGruplari) ? `<h3>Çalıştığı gruplar</h3>${etiketler(u.yasGruplari)}` : "")
     );

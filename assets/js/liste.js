@@ -61,11 +61,14 @@
 
   function kartHtml(u) {
     const profilAdresi = `uzman.html?id=${encodeURIComponent(u.id)}`;
-    const etiketler = (u.uzmanliklar || []).slice(0, 3).map((e) => `<span class="etiket">${esc(e)}</span>`).join("");
+    const etiketler = (u.uzmanliklar || []).slice(0, 3).map(renkliEtiket).join("");
+    // Kartın vurgu rengi: ilk çalışma alanının rengi
+    const kartRengi = u.uzmanliklar && u.uzmanliklar.length ? uzmanlikRengi(u.uzmanliklar[0]) : "#1d5c48";
     const konum = u.gorusme.includes("yuzyuze") ? `${u.ilce}, ${u.sehir}` : u.sehir;
     // Kartın tamamı tıklanabilir: isimdeki bağlantı (kart-baglanti) görünmez bir katmanla tüm kartı kaplar.
     return `
-      <article class="kart">
+      <article class="kart" style="--kart-renk:${kartRengi}">
+        <span class="kart-vurgu" aria-hidden="true"></span>
         <div class="kart-ust">
           ${avatarHtml(u)}
           <div class="kart-kimlik">
