@@ -33,10 +33,14 @@ uzman.html            Uzman profil sayfası  →  uzman.html?id=elif-aydin
 giris.html            Uzman Girişi: giriş / kayıt / doğrulama / şifremi unuttum
 assets/css/stil.css   Tüm sayfaların ortak tasarımı (renkler en üstte)
 assets/js/ayarlar.js  Marka adı ve sabit listeler (unvanlar, yaş grupları…)
-assets/js/ornek-veri.js  Örnek uzmanlar — veritabanı bağlanınca silinecek
+assets/js/ornek-veri.js  Örnek uzmanlar, manşetler ve blog yazıları — veritabanı bağlanınca silinecek
+assets/js/ornek-veri-deneme.js  Sayfalamayı denemek için otomatik üretilmiş 40 hayali uzman — silinecek
 assets/js/veri.js     Veri katmanı — sayfaların veriye ulaştığı tek kapı
 assets/js/ortak.js    Ortak yardımcılar ve ikonlar
-assets/js/liste.js    Liste sayfasının arama ve filtre kodu
+assets/js/liste.js    Uzman listesi: arama, filtreler, sayfalama, kutu/liste görünümü
+assets/js/manset.js   Ana sayfadaki kayan manşet alanı
+assets/js/blog.js     Ana sayfadaki "Uzmanlarımızdan yazılar" alanı
+assets/img/           Manşet çizimleri ve temsili uzman portreleri
 assets/js/profil.js   Profil sayfasını oluşturan kod
 assets/js/giris.js    Giriş/kayıt ekranlarının kodu
 ```

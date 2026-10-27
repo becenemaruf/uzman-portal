@@ -3,10 +3,13 @@
  * 1) Uzmanları veri katmanından alır
  * 2) Filtre seçeneklerini bu verilerden otomatik oluşturur
  * 3) Kullanıcı her yazdığında ya da seçim yaptığında listeyi yeniden süzer
+ * 4) Sonuçları sayfalara böler (sayfa başına SAYFA_BOYUTU kadar uzman)
+ * 5) Kutu (grid) ve liste görünümü arasında geçiş sağlar; seçim tarayıcıda hatırlanır
  */
 (async function () {
   const $ = (id) => document.getElementById(id);
   const kartAlani = $("kartlar");
+  const hareketAzalt = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const uzmanlar = await Veri.uzmanlariGetir();
 
@@ -66,6 +69,7 @@
     const kartRengi = u.uzmanliklar && u.uzmanliklar.length ? uzmanlikRengi(u.uzmanliklar[0]) : "#1d5c48";
     const konum = u.gorusme.includes("yuzyuze") ? `${u.ilce}, ${u.sehir}` : u.sehir;
     // Kartın tamamı tıklanabilir: isimdeki bağlantı (kart-baglanti) görünmez bir katmanla tüm kartı kaplar.
+    // kart-govde: liste görünümünde ortadaki sütun olur.
     return `
       <article class="kart" style="--kart-renk:${kartRengi}">
         <span class="kart-vurgu" aria-hidden="true"></span>
@@ -79,12 +83,14 @@
             </div>
           </div>
         </div>
-        <p class="kart-meta">
-          <span>${ikon("konum")}${esc(konum)}</span>
-          <span>${ikon("video")}${esc(gorusmeMetni(u.gorusme))}</span>
-        </p>
-        ${etiketler ? `<div class="etiketler">${etiketler}</div>` : ""}
-        <p class="tanitim">${esc(u.kisaTanitim)}</p>
+        <div class="kart-govde">
+          <p class="kart-meta">
+            <span>${ikon("konum")}${esc(konum)}</span>
+            <span>${ikon("video")}${esc(gorusmeMetni(u.gorusme))}</span>
+          </p>
+          ${etiketler ? `<div class="etiketler">${etiketler}</div>` : ""}
+          <p class="tanitim">${esc(u.kisaTanitim)}</p>
+        </div>
         <div class="kart-alt">
           <div class="kart-alt-bilgi">
             ${u.ucret ? `<span class="ucret">${ucretMetni(u.ucret)} <small>/ seans</small></span>` : `<span class="ucret ucret-yok">Ücret görüşmede</span>`}
@@ -95,33 +101,114 @@
       </article>`;
   }
 
-  function listele() {
+  // --- Durum ---
+  let sonuclar = []; // filtreden geçen tüm uzmanlar
+  let sayfa = 1;     // şu an gösterilen sayfa
+
+  // Filtreler değişince: listeyi yeniden süz ve 1. sayfaya dön
+  function filtrele() {
     const f = {};
     [...temelFiltreler, ...ekFiltreler].forEach((id) => (f[id] = degerOku(id)));
 
     // Sıralama: yeni danışan kabul edenler önce, sonra isme göre.
-    const sonuc = uzmanlar
+    sonuclar = uzmanlar
       .filter((u) => uygunMu(u, f))
       .sort((a, b) => (b.yeniDanisan - a.yeniDanisan) || a.ad.localeCompare(b.ad, "tr"));
+    sayfa = 1;
 
-    $("sonucSayisi").innerHTML = `<strong>${sonuc.length}</strong> uzman bulundu`;
+    // Kaç ek filtre seçili? "Daha fazla filtre (2)" sayacı
+    const ekSecili = ekFiltreler.filter((id) => degerOku(id)).length;
+    $("filtreSayac").hidden = ekSecili === 0;
+    $("filtreSayac").textContent = ekSecili;
+    $("temizleDugme").hidden = ![...temelFiltreler, ...ekFiltreler].some((id) => degerOku(id));
 
-    kartAlani.innerHTML = sonuc.length
-      ? sonuc.map(kartHtml).join("")
+    ciz();
+  }
+
+  // Seçili sayfadaki uzmanları ve sayfa numaralarını çizer
+  function ciz() {
+    const toplam = sonuclar.length;
+    const sayfaSayisi = Math.max(1, Math.ceil(toplam / SAYFA_BOYUTU));
+    sayfa = Math.min(Math.max(1, sayfa), sayfaSayisi);
+    const bas = (sayfa - 1) * SAYFA_BOYUTU;
+    const sayfadakiler = sonuclar.slice(bas, bas + SAYFA_BOYUTU);
+
+    $("sonucSayisi").innerHTML =
+      toplam > SAYFA_BOYUTU
+        ? `<strong>${toplam}</strong> uzman bulundu <span class="aralik">· ${bas + 1}–${bas + sayfadakiler.length} arası gösteriliyor</span>`
+        : `<strong>${toplam}</strong> uzman bulundu`;
+
+    kartAlani.innerHTML = toplam
+      ? sayfadakiler.map(kartHtml).join("")
       : `<div class="bos-durum">
            <h2>Bu kriterlere uygun uzman bulunamadı</h2>
            <p>Birkaç filtreyi kaldırmayı ya da aramanızı genişletmeyi deneyin.</p>
            <button class="btn btn-cizgi" type="button" data-temizle>Filtreleri temizle</button>
          </div>`;
 
-    // Kaç ek filtre seçili? "Daha fazla filtre (2)" sayacı
-    const ekSecili = ekFiltreler.filter((id) => degerOku(id)).length;
-    $("filtreSayac").hidden = ekSecili === 0;
-    $("filtreSayac").textContent = ekSecili;
-
-    const herhangiSecili = [...temelFiltreler, ...ekFiltreler].some((id) => degerOku(id));
-    $("temizleDugme").hidden = !herhangiSecili;
+    sayfalamaCiz(sayfaSayisi);
   }
+
+  // Sayfa numaraları: çok sayfa varsa "1 … 4 5 6 … 12" şeklinde kısaltılır
+  function sayfalamaCiz(sayfaSayisi) {
+    const alan = $("sayfalama");
+    if (sayfaSayisi <= 1) {
+      alan.hidden = true;
+      alan.innerHTML = "";
+      return;
+    }
+    const numaralar = [];
+    for (let i = 1; i <= sayfaSayisi; i++) {
+      if (i === 1 || i === sayfaSayisi || Math.abs(i - sayfa) <= 1) numaralar.push(i);
+      else if (numaralar[numaralar.length - 1] !== "…") numaralar.push("…");
+    }
+    alan.innerHTML = `
+      <button class="sayfa-dugme sayfa-ok" type="button" data-sayfa="${sayfa - 1}" ${sayfa === 1 ? "disabled" : ""} aria-label="Önceki sayfa">${ikon("geri")}<span class="sayfa-ok-yazi">Önceki</span></button>
+      ${numaralar
+        .map((n) =>
+          n === "…"
+            ? `<span class="sayfa-bosluk" aria-hidden="true">…</span>`
+            : `<button class="sayfa-dugme" type="button" data-sayfa="${n}" ${n === sayfa ? 'aria-current="page"' : ""} aria-label="${n}. sayfa">${n}</button>`
+        )
+        .join("")}
+      <button class="sayfa-dugme sayfa-ok" type="button" data-sayfa="${sayfa + 1}" ${sayfa === sayfaSayisi ? "disabled" : ""} aria-label="Sonraki sayfa"><span class="sayfa-ok-yazi">Sonraki</span>${ikon("ileri")}</button>`;
+    alan.hidden = false;
+  }
+
+  function sayfayaGit(n) {
+    sayfa = n;
+    ciz();
+    // Yeni sayfanın başına kaydır (yapışkan üst menünün altında kalmasın diye biraz pay bırakılır)
+    const ust = $("sonucSatiri").getBoundingClientRect().top + window.scrollY - 84;
+    window.scrollTo({ top: ust, behavior: hareketAzalt ? "auto" : "smooth" });
+  }
+
+  // --- Görünüm: kutu (grid) / liste ---
+  const GORUNUM_ANAHTARI = "uzmanGorunumu";
+  function gorunumUygula(gorunum) {
+    kartAlani.classList.toggle("liste-gorunumu", gorunum === "liste");
+    document.querySelectorAll("[data-gorunum-sec]").forEach((d) => {
+      d.setAttribute("aria-pressed", String(d.dataset.gorunumSec === gorunum));
+    });
+  }
+  let kayitliGorunum = "grid";
+  try {
+    kayitliGorunum = localStorage.getItem(GORUNUM_ANAHTARI) === "liste" ? "liste" : "grid";
+  } catch (e) {
+    /* tarayıcı hafızası kapalıysa varsayılan görünümle devam edilir */
+  }
+  gorunumUygula(kayitliGorunum);
+  document.querySelectorAll("[data-gorunum-sec]").forEach((d) => {
+    d.addEventListener("click", () => {
+      const secilen = d.dataset.gorunumSec;
+      gorunumUygula(secilen);
+      try {
+        localStorage.setItem(GORUNUM_ANAHTARI, secilen);
+      } catch (e) {
+        /* kaydedilemezse sorun değil */
+      }
+    });
+  });
 
   function temizle() {
     [...temelFiltreler, ...ekFiltreler].forEach((id) => {
@@ -129,16 +216,20 @@
       if (el.type === "checkbox") el.checked = false;
       else el.value = "";
     });
-    listele();
+    filtrele();
   }
 
   // --- Olaylar ---
   [...temelFiltreler, ...ekFiltreler].forEach((id) => {
-    $(id).addEventListener(id === "aramaMetni" ? "input" : "change", listele);
+    $(id).addEventListener(id === "aramaMetni" ? "input" : "change", filtrele);
   });
   $("temizleDugme").addEventListener("click", temizle);
   kartAlani.addEventListener("click", (e) => {
     if (e.target.closest("[data-temizle]")) temizle();
+  });
+  $("sayfalama").addEventListener("click", (e) => {
+    const dugme = e.target.closest("[data-sayfa]");
+    if (dugme && !dugme.disabled) sayfayaGit(Number(dugme.dataset.sayfa));
   });
   // Başlık butonu: tıklanınca arama kutusuna odaklanır, danışan hemen yazmaya başlar
   $("baslikDugme").addEventListener("click", () => $("aramaMetni").focus());
@@ -148,5 +239,5 @@
     $("ekFiltreDugme").setAttribute("aria-expanded", String(!panel.hidden));
   });
 
-  listele();
+  filtrele();
 })();

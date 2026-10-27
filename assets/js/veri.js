@@ -22,6 +22,15 @@ const Veri = {
     return uzman && uzman.dogrulandi ? uzman : null;
   },
 
+  // Blog yazıları: en yeniler önce. Her yazıya yazarın bilgisi eklenir;
+  // yazarı yayında olmayan (doğrulanmamış) yazılar gösterilmez.
+  async yazilariGetir(adet = 6) {
+    return ORNEK_YAZILAR.map((y) => ({ ...y, yazar: ORNEK_UZMANLAR.find((u) => u.id === y.yazarId && u.dogrulandi) }))
+      .filter((y) => y.yazar)
+      .sort((a, b) => b.tarih.localeCompare(a.tarih))
+      .slice(0, adet);
+  },
+
   // Ana sayfa manşetleri: yalnızca tarih aralığı bugünü kapsayanlar.
   async mansetleriGetir() {
     const bugun = new Date().toISOString().slice(0, 10); // "2026-10-27"

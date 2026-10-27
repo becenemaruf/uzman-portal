@@ -22,6 +22,9 @@ const UNVANLAR = [
 // Çalışılan yaş grupları
 const YAS_GRUPLARI = ["Çocuk", "Ergen", "Yetişkin", "Çift", "Aile"];
 
+// Bir sayfada gösterilecek en fazla uzman sayısı (fazlası sonraki sayfalara geçer)
+const SAYFA_BOYUTU = 36;
+
 // Ücret filtresi seçenekleri (seans başına üst sınır, TL)
 const UCRET_SINIRLARI = [1500, 2000, 2500, 3000];
 

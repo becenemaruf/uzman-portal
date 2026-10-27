@@ -301,3 +301,67 @@ const ORNEK_MANSETLER = [
     gorsel: "assets/img/manset-etkinlik.svg",
   },
 ];
+
+/*
+ * ÖRNEK BLOG YAZILARI
+ *  id         : adres için kısa ad
+ *  yazarId    : yazıyı yazan uzmanın id'si (uzman yayında değilse yazı da görünmez)
+ *  kategori   : renk, çalışma alanı renk sistemiyle aynı kelimelerden belirlenir
+ *  baslik, ozet, tarih ("2026-10-20"), okumaDakika
+ */
+const ORNEK_YAZILAR = [
+  {
+    id: "panik-atak-beden",
+    yazarId: "elif-aydin",
+    kategori: "Kaygı",
+    baslik: "Panik atak sırasında beden neler yaşar?",
+    ozet: "Kalp çarpıntısı, nefes darlığı ve baş dönmesi neden aynı anda gelir? Bedenin alarm sisteminin nasıl çalıştığını anlamak, panik anında korkuyu azaltmanın ilk adımıdır.",
+    tarih: "2026-10-20",
+    okumaDakika: 6,
+  },
+  {
+    id: "cift-terapisi-ne-zaman",
+    yazarId: "can-ozturk",
+    kategori: "Çift ilişkileri",
+    baslik: "Çift terapisine ne zaman başvurmalı?",
+    ozet: "Aynı tartışmalar tekrar tekrar yaşanıyorsa ya da konuşmak giderek zorlaşıyorsa, terapiye başvurmak için kriz anını beklemek gerekmez.",
+    tarih: "2026-10-14",
+    okumaDakika: 5,
+  },
+  {
+    id: "sinav-kaygisi-ebeveyn",
+    yazarId: "zeynep-sahin",
+    kategori: "Çocuk ve ergen",
+    baslik: "Sınav döneminde ebeveynler neler yapabilir?",
+    ozet: "Çocuğun sınav kaygısı çoğu zaman evdeki atmosferle birlikte büyür ya da küçülür. Destekleyici olmanın birkaç pratik yolu var.",
+    tarih: "2026-10-08",
+    okumaDakika: 4,
+  },
+  {
+    id: "yas-sureci",
+    yazarId: "selin-arslan",
+    kategori: "Yas ve kayıp",
+    baslik: "Yasın belirli bir takvimi var mı?",
+    ozet: "Kaybın ardından yaşanan duygular her zaman sırayla gelmez. Yas sürecinin herkes için farklı ilerlediğini bilmek, kendimize karşı daha şefkatli olmamızı sağlar.",
+    tarih: "2026-09-30",
+    okumaDakika: 7,
+  },
+  {
+    id: "okb-dongusu",
+    yazarId: "ayse-demir",
+    kategori: "Kaygı",
+    baslik: "Obsesyon ve kompulsiyon döngüsünü anlamak",
+    ozet: "Rahatsız edici düşünceler neden tekrarlar ve kontrol davranışları neden kısa vadede rahatlatıp uzun vadede sorunu büyütür?",
+    tarih: "2026-09-22",
+    okumaDakika: 6,
+  },
+  {
+    id: "depresyon-ilac",
+    yazarId: "murat-kaya",
+    kategori: "Depresyon",
+    baslik: "Depresyon tedavisinde ilaç: sık sorulan sorular",
+    ozet: "Antidepresanlar bağımlılık yapar mı, etkisi ne zaman başlar, ne kadar süre kullanılır? Tedaviye başlamadan önce merak edilenler.",
+    tarih: "2026-09-15",
+    okumaDakika: 8,
+  },
+];
