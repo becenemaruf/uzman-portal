@@ -21,7 +21,11 @@
 // =====================================================================
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
-const IZINLI_ADRESLER = ["https://becenemaruf.github.io"];
+const IZINLI_ADRESLER = [
+  "https://klinikpsikologlar.com.tr",
+  "https://www.klinikpsikologlar.com.tr",
+  "https://becenemaruf.github.io", // geçiş dönemi: eski adres de çalışsın
+];
 
 function cors(origin: string | null) {
   const izinli = origin && IZINLI_ADRESLER.includes(origin) ? origin : IZINLI_ADRESLER[0];

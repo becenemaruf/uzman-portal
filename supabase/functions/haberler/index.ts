@@ -22,7 +22,7 @@ const ANA_SAYFA = "https://www.aktuelpsikoloji.com/";
 // CM News haber adresleri: https://www.aktuelpsikoloji.com/<kisa-ad>-<numara>h.htm
 const HABER_ADRESI = /^https?:\/\/(www\.)?aktuelpsikoloji\.com\/[a-z0-9-]+-(\d+)h\.htm$/i;
 const TARAYICI_KIMLIGI =
-  "Mozilla/5.0 (compatible; UzmanPortali-HaberOnizleme/1.0; +https://becenemaruf.github.io/uzman-portal/)";
+  "Mozilla/5.0 (compatible; UzmanPortali-HaberOnizleme/1.0; +https://klinikpsikologlar.com.tr/)";
 const IZINLI_ALAN = /^https?:\/\/(www\.)?aktuelpsikoloji\.com\//;
 const ONBELLEK_SURESI = 15 * 60 * 1000;
 const EN_FAZLA = 12;

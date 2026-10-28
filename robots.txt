@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /giris.html
+
+Sitemap: https://klinikpsikologlar.com.tr/sitemap.xml
