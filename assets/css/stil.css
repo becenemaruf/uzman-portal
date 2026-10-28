@@ -1308,3 +1308,8 @@ html { scroll-padding-top: 124px; }
 .yakinda-etiket { display: inline-block; margin-top: 6px; font-size: 0.78rem; padding: 2px 8px; border-radius: 6px; background: var(--yuzey-ikincil); border: 1px dashed var(--cizgi-koyu); color: var(--soluk); }
 .panel-guvenlik { margin-top: 16px; }
 .panel-guvenlik .soluk { margin-bottom: 12px; }
+.sayaclar { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.sayac-kutu { padding: 14px 16px; border: 1px solid var(--cizgi); border-radius: 12px; background: var(--yuzey-ikincil); }
+.sayac-kutu strong { display: block; font-size: 1.8rem; line-height: 1.1; color: var(--vurgu-koyu); }
+.sayac-kutu span { font-size: 0.86rem; color: var(--soluk); }
+.sayac-kutu.vurgulu { border-color: var(--altin); background: var(--altin-acik); }
