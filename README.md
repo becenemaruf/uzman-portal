@@ -42,6 +42,7 @@ Türkiye'nin klinik psikolog rehberi: Unvanı doğrulanmış klinik psikologlar�
 ```
 index.html            Uzman listesi (ana sayfa)
 uzman.html            Uzman profil sayfası  →  uzman.html?id=elif-aydin
+yazi.html             Yazı okuma sayfası    →  yazi.html?id=panik-atak-beden
 giris.html            Uzman Girişi: giriş / kayıt / doğrulama / şifremi unuttum
 assets/css/stil.css   Tüm sayfaların ortak tasarımı (renkler en üstte)
 assets/js/ayarlar.js  Marka adı ve sabit listeler (unvanlar, yaş grupları…)
@@ -53,7 +54,8 @@ assets/js/blog.js     Ana sayfadaki "Uzmanlarımızdan yazılar" alanı
 assets/img/           Manşet çizimleri ve temsili uzman portreleri
 assets/img/marka/     Logo (üst menü: logo.webp, alt bilgi: logo-tam.webp) ve sekme simgeleri
 favicon.ico           Tarayıcı sekmesi simgesi
-assets/js/profil.js   Profil sayfasını oluşturan kod (iletişim paneli dahil)
+assets/js/profil.js   Profil sayfası (iletişim, paylaş, yol tarifi, SEO etiketleri, hata/yeniden dene)
+assets/js/yazi.js     Yazı okuma sayfası
 assets/js/mesaj-formu.js  "Uzmana Mesaj Gönder" penceresi
 assets/js/giris.js    Giriş/kayıt ekranlarının kodu
 supabase/migrations/  Veritabanının kurulum adımları (sırayla uygulanan SQL dosyaları)

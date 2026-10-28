@@ -30,7 +30,7 @@
             ${renkliEtiket(y.kategori)}
           </div>
           <div class="yazi-icerik">
-            <h3><a class="yazi-baglanti" href="#">${esc(y.baslik)}</a></h3>
+            <h3><a class="yazi-baglanti" href="yazi.html?id=${encodeURIComponent(y.id)}">${esc(y.baslik)}</a></h3>
             <p class="yazi-ozet">${esc(y.ozet)}</p>
             <div class="yazi-alt">
               ${avatarHtml(y.yazar)}

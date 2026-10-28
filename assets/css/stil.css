@@ -1184,3 +1184,51 @@ html { scroll-padding-top: 124px; }
 }
 .kurumsal-cagri { background: linear-gradient(135deg, var(--vurgu-koyu) 0%, var(--vurgu) 100%); }
 .dogrulama-isaret, .dogrulama-detay summary { color: var(--vurgu); }
+
+/* ---------- Profil sayfası: gezinme izi, paylaş, örnek rozeti, yükleniyor/hata durumları ---------- */
+.kirinti { margin: 4px 0 16px; font-size: 0.88rem; }
+.kirinti ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 0; }
+.kirinti li { display: inline-flex; align-items: center; color: var(--soluk); min-width: 0; }
+.kirinti li + li::before { content: "›"; margin: 0 8px; color: var(--cizgi-koyu); }
+.kirinti a { color: var(--soluk); text-decoration: none; padding: 6px 0; }
+.kirinti a:hover { color: var(--vurgu); text-decoration: underline; text-underline-offset: 3px; }
+.kirinti [aria-current] { color: var(--metin); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60vw; }
+
+.profil-bas > div.profil-araclar { flex: none; align-self: flex-start; margin-left: auto; }
+.profil-araclar .btn { gap: 6px; min-height: 40px; }
+.profil-araclar .ikon { width: 16px; height: 16px; }
+.paylas-bildirim { margin: 0; font-size: 0.88rem; color: var(--vurgu); }
+.paylas-bildirim:not(:empty) { margin-top: 12px; }
+.paylas-adres { width: 100%; max-width: 420px; margin-top: 6px; padding: 8px 10px; border: 1px solid var(--cizgi-koyu); border-radius: 8px; font: inherit; font-size: 0.85rem; }
+.profil-kimlik .rozetler { gap: 8px 14px; }
+
+.ornek-rozet {
+  display: inline-flex; align-items: flex-start; gap: 6px; margin: 12px 0 0; padding: 6px 10px;
+  font-size: 0.82rem; color: #6b5420; background: #fbf3df; border: 1px solid #ecdcb3; border-radius: 8px;
+}
+.ornek-rozet .ikon { width: 15px; height: 15px; flex: none; margin-top: 2px; }
+
+.yol-tarifi { margin-top: 14px; gap: 6px; min-height: 40px; }
+.yol-tarifi .ikon { width: 16px; height: 16px; }
+
+.bos-baslik { font-size: 1.35rem; margin: 0 0 8px; }
+.bos-durum-butonlar { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.bos-durum-butonlar .btn { gap: 6px; }
+.bos-durum-butonlar .ikon { width: 16px; height: 16px; }
+
+.profil-iskelet { background: var(--yuzey, #fff); border: 1px solid var(--cizgi); border-radius: 16px; padding: 28px; margin-bottom: 48px; }
+.iskelet-satir { height: 14px; border-radius: 7px; margin-bottom: 14px; background: linear-gradient(90deg, #ecedea 25%, #f4f5f2 50%, #ecedea 75%); background-size: 200% 100%; animation: iskelet 1.4s ease-in-out infinite; }
+.iskelet-avatar { width: 96px; height: 96px; border-radius: 50%; margin-bottom: 20px; }
+@keyframes iskelet { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .iskelet-satir { animation: none; } }
+
+/* ---------- Yazı okuma sayfası ---------- */
+.yazi-sayfa { max-width: 760px; margin: 0 auto 56px; }
+.yazi-sayfa h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.2; margin: 12px 0 14px; }
+.yazi-sayfa .yazi-giris { font-size: 1.12rem; color: var(--soluk); margin: 0 0 24px; }
+.yazi-yazar { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--cizgi); border-bottom: 1px solid var(--cizgi); margin-bottom: 28px; }
+.yazi-yazar .avatar { width: 48px; height: 48px; flex: none; }
+.yazi-yazar a { font-weight: 600; color: var(--metin); }
+.yazi-yazar small { display: block; color: var(--soluk); }
+.yazi-govde p { font-size: 1.06rem; line-height: 1.75; margin: 0 0 1.1em; }
+.yazi-not { margin-top: 32px; padding: 14px 16px; background: var(--bilgi-acik); border-radius: 10px; font-size: 0.9rem; color: var(--soluk); }

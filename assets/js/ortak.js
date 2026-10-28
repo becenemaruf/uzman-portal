@@ -53,6 +53,24 @@ function avatarRengi(ad) {
   return AVATAR_RENKLERI[toplam % AVATAR_RENKLERI.length];
 }
 
+/* Fotoğraf bağlantısı bozuksa (silinmiş/yüklenemeyen dosya) kırık resim yerine baş harfler gösterilir.
+ * Tüm sayfalardaki .avatar resimleri için tek yerden çalışır. */
+document.addEventListener(
+  "error",
+  (e) => {
+    const img = e.target;
+    if (!(img instanceof HTMLImageElement) || !img.classList.contains("avatar")) return;
+    const ad = img.getAttribute("alt") || "";
+    const yedek = document.createElement("div");
+    yedek.className = img.className;
+    yedek.style.background = avatarRengi(ad || "?");
+    yedek.setAttribute("aria-hidden", "true");
+    yedek.textContent = basHarfler(ad);
+    img.replaceWith(yedek);
+  },
+  true
+);
+
 function avatarHtml(uzman, ekSinif = "") {
   if (uzman.foto) {
     return `<img class="avatar ${ekSinif}" src="${esc(uzman.foto)}" alt="${esc(uzman.ad)}" loading="lazy">`;
@@ -165,6 +183,9 @@ const IKON_YOLLARI = {
   ara: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   konum: '<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
   video: '<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/>',
+  paylas: '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"/>',
+  yol: '<path d="M3 11 21 3l-8 18-2-8z"/>',
+  yenile: '<path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/>',
   dogrulama: '<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/>',
   telefon: '<path d="M5 4h3.5l2 5-2.3 1.4a11 11 0 0 0 5.4 5.4L15 13.5l5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
   mesaj: '<path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.1-5.2A8.5 8.5 0 1 1 21 11.5z"/>',

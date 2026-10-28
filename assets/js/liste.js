@@ -93,7 +93,7 @@
             <h2><a class="kart-baglanti" href="${profilAdresi}">${esc(u.ad)}</a></h2>
             <div class="rozetler">
               <span class="rozet">${esc(u.unvan)}</span>
-              <span class="dogrulama-isaret" title="Unvanı doğrulandı">${ikon("dogrulama")}<span class="gorunmez">Unvanı doğrulandı</span></span>
+              ${u.dogrulandi ? `<span class="dogrulama-isaret" title="Unvanı doğrulandı">${ikon("dogrulama")}<span class="gorunmez">Unvanı doğrulandı</span></span>` : ""}
             </div>
           </div>
         </div>

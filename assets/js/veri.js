@@ -21,10 +21,19 @@ const Veri = (() => {
   // Yalnızca sitede aktif olan meslekler listelenir (ayarlar.js → AKTIF_UNVANLAR).
   const UNVAN_SUZGECI = `in.(${AKTIF_UNVANLAR.map((u) => `"${u}"`).join(",")})`;
 
+  // Bağlantı çok yavaşsa 15 saniye sonra vazgeçilir; sayfa "yeniden dene" seçeneği gösterir.
+  const ZAMAN_ASIMI_MS = 15000;
+
   async function oku(yol) {
-    const yanit = await fetch(`${ADRES}/${yol}`, { headers: BASLIKLAR });
-    if (!yanit.ok) throw new Error(`Veri alınamadı (${yanit.status})`);
-    return yanit.json();
+    const denetim = new AbortController();
+    const sayac = setTimeout(() => denetim.abort(), ZAMAN_ASIMI_MS);
+    try {
+      const yanit = await fetch(`${ADRES}/${yol}`, { headers: BASLIKLAR, signal: denetim.signal });
+      if (!yanit.ok) throw new Error(`Veri alınamadı (${yanit.status})`);
+      return await yanit.json();
+    } finally {
+      clearTimeout(sayac);
+    }
   }
 
   const siraliAdlar = (satirlar, tablo) =>
@@ -54,10 +63,13 @@ const Veri = (() => {
     return {
       id: s.slug,
       ornek: s.ornek,
+      // Rozet, uzmanın beyanından değil veritabanındaki yayın durumundan gelir:
+      // "yayinda" durumuna yalnızca yönetici, belgeleri inceledikten sonra geçirebilir
+      // (bkz. ozel.uzman_degisikligini_denetle). Örnek (deneme) profiller hiçbir zaman "doğrulandı" sayılmaz.
+      dogrulandi: s.durum === "yayinda" && !s.ornek,
       ad: tamAd(s),
       foto: s.foto_yolu,
       unvan: s.unvan,
-      dogrulandi: true,
       sehir: s.sehir,
       ilce: s.ilce,
       gorusme,
@@ -79,14 +91,14 @@ const Veri = (() => {
       yazilar: (s.yazilar || [])
         .slice()
         .sort((a, b) => String(b.yayin_tarihi).localeCompare(String(a.yayin_tarihi)))
-        .map((y) => ({ baslik: y.baslik, tarih: tarihMetni(y.yayin_tarihi) })),
+        .map((y) => ({ id: y.slug, baslik: y.baslik, tarih: tarihMetni(y.yayin_tarihi) })),
       iletisim,
     };
   }
 
   // Listede gereken alanlar (profil sayfasının uzun metinleri liste için indirilmez)
   const LISTE_ALANLARI = [
-    "slug", "ornek", "unvan_oneki", "ad", "soyad", "unvan", "foto_yolu", "sehir", "ilce",
+    "slug", "ornek", "durum", "unvan_oneki", "ad", "soyad", "unvan", "foto_yolu", "sehir", "ilce",
     "gorusme_online", "gorusme_yuzyuze", "yeni_danisan", "kabul_durumu_guncellenme", "guncellenme",
     "deneyim_yili", "cinsiyet", "diller", "yas_gruplari", "kisa_tanitim",
     "uzman_uzmanliklar(sira,uzmanlik_alanlari(ad,kategori))",
@@ -96,7 +108,7 @@ const Veri = (() => {
   const PROFIL_ALANLARI = [
     LISTE_ALANLARI, "hakkinda", "seans_suresi", "online_platform", "muayenehane_adres",
     "telefon", "whatsapp", "eposta",
-    "uzman_egitimler(tur,metin,sira)", "uzman_sss(soru,cevap,sira)", "yazilar(baslik,yayin_tarihi)",
+    "uzman_egitimler(tur,metin,sira)", "uzman_sss(soru,cevap,sira)", "yazilar(slug,baslik,yayin_tarihi)",
   ].join(",");
 
   return {
@@ -111,16 +123,39 @@ const Veri = (() => {
       }
     },
 
-    // Tek bir uzman (adres çubuğundaki kısa ada göre); bulunamazsa ya da yayında değilse null.
+    /* Tek bir uzman (adres çubuğundaki kısa ada göre).
+     * - Bulunamazsa, yayından kaldırılmışsa ya da adres geçersizse: null
+     * - Sunucuya ulaşılamazsa / zaman aşımında: hata FIRLATIR (sayfa "yeniden dene" gösterir).
+     *   Böylece bağlantı sorunu, "profil bulunamadı" diye yanlış bildirilmez.
+     */
     async uzmanGetir(id) {
       if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id || "")) return null;
-      try {
-        const satirlar = await oku(`uzmanlar?select=${PROFIL_ALANLARI}&slug=eq.${encodeURIComponent(id)}&durum=eq.yayinda&unvan=${encodeURIComponent(UNVAN_SUZGECI)}&yazilar.durum=eq.yayinda`);
-        return satirlar.length ? uzmanaCevir(satirlar[0]) : null;
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
+      const satirlar = await oku(`uzmanlar?select=${PROFIL_ALANLARI}&slug=eq.${encodeURIComponent(id)}&durum=eq.yayinda&unvan=${encodeURIComponent(UNVAN_SUZGECI)}&yazilar.durum=eq.yayinda`);
+      return satirlar.length ? uzmanaCevir(satirlar[0]) : null;
+    },
+
+    /* Tek bir yazı (yazi.html için). Bulunamazsa null; bağlantı hatasında hata fırlatır.
+     * Metin düz yazı olarak saklanır ve sayfada HTML olarak YORUMLANMAZ (boş satırlar paragraf olur). */
+    async yaziGetir(id) {
+      if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id || "")) return null;
+      const satirlar = await oku(
+        `yazilar?select=slug,baslik,ozet,icerik,kategori,okuma_dakika,yayin_tarihi,guncellenme,` +
+          `uzmanlar!inner(slug,unvan_oneki,ad,soyad,unvan,foto_yolu,ornek)` +
+          `&slug=eq.${encodeURIComponent(id)}&durum=eq.yayinda&uzmanlar.durum=eq.yayinda&uzmanlar.unvan=${encodeURIComponent(UNVAN_SUZGECI)}`
+      );
+      if (!satirlar.length) return null;
+      const y = satirlar[0];
+      return {
+        id: y.slug,
+        baslik: y.baslik,
+        ozet: y.ozet,
+        paragraflar: y.icerik ? y.icerik.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean) : [],
+        kategori: y.kategori,
+        okumaDakika: y.okuma_dakika,
+        tarih: String(y.yayin_tarihi).slice(0, 10),
+        guncellenme: y.guncellenme,
+        yazar: { id: y.uzmanlar.slug, ad: tamAd(y.uzmanlar), foto: y.uzmanlar.foto_yolu, unvan: y.uzmanlar.unvan, ornek: y.uzmanlar.ornek },
+      };
     },
 
     // Blog yazıları: en yeniler önce, yazarın bilgisiyle birlikte.
