@@ -18,6 +18,9 @@ const Veri = (() => {
   // Veritabanının döndürdüğü kategori kodları ortak.js'deki kategoriBul() tarafından kullanılır.
   window.ALAN_KATEGORILERI = window.ALAN_KATEGORILERI || {};
 
+  // Yalnızca sitede aktif olan meslekler listelenir (ayarlar.js → AKTIF_UNVANLAR).
+  const UNVAN_SUZGECI = `in.(${AKTIF_UNVANLAR.map((u) => `"${u}"`).join(",")})`;
+
   async function oku(yol) {
     const yanit = await fetch(`${ADRES}/${yol}`, { headers: BASLIKLAR });
     if (!yanit.ok) throw new Error(`Veri alınamadı (${yanit.status})`);
@@ -100,7 +103,7 @@ const Veri = (() => {
     // Yayındaki (unvanı doğrulanmış) tüm uzmanlar.
     async uzmanlariGetir() {
       try {
-        const satirlar = await oku(`uzmanlar?select=${LISTE_ALANLARI}&durum=eq.yayinda`);
+        const satirlar = await oku(`uzmanlar?select=${LISTE_ALANLARI}&durum=eq.yayinda&unvan=${encodeURIComponent(UNVAN_SUZGECI)}`);
         return satirlar.map(uzmanaCevir);
       } catch (e) {
         console.error(e);
@@ -112,7 +115,7 @@ const Veri = (() => {
     async uzmanGetir(id) {
       if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id || "")) return null;
       try {
-        const satirlar = await oku(`uzmanlar?select=${PROFIL_ALANLARI}&slug=eq.${encodeURIComponent(id)}&durum=eq.yayinda&yazilar.durum=eq.yayinda`);
+        const satirlar = await oku(`uzmanlar?select=${PROFIL_ALANLARI}&slug=eq.${encodeURIComponent(id)}&durum=eq.yayinda&unvan=${encodeURIComponent(UNVAN_SUZGECI)}&yazilar.durum=eq.yayinda`);
         return satirlar.length ? uzmanaCevir(satirlar[0]) : null;
       } catch (e) {
         console.error(e);
@@ -126,7 +129,7 @@ const Veri = (() => {
         const satirlar = await oku(
           `yazilar?select=slug,baslik,ozet,kategori,kapak_yolu,okuma_dakika,yayin_tarihi,` +
             `uzmanlar!inner(slug,unvan_oneki,ad,soyad,unvan,foto_yolu)` +
-            `&durum=eq.yayinda&uzmanlar.durum=eq.yayinda&order=yayin_tarihi.desc&limit=${Number(adet) || 6}`
+            `&durum=eq.yayinda&uzmanlar.durum=eq.yayinda&uzmanlar.unvan=${encodeURIComponent(UNVAN_SUZGECI)}&order=yayin_tarihi.desc&limit=${Number(adet) || 6}`
         );
         return satirlar.map((y) => ({
           id: y.slug,

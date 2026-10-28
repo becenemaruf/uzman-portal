@@ -1,8 +1,8 @@
-# uzman-portal
+# Klinik Psikologlar (klinikpsikologlar.com.tr)
 
-Ruh sağlığı ve gelişim alanında çalışan uzmanların (psikolog, klinik psikolog, PDR, psikiyatrist, çocuk ve ergen psikiyatristi, sosyal hizmet uzmanı, dil ve konuşma terapisti, ergoterapist, özel eğitim uzmanı, çocuk gelişimci) profil oluşturup danışanlara görünürlüklerini artırabildikleri portal.
+Türkiye'nin klinik psikolog rehberi: Unvanı doğrulanmış klinik psikologların profil oluşturup danışanlara görünürlüklerini artırabildikleri platform.
 
-> Marka adı henüz belirlenmedi. Geçici ad `assets/js/ayarlar.js` dosyasındaki `SITE.ad` satırından tek yerden değiştirilir.
+> **Kapsam kararı (28 Ekim 2026):** Platform yalnızca klinik psikologlarla yayına başlıyor. Altyapı diğer meslekleri (psikolog, PDR, psikiyatrist, sosyal hizmet uzmanı, dil ve konuşma terapisti, ergoterapist, özel eğitim uzmanı, çocuk gelişimci) desteklemeye devam ediyor; bunlar **silinmedi, gizlendi**. Yeni bir mesleğe açılmak için `assets/js/ayarlar.js` içindeki `AKTIF_UNVANLAR` listesine eklemek ve veritabanında ilgili çalışma alanlarını `aktif = true` yapmak yeterli (`supabase/ornek-veri/klinik_psikolog_donusumu.sql`).
 
 ## Yol haritası
 
@@ -51,6 +51,8 @@ assets/js/liste.js    Uzman listesi: arama, filtreler, sayfalama, kutu/liste gö
 assets/js/manset.js   Ana sayfadaki kayan manşet alanı
 assets/js/blog.js     Ana sayfadaki "Uzmanlarımızdan yazılar" alanı
 assets/img/           Manşet çizimleri ve temsili uzman portreleri
+assets/img/marka/     Logo (üst menü: logo.webp, alt bilgi: logo-tam.webp) ve sekme simgeleri
+favicon.ico           Tarayıcı sekmesi simgesi
 assets/js/profil.js   Profil sayfasını oluşturan kod (iletişim paneli dahil)
 assets/js/mesaj-formu.js  "Uzmana Mesaj Gönder" penceresi
 assets/js/giris.js    Giriş/kayıt ekranlarının kodu

@@ -203,6 +203,8 @@ select.girdi {
   .arama { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .arama > * { grid-column: span 2; }
   .arama .arama-kutu, .arama .ihtiyac-kutu { grid-column: span 6; }
+  .arama.tek-unvan > *:not(.arama-kutu):not(.ihtiyac-kutu) { grid-column: span 3; }
+  .unvan-kutu[hidden] { display: none; }
 }
 @media (min-width: 1020px) {
   .arama .arama-kutu, .arama .ihtiyac-kutu { grid-column: span 3; }
@@ -1094,3 +1096,35 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
 .haber-listesi a:hover .haber-liste-baslik { color: var(--mor); text-decoration: underline; text-underline-offset: 3px; }
 .haber-liste-baslik { font-weight: 600; line-height: 1.4; }
 .haber-not { margin: 14px 0 0; font-size: 0.82rem; color: var(--soluk); }
+
+/* ---------- Marka logosu ---------- */
+.logo-gorsel { display: block; height: 50px; width: auto; }
+@media (max-width: 400px) { .logo-gorsel { height: 36px; } }
+.alt-logo { display: inline-block; justify-self: start; }
+.alt-logo img { display: block; width: 240px; max-width: 100%; height: auto; }
+
+/* ---------- Profil bölüm başlıkları ----------
+   Her bölümün üstünde, kartın kenarlarına kadar uzanan renkli bir başlık şeridi ve simge. */
+.blok-bolum { padding: 0; overflow: hidden; }
+.blok-baslik {
+  display: flex; align-items: center; gap: 12px;
+  margin: 0 !important; padding: 14px 22px;
+  font-size: 1.2rem;
+  background: linear-gradient(90deg, var(--vurgu-acik) 0%, rgba(227, 238, 232, 0.35) 100%);
+  border-bottom: 1px solid var(--cizgi);
+  color: var(--vurgu-koyu);
+}
+.blok-baslik::before {
+  content: ""; align-self: stretch; width: 4px; border-radius: 4px; margin: -2px 2px -2px -10px; background: var(--vurgu);
+}
+.blok-ikon {
+  flex: none; width: 34px; height: 34px; border-radius: 10px;
+  display: grid; place-items: center;
+  background: var(--vurgu); color: #fff;
+}
+.blok-ikon .ikon { width: 18px; height: 18px; }
+.blok-icerik { padding: 20px 22px 22px; }
+@media (min-width: 700px) {
+  .blok-baslik { padding: 16px 28px; }
+  .blok-icerik { padding: 22px 28px 26px; }
+}

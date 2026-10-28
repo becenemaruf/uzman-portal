@@ -31,8 +31,13 @@
   function etiketler(dizi) {
     return `<div class="etiketler">${dizi.map((e) => `<span class="etiket">${esc(e)}</span>`).join("")}</div>`;
   }
-  function blok(baslik, icerik, idAdi = "") {
-    return `<section class="blok"${idAdi ? ` id="${idAdi}"` : ""}><h2>${baslik}</h2>${icerik}</section>`;
+  // Profil bölümleri: Başlık, simgesiyle birlikte renkli bir şerit olarak gösterilir;
+  // böylece "Çalışma alanları", "Seans bilgileri" gibi başlıklar içerikten net biçimde ayrılır.
+  function blok(baslik, icerik, ikonAdi = "bilgi") {
+    return `<section class="blok blok-bolum">
+      <h2 class="blok-baslik"><span class="blok-ikon" aria-hidden="true">${ikon(ikonAdi)}</span>${baslik}</h2>
+      <div class="blok-icerik">${icerik}</div>
+    </section>`;
   }
   function doluMu(dizi) {
     return Array.isArray(dizi) && dizi.length > 0;
@@ -128,7 +133,8 @@
     hakkinda = blok(
       "Hakkımda",
       `<div class="uzun-metin ${uzun ? "kapali" : ""}" id="hakkindaMetni">${u.hakkinda.map((p) => `<p>${esc(p)}</p>`).join("")}</div>
-       ${uzun ? `<button class="link-buton" type="button" id="devamiDugme" aria-expanded="false" aria-controls="hakkindaMetni">Devamını oku</button>` : ""}`
+       ${uzun ? `<button class="link-buton" type="button" id="devamiDugme" aria-expanded="false" aria-controls="hakkindaMetni">Devamını oku</button>` : ""}`,
+      "kisi"
     );
   }
 
@@ -139,7 +145,8 @@
       "Çalışma alanları",
       (doluMu(u.uzmanliklar) ? `<h3>Uzmanlık alanları</h3><div class="etiketler">${u.uzmanliklar.map(renkliEtiket).join("")}</div>` : "") +
         (doluMu(u.yaklasimlar) ? `<h3>Terapi yaklaşımları</h3>${etiketler(u.yaklasimlar)}` : "") +
-        (doluMu(u.yasGruplari) ? `<h3>Çalıştığı gruplar</h3>${etiketler(u.yasGruplari)}` : "")
+        (doluMu(u.yasGruplari) ? `<h3>Çalıştığı gruplar</h3>${etiketler(u.yasGruplari)}` : ""),
+      "katman"
     );
   }
 
@@ -153,7 +160,8 @@
   ].filter(([, deger]) => deger);
   const seans = blok(
     "Seans bilgileri",
-    `<dl class="seans-tablo">${seansSatirlari.map(([b, d]) => `<div><dt>${b}</dt><dd>${esc(d)}</dd></div>`).join("")}</dl>`
+    `<dl class="seans-tablo">${seansSatirlari.map(([b, d]) => `<div><dt>${b}</dt><dd>${esc(d)}</dd></div>`).join("")}</dl>`,
+    "saat"
   );
 
   // --- Eğitim ---
@@ -163,7 +171,8 @@
     egitim = blok(
       "Eğitim ve sertifikalar",
       (doluMu(u.egitim) ? `<h3>Eğitim</h3>${liste(u.egitim)}` : "") +
-        (doluMu(u.sertifikalar) ? `<h3>Aldığı eğitimler ve sertifikalar</h3>${liste(u.sertifikalar)}` : "")
+        (doluMu(u.sertifikalar) ? `<h3>Aldığı eğitimler ve sertifikalar</h3>${liste(u.sertifikalar)}` : ""),
+      "kep"
     );
   }
 
@@ -173,7 +182,8 @@
         "Yazıları",
         `<ul class="yazi-listesi">${u.yazilar
           .map((y) => `<li><a href="#"><span>${esc(y.baslik)}</span><small>${esc(y.tarih)}</small></a></li>`)
-          .join("")}</ul>`
+          .join("")}</ul>`,
+        "yazi"
       )
     : "";
 
@@ -183,7 +193,8 @@
         "Sık sorulan sorular",
         `<div class="sss">${u.sss
           .map((x) => `<details><summary>${esc(x.soru)}</summary><p>${esc(x.cevap)}</p></details>`)
-          .join("")}</div>`
+          .join("")}</div>`,
+        "soru"
       )
     : "";
 

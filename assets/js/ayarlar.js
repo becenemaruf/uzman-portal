@@ -5,8 +5,9 @@
  * tüm sayfalardaki logo yazısı ve sayfa başlıkları kendiliğinden güncellenir.
  */
 const SITE = {
-  ad: "Uzman Portalı",
-  slogan: "Ruh sağlığı uzmanlarını keşfedin",
+  ad: "Klinik Psikologlar",
+  slogan: "Türkiye'nin klinik psikolog rehberi",
+  alanAdi: "klinikpsikologlar.com.tr",
 };
 
 /*
@@ -28,8 +29,14 @@ const BAGLANTI = {
   mesajSistemiAcik: true,
 };
 
-// Uzmanların seçebileceği unvanlar (filtrede ve kayıt formunda kullanılır)
-const UNVANLAR = [
+/*
+ * UNVANLAR
+ * TUM_UNVANLAR: Altyapının desteklediği bütün meslekler (veritabanı da hepsini kabul eder).
+ * AKTIF_UNVANLAR: Şu an sitede yer alan meslekler. Platform yalnızca klinik psikologlarla başlıyor;
+ * ileride başka bir mesleğe açılmak için bu listeye o mesleği eklemek yeterli.
+ * Tek bir aktif unvan olduğunda arama panelindeki "unvan" filtresi kendiliğinden gizlenir.
+ */
+const TUM_UNVANLAR = [
   "Psikolog",
   "Klinik Psikolog",
   "Psikolojik Danışman (PDR)",
@@ -41,6 +48,8 @@ const UNVANLAR = [
   "Özel Eğitim Uzmanı",
   "Çocuk Gelişimci",
 ];
+const AKTIF_UNVANLAR = ["Klinik Psikolog"];
+const UNVANLAR = TUM_UNVANLAR.filter((u) => AKTIF_UNVANLAR.includes(u));
 
 // Çalışılan yaş grupları
 const YAS_GRUPLARI = ["Çocuk", "Ergen", "Yetişkin", "Çift", "Aile"];
@@ -66,7 +75,8 @@ const KABUL_GUNCELLIK_GUN = 60;
 const IHTIYAC_KATEGORILERI = [
   // Dizi sırası EŞLEŞME önceliğidir ("Sınav Kaygısı" önce çocuk-ergen grubuna girsin diye);
   // açılır listedeki görünüm sırasını "sira" belirler.
-  { kod: "gelisim",       sira: 5, etiket: "Gelişim, konuşma ve öğrenme desteği", renk: "#8a7412",
+  // "gelisim" grubu (dil-konuşma, ergoterapi, özel eğitim) şimdilik pasif; diğer meslekler açıldığında aktif olur.
+  { kod: "gelisim",       sira: 5, aktif: false, etiket: "Gelişim, konuşma ve öğrenme desteği", renk: "#8a7412",
     kelimeler: ["konusma", "kekemelik", "duyu", "gunluk yasam", "ozel egitim", "gelisimsel"] },
   { kod: "cocuk_ergen",   sira: 4, etiket: "Çocuk ve ergenlerle ilgili konular", renk: "#b86e12",
     kelimeler: ["cocuk", "ergen", "sinav", "okul", "ebeveyn", "hiperaktivite", "otizm", "ogrenme"] },

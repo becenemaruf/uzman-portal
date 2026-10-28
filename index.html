@@ -3,8 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ruh Sağlığı Uzmanı Bul | Uzman Portalı</title>
-  <meta name="description" content="Şehrinize, ihtiyacınıza ve görüşme tercihinize göre unvanı doğrulanmış ruh sağlığı, gelişim ve sosyal hizmet uzmanlarını bulun.">
+  <title>Klinik Psikolog Bul | Klinik Psikologlar — Türkiye'nin Klinik Psikolog Rehberi</title>
+  <meta name="description" content="Şehrinize, ihtiyacınıza ve görüşme tercihinize göre unvanı doğrulanmış klinik psikologları bulun. Türkiye'nin klinik psikolog rehberi.">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/marka/isaret-32.png">
+  <link rel="apple-touch-icon" href="assets/img/marka/isaret-180.png">
+  <meta name="theme-color" content="#0b2233">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
@@ -16,9 +20,8 @@
 
   <header class="ust">
     <div class="kapsayici">
-      <a class="logo" href="index.html">
-        <span class="logo-isaret"><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-8"/><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7z"/><path d="M12 14c0-3-2.5-5.5-6-5.5 0 3 2.5 5.5 6 5.5z"/></svg></span>
-        <span data-site-adi>Uzman Portalı</span>
+      <a class="logo" href="index.html" aria-label="Klinik Psikologlar ana sayfa">
+        <img class="logo-gorsel" src="assets/img/marka/logo.webp" alt="Klinik Psikologlar" width="720" height="181">
       </a>
       <nav class="ust-menu" aria-label="Ana menü">
         <a class="metin-link" href="index.html">Uzmanlar</a>
@@ -51,10 +54,10 @@
       <h1 class="baslik-kap">
         <button class="baslik-buton" type="button" id="baslikDugme">
           <span class="baslik-ikon" aria-hidden="true"><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
-          <span>Size uygun ruh sağlığı uzmanını bulun</span>
+          <span>Size uygun klinik psikoloğu bulun</span>
         </button>
       </h1>
-      <p class="arama-aciklama">Psikolog, psikiyatrist, PDR, dil ve konuşma terapisti, ergoterapist ve daha birçok alandan unvanı doğrulanmış uzmanları şehrinize, ihtiyacınıza ve görüşme tercihinize göre arayın.</p>
+      <p class="arama-aciklama">Unvanı ve klinik psikoloji eğitimi doğrulanmış uzmanları şehrinize, ihtiyacınıza ve görüşme tercihinize göre arayın.</p>
       <form class="arama" id="aramaFormu" role="search" onsubmit="return false">
         <div class="arama-kutu">
           <label class="gorunmez" for="aramaMetni">İsim, uzmanlık alanı veya ilçe ara</label>
@@ -72,7 +75,7 @@
           <label class="gorunmez" for="filtreSehir">Şehir</label>
           <select class="girdi" id="filtreSehir"><option value="">Tüm şehirler</option></select>
         </div>
-        <div>
+        <div class="unvan-kutu">
           <label class="gorunmez" for="filtreUnvan">Unvan</label>
           <select class="girdi" id="filtreUnvan"><option value="">Tüm unvanlar</option></select>
         </div>
@@ -166,7 +169,7 @@
           <div>
             <span class="bolum-ust-yazi">Blog</span>
             <h2 id="yazilarBaslik">Uzmanlarımızdan yazılar</h2>
-            <p>Ruh sağlığına dair bilgilendirici yazılar, alanında doğrulanmış uzmanların kaleminden.</p>
+            <p>Ruh sağlığına dair bilgilendirici yazılar, unvanı doğrulanmış klinik psikologların kaleminden.</p>
           </div>
           <a class="btn btn-cizgi" href="#">Tüm yazılar</a>
         </div>
@@ -194,7 +197,7 @@
     <section class="uzman-cagri" id="uzmanlar-icin">
       <div class="kapsayici">
         <div>
-          <h2>Ruh sağlığı uzmanı mısınız?</h2>
+          <h2>Klinik psikolog musunuz?</h2>
           <p>Profilinizi oluşturun, sizi arayan danışanlara ulaşın. Unvanınız doğrulandıktan sonra profiliniz yayına alınır.</p>
           <a class="btn btn-beyaz" href="giris.html#kayit">Profilinizi oluşturun</a>
         </div>
@@ -218,6 +221,9 @@
 
   <footer class="alt">
     <div class="kapsayici">
+      <a class="alt-logo" href="index.html" aria-label="Klinik Psikologlar ana sayfa">
+        <img src="assets/img/marka/logo-tam.webp" alt="Klinik Psikologlar — Türkiye'nin klinik psikolog rehberi" width="900" height="291" loading="lazy">
+      </a>
       <p class="acil-not"><strong>Acil bir durumdaysanız</strong> lütfen 112 Acil Çağrı Merkezi'ni arayın. Bu platform acil durum hizmeti vermez.</p>
       <nav class="alt-linkler" aria-label="Alt menü">
         <a href="hakkimizda.html">Hakkımızda</a>
@@ -226,7 +232,7 @@
         <a href="cerez-politikasi.html">Çerez Politikası</a>
         <a href="#">İletişim</a>
       </nav>
-      <p>© <span data-yil></span> <span data-site-adi>Uzman Portalı</span></p>
+      <p>© <span data-yil></span> <span data-site-adi>Klinik Psikologlar</span></p>
     </div>
   </footer>
 

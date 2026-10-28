@@ -26,6 +26,11 @@
   }
   secenekleriDoldur("filtreSehir", benzersiz(uzmanlar.map((u) => u.sehir)));
   secenekleriDoldur("filtreUnvan", UNVANLAR.filter((un) => uzmanlar.some((u) => u.unvan === un)));
+  // Tek bir meslek aktifken unvan filtresinin anlamı yoktur; gizlenir ve arama paneli yeniden dizilir.
+  if (UNVANLAR.length <= 1) {
+    document.querySelector(".unvan-kutu").hidden = true; // öğe yerinde kalır, filtre kodu bozulmaz
+    $("aramaFormu").classList.add("tek-unvan");
+  }
   secenekleriDoldur("filtreUzmanlik", benzersiz(uzmanlar.flatMap((u) => u.uzmanliklar || [])));
   secenekleriDoldur("filtreYas", YAS_GRUPLARI);
   secenekleriDoldur("filtreYaklasim", benzersiz(uzmanlar.flatMap((u) => u.yaklasimlar || [])));
@@ -35,6 +40,7 @@
   const ihtiyacSecimi = $("filtreIhtiyac");
   const eminDegilim = ihtiyacSecimi.querySelector('[value="emin-degilim"]');
   [...IHTIYAC_KATEGORILERI]
+    .filter((k) => k.aktif !== false)
     .sort((a, b) => a.sira - b.sira)
     .forEach((k) => eminDegilim.insertAdjacentHTML("beforebegin", `<option value="${k.kod}">${esc(k.etiket)}</option>`));
 
@@ -191,13 +197,13 @@
 
     $("sonucSayisi").innerHTML =
       toplam > SAYFA_BOYUTU
-        ? `<strong>${toplam}</strong> uzman bulundu <span class="aralik">· ${bas + 1}–${bas + sayfadakiler.length} arası gösteriliyor</span>`
-        : `<strong>${toplam}</strong> uzman bulundu`;
+        ? `<strong>${toplam}</strong> klinik psikolog bulundu <span class="aralik">· ${bas + 1}–${bas + sayfadakiler.length} arası gösteriliyor</span>`
+        : `<strong>${toplam}</strong> klinik psikolog bulundu`;
 
     kartAlani.innerHTML = toplam
       ? sayfadakiler.map(kartHtml).join("")
       : `<div class="bos-durum">
-           <h2>Bu kriterlere uygun uzman bulunamadı</h2>
+           <h2>Bu kriterlere uygun klinik psikolog bulunamadı</h2>
            <p>Birkaç filtreyi kaldırmayı ya da aramanızı genişletmeyi deneyin.</p>
            <button class="btn btn-cizgi" type="button" data-temizle>Filtreleri temizle</button>
          </div>`;
