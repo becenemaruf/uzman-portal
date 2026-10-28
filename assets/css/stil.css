@@ -4,20 +4,24 @@
  * Bir rengi değiştirmek için sadece buradaki satırı değiştirmek yeterli.
  */
 :root {
-  --zemin: #f6f4ef;          /* sayfa arka planı: kırık beyaz */
+  /* Renkler Klinik Psikologlar logosundan alındı: lacivert, gri-mavi ve altın */
+  --zemin: #f5f5f2;          /* sayfa arka planı: sıcak kırık beyaz */
   --yuzey: #ffffff;          /* kartlar */
-  --yuzey-ikincil: #faf9f5;
-  --metin: #1c2321;
-  --soluk: #5b6560;          /* ikincil yazılar */
-  --cizgi: #e4e0d6;
-  --cizgi-koyu: #cfc9bc;
-  --vurgu: #1d5c48;          /* ana renk: koyu yeşil */
-  --vurgu-koyu: #164a3a;
-  --vurgu-acik: #e3eee8;
+  --yuzey-ikincil: #f9f9f7;
+  --metin: #13202b;          /* logodaki koyu lacivertin yumuşatılmış tonu */
+  --soluk: #56626c;          /* ikincil yazılar */
+  --cizgi: #e3e4e1;
+  --cizgi-koyu: #c9cdcf;
+  --vurgu: #1c4a66;          /* ana renk: logodaki gri-mavi lacivert */
+  --vurgu-koyu: #12354b;
+  --vurgu-acik: #e5eef4;
+  --altin: #b08d5c;          /* logodaki altın daire: küçük vurgular */
+  --altin-koyu: #8a6a3d;
+  --altin-acik: #f6efe4;
   --basari: #2e9e64;
   --hata: #a33a2b;
   --hata-acik: #f8e9e6;
-  --bilgi-acik: #eef3f1;
+  --bilgi-acik: #eaf1f6;
   --mor: #5b3f86;            /* arama alanı vurgusu: koyu mor */
   --mor-koyu: #4a3270;
   --mor-acik: #f3eef9;       /* arama paneli zemini: açık eflatun */
@@ -27,7 +31,7 @@
   --bordo: #8a1f3d;          /* "Uzmanı Ara" butonu */
   --bordo-koyu: #721833;
   --yaricap: 14px;
-  --golge: 0 1px 2px rgba(28, 35, 33, 0.04), 0 6px 18px rgba(28, 35, 33, 0.05);
+  --golge: 0 1px 2px rgba(19, 32, 43, 0.04), 0 6px 18px rgba(19, 32, 43, 0.06);
   --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --genislik: 1180px;
@@ -155,7 +159,7 @@ input, select, button, textarea { font: inherit; color: inherit; }
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .girdi:hover { border-color: #b9b2a3; }
-.girdi:focus { outline: none; border-color: var(--vurgu); box-shadow: 0 0 0 3px rgba(29, 92, 72, 0.15); }
+.girdi:focus { outline: none; border-color: var(--vurgu); box-shadow: 0 0 0 3px rgba(28, 74, 102, 0.18); }
 select.girdi {
   appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 40px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b6560' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
@@ -1131,7 +1135,7 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
   display: flex; align-items: center; gap: 12px;
   margin: 0 !important; padding: 14px 22px;
   font-size: 1.2rem;
-  background: linear-gradient(90deg, var(--vurgu-acik) 0%, rgba(227, 238, 232, 0.35) 100%);
+  background: linear-gradient(90deg, var(--vurgu-acik) 0%, rgba(229, 238, 244, 0.35) 100%);
   border-bottom: 1px solid var(--cizgi);
   color: var(--vurgu-koyu);
 }
@@ -1163,3 +1167,19 @@ html { scroll-padding-top: 96px; }
 }
 .konu-kart h3 { font-size: 1.05rem; margin: 0; }
 .konu-kart p { margin: 0 0 6px; color: #3a433f; font-size: 0.94rem; line-height: 1.55; flex: 1; }
+
+
+/* ---------- Altın vurgular (logodaki altın daire) ---------- */
+.blok-baslik::before { background: var(--altin); }
+.bolum-ust-yazi { color: var(--altin-koyu); }
+.ust-etiket { color: var(--altin-koyu); border-color: #e8dcc8; }
+@media (min-width: 1080px) {
+  .ust-menu .metin-link[aria-current="page"] { box-shadow: inset 0 -2px 0 var(--altin); border-radius: 0; }
+}
+.ust { border-bottom-color: #e7e3da; }
+.uzman-cagri { background: linear-gradient(135deg, var(--vurgu-koyu) 0%, var(--vurgu) 100%); }
+.uzman-cagri h2::after {
+  content: ""; display: block; width: 56px; height: 3px; border-radius: 3px; margin-top: 12px; background: var(--altin);
+}
+.kurumsal-cagri { background: linear-gradient(135deg, var(--vurgu-koyu) 0%, var(--vurgu) 100%); }
+.dogrulama-isaret, .dogrulama-detay summary { color: var(--vurgu); }

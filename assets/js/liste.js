@@ -80,7 +80,7 @@
     const profilAdresi = `uzman.html?id=${encodeURIComponent(u.id)}`;
     const etiketler = (u.uzmanliklar || []).slice(0, 3).map(renkliEtiket).join("");
     // Kartın vurgu rengi: ilk çalışma alanının rengi
-    const kartRengi = u.uzmanliklar && u.uzmanliklar.length ? uzmanlikRengi(u.uzmanliklar[0]) : "#1d5c48";
+    const kartRengi = u.uzmanliklar && u.uzmanliklar.length ? uzmanlikRengi(u.uzmanliklar[0]) : "#1c4a66";
     const konum = u.gorusme.includes("yuzyuze") ? `${u.ilce}, ${u.sehir}` : u.sehir;
     // Kartın tamamı tıklanabilir: isimdeki bağlantı (kart-baglanti) görünmez bir katmanla tüm kartı kaplar.
     // kart-govde: liste görünümünde ortadaki sütun olur.

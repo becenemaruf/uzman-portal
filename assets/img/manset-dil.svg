@@ -2,7 +2,7 @@
   <circle cx="360" cy="110" r="88" fill="#ffffff" opacity="0.35"/>
   <circle cx="120" cy="248" r="56" fill="#d8c9ad" opacity="0.35"/>
   <!-- büyük yeşil balon -->
-  <path d="M110 70h170a22 22 0 0 1 22 22v76a22 22 0 0 1-22 22h-112l-34 30v-30h-24a22 22 0 0 1-22-22V92a22 22 0 0 1 22-22z" fill="#1d5c48"/>
+  <path d="M110 70h170a22 22 0 0 1 22 22v76a22 22 0 0 1-22 22h-112l-34 30v-30h-24a22 22 0 0 1-22-22V92a22 22 0 0 1 22-22z" fill="#1c4a66"/>
   <rect x="122" y="100" width="120" height="11" rx="5.5" fill="#ffffff" opacity="0.9"/>
   <rect x="122" y="122" width="150" height="11" rx="5.5" fill="#ffffff" opacity="0.55"/>
   <rect x="122" y="144" width="96" height="11" rx="5.5" fill="#ffffff" opacity="0.55"/>
@@ -14,10 +14,10 @@
   <!-- dil etiketleri -->
   <g font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="600" text-anchor="middle">
     <rect x="316" y="58" width="48" height="30" rx="15" fill="#ffffff"/>
-    <text x="340" y="78" fill="#1d5c48">TR</text>
-    <rect x="372" y="98" width="48" height="30" rx="15" fill="#1d5c48"/>
+    <text x="340" y="78" fill="#1c4a66">TR</text>
+    <rect x="372" y="98" width="48" height="30" rx="15" fill="#1c4a66"/>
     <text x="396" y="118" fill="#ffffff">EN</text>
     <rect x="96" y="232" width="48" height="30" rx="15" fill="#ffffff"/>
-    <text x="120" y="252" fill="#1d5c48">DE</text>
+    <text x="120" y="252" fill="#1c4a66">DE</text>
   </g>
 </svg>

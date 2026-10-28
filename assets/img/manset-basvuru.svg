@@ -6,21 +6,21 @@
   <rect x="150" y="62" width="230" height="196" rx="18" fill="#ffffff" opacity="0.14" transform="rotate(6 265 160)"/>
   <!-- profil kartı -->
   <rect x="120" y="58" width="230" height="204" rx="18" fill="#ffffff"/>
-  <circle cx="174" cy="112" r="28" fill="#cfe3d9"/>
-  <circle cx="174" cy="104" r="10" fill="#1d5c48" opacity="0.55"/>
-  <path d="M156 128c4-9 10-13 18-13s14 4 18 13" fill="#1d5c48" opacity="0.55"/>
+  <circle cx="174" cy="112" r="28" fill="#cfdeea"/>
+  <circle cx="174" cy="104" r="10" fill="#1c4a66" opacity="0.55"/>
+  <path d="M156 128c4-9 10-13 18-13s14 4 18 13" fill="#1c4a66" opacity="0.55"/>
   <rect x="214" y="96" width="104" height="12" rx="6" fill="#1c2321" opacity="0.85"/>
-  <rect x="214" y="118" width="64" height="14" rx="7" fill="#e3eee8"/>
+  <rect x="214" y="118" width="64" height="14" rx="7" fill="#e5eef4"/>
   <rect x="146" y="164" width="178" height="9" rx="4.5" fill="#e4e0d6"/>
   <rect x="146" y="182" width="150" height="9" rx="4.5" fill="#e4e0d6"/>
   <rect x="146" y="212" width="58" height="22" rx="11" fill="#faf9f5" stroke="#e4e0d6"/>
   <rect x="212" y="212" width="70" height="22" rx="11" fill="#faf9f5" stroke="#e4e0d6"/>
   <!-- doğrulama rozeti -->
-  <circle cx="338" cy="70" r="30" fill="#2e9e64"/>
-  <circle cx="338" cy="70" r="30" fill="none" stroke="#1d5c48" stroke-width="5" opacity="0.35"/>
+  <circle cx="338" cy="70" r="30" fill="#b08d5c"/>
+  <circle cx="338" cy="70" r="30" fill="none" stroke="#1c4a66" stroke-width="5" opacity="0.35"/>
   <path d="M325 70l9 9 17-18" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
   <!-- küçük filiz -->
-  <path d="M398 262v-38" stroke="#cfe3d9" stroke-width="4" stroke-linecap="round"/>
-  <path d="M398 236c0-16 12-28 28-28 0 16-12 28-28 28z" fill="#cfe3d9"/>
-  <path d="M398 246c0-12-10-22-24-22 0 12 10 22 24 22z" fill="#cfe3d9" opacity="0.7"/>
+  <path d="M398 262v-38" stroke="#cfdeea" stroke-width="4" stroke-linecap="round"/>
+  <path d="M398 236c0-16 12-28 28-28 0 16-12 28-28 28z" fill="#cfdeea"/>
+  <path d="M398 246c0-12-10-22-24-22 0 12 10 22 24 22z" fill="#cfdeea" opacity="0.7"/>
 </svg>
