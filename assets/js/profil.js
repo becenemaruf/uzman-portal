@@ -240,19 +240,30 @@
             ${ikon(k.ikon)}<span class="btn-metin">${k.etiket}<small>Uzman bu kanalı kullanmıyor</small></span>
           </span>`;
       }
+      // Örnek (deneme) profiller: Buton görünür ama hiçbir numarayı aramaz, WhatsApp ya da e-posta açmaz.
+      if (u.ornek) {
+        return `<button class="btn btn-blok btn-iletisim ${k.sinif}" type="button" data-ornek-kanal>
+            ${ikon(k.ikon)}<span class="btn-metin">${k.etiket}<small>Örnek profil — gerçek bir kişiye bağlı değil</small></span>
+          </button>`;
+      }
       return `<a class="btn btn-blok btn-iletisim ${k.sinif}" href="${esc(k.adres(deger))}"${k.yeniSekme ? ' target="_blank" rel="noopener"' : ""}>
           ${ikon(k.ikon)}<span class="btn-metin">${k.etiket}<small>${esc(k.altMetin(deger))}</small></span>
         </a>`;
     }
 
     const mesajButonu = (kisa = false) =>
-      `<button class="btn ${kisa ? "" : "btn-blok"} btn-iletisim btn-mesaj" type="button" data-mesaj-ac>
+      `<button class="btn ${kisa ? "" : "btn-blok"} btn-iletisim btn-mesaj" type="button" ${u.ornek ? "data-ornek-kanal" : "data-mesaj-ac"}>
         ${ikon("gonder")}<span class="btn-metin">${kisa ? "Mesaj gönder" : `Uzmana Mesaj Gönder<small>Platform üzerinden iletilir</small>`}</span>
       </button>`;
 
     // Mobilde ekranın altına sabitlenen kısa çubuk: yalnızca kullanılabilir kanallar.
     function mobilCubuk() {
       if (kanalYok) return mesajButonu(true);
+      if (u.ornek) {
+        return aktifKanallar
+          .map((k) => `<button class="btn btn-iletisim ${k.sinif}" type="button" data-ornek-kanal>${ikon(k.ikon)}${k.kisaEtiket}</button>`)
+          .join("");
+      }
       return aktifKanallar
         .map((k) => `<a class="btn btn-iletisim ${k.sinif}" href="${esc(k.adres(iletisim[k.kod]))}"${k.yeniSekme ? ' target="_blank" rel="noopener"' : ""}>${ikon(k.ikon)}${k.kisaEtiket}</a>`)
         .join("");
@@ -423,6 +434,7 @@
           <h2 id="iletisimBaslik">İletişime geçin</h2>
           <span class="durum ${kabul.sinif}">${kabul.metin}</span>
           ${kabulNotu}
+          ${u.ornek ? `<p class="kapali-uyari" id="ornekKanalNotu" tabindex="-1" role="status" hidden>Bu bir örnek profildir; butonlar tasarımı göstermek içindir ve hiçbir numarayı aramaz, mesaj göndermez.</p>` : ""}
           <div class="iletisim-butonlari">
             ${KANALLAR.map(kanalButonu).join("")}
             ${kanalYok ? mesajButonu() : ""}
@@ -453,14 +465,15 @@
         ${yan}
       </div>
       <div class="mobil-iletisim">${mobilCubuk()}</div>
-      ${kanalYok ? MesajFormu.html(u) : ""}`;
+      ${kanalYok && !u.ornek ? MesajFormu.html(u) : ""}`;
 
     // Statik "Uzman listesine dön" bağlantısı, gezinme izi geldikten sonra gereksizleşir.
     const geriLink = document.querySelector(".geri-link");
     if (geriLink) geriLink.hidden = true;
 
     document.body.classList.add("mobil-cubuk-var");
-    if (kanalYok) MesajFormu.bagla(u);
+    // Örnek profillere gerçek danışanlardan mesaj toplanmaz.
+    if (kanalYok && !u.ornek) MesajFormu.bagla(u);
 
     // "Klinik psikolog bul": Listeden gelindiyse tarayıcının geri adımını kullan,
     // böylece listedeki filtreler ve sayfa numarası korunur.
@@ -531,6 +544,17 @@
         }
       });
     }
+
+    // Örnek profillerde iletişim butonuna basılınca yalnızca açıklama gösterilir.
+    alan.querySelectorAll("[data-ornek-kanal]").forEach((d) =>
+      d.addEventListener("click", () => {
+        const kutu = document.getElementById("ornekKanalNotu");
+        if (kutu) {
+          kutu.hidden = false;
+          kutu.focus();
+        }
+      })
+    );
 
     // Paylaş: Telefonlarda sistemin paylaşım menüsü; desteklenmeyen tarayıcılarda bağlantıyı kopyalar.
     const paylasDugme = document.getElementById("paylasDugme");

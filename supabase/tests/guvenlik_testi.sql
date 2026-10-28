@@ -269,7 +269,7 @@ begin
   perform set_config('request.jwt.claims', json_build_object('sub', a, 'role', 'authenticated')::text, true);
   set local role authenticated;
   begin
-    update public.uzmanlar set telefon = '05551112233' where id = pa;
+    update public.uzmanlar set telefon = '00000002233' where id = pa;
     r := r || '❌ 32) Uzman yayındaki telefonu doğrudan yazabildi!' || E'\n';
   exception when others then
     r := r || '✅ 32) Uzman yayındaki telefonu doğrudan yazamadı → "' || sqlerrm || '"' || E'\n';
@@ -277,11 +277,11 @@ begin
 
   -- 33) Uzman iletişim bilgilerini kaydeder; yalnızca WhatsApp'a izin verir
   insert into public.uzman_iletisim (uzman_id, telefon, whatsapp, eposta, whatsapp_yayinda)
-    values (pa, '05551112233', '05551112244', 'uzman-a@ornek.test', true);
+    values (pa, '00000002233', '00000002244', 'uzman-a@ornek.test', true);
   reset role;
   perform set_config('request.jwt.claims', '{"role":"anon"}', true);
   set local role anon;
-  select telefon is null and eposta is null and whatsapp = '05551112244' into t from public.uzmanlar where id = pa;
+  select telefon is null and eposta is null and whatsapp = '00000002244' into t from public.uzmanlar where id = pa;
   r := r || case when t then '✅' else '❌' end || ' 33) Danışan yalnızca izin verilen WhatsApp''ı görüyor; telefon ve e-posta boş' || E'\n';
 
   -- 34) Danışan gizli iletişim tablosunu okuyamaz
@@ -309,7 +309,7 @@ begin
   reset role;
   perform set_config('request.jwt.claims', '{"role":"anon"}', true);
   set local role anon;
-  select telefon = '05551112233' and whatsapp is null into t from public.uzmanlar where id = pa;
+  select telefon = '00000002233' and whatsapp is null into t from public.uzmanlar where id = pa;
   r := r || case when t then '✅' else '❌' end || ' 36) İzin değişikliği herkese açık profile anında yansıdı' || E'\n';
 
   -- 37) Boş bir bilgi yayımlanamaz
