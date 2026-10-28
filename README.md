@@ -42,6 +42,8 @@ Türkiye'nin klinik psikolog rehberi: Unvanı doğrulanmış klinik psikologlar�
 ```
 index.html            Uzman listesi (ana sayfa)
 uzman.html            Uzman profil sayfası  →  uzman.html?id=elif-aydin
+giris.html            Uzman girişi / kayıt / şifre yenileme (Supabase Auth)
+panel.html            Uzman paneli (başlangıç: profil durumu ve adımlar)
 yazi.html             Yazı okuma sayfası    →  yazi.html?id=panik-atak-beden
 giris.html            Uzman Girişi: giriş / kayıt / doğrulama / şifremi unuttum
 assets/css/stil.css   Tüm sayfaların ortak tasarımı (renkler en üstte)
@@ -56,6 +58,9 @@ assets/img/marka/     Logo (üst menü: logo.webp, alt bilgi: logo-tam.webp) ve 
 favicon.ico           Tarayıcı sekmesi simgesi
 assets/js/profil.js   Profil sayfası (iletişim, paylaş, yol tarifi, SEO etiketleri, hata/yeniden dene)
 assets/js/yazi.js     Yazı okuma sayfası
+assets/js/oturum.js   Supabase oturumu, Türkçe hata mesajları, Turnstile (CAPTCHA)
+assets/js/panel.js    Uzman paneli
+assets/vendor/supabase/  supabase-js 2.45.4 (yerel kopya, MIT lisansı)
 assets/js/mesaj-formu.js  "Uzmana Mesaj Gönder" penceresi
 assets/js/giris.js    Giriş/kayıt ekranlarının kodu
 supabase/migrations/  Veritabanının kurulum adımları (sırayla uygulanan SQL dosyaları)

@@ -196,6 +196,7 @@ const IKON_YOLLARI = {
   saat: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   deneyim: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>',
   dil: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  onay: '<path d="m5 12 4.5 4.5L19 7"/>',
   kilit: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   goz: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
   gozKapali: '<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.9M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a9.6 9.6 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
@@ -254,6 +255,23 @@ function mobilMenu() {
   });
 }
 
+/* Giriş yapmış uzman: üst menüde "Uzman Girişi / Profil Oluştur" yerine "Panelim" görünür.
+ * Yalnızca tarayıcıda oturum kaydı olup olmadığına bakılır (kütüphane yüklenmez); asıl kontrol panel sayfasındadır. */
+function oturumMenusu() {
+  let var_ = false;
+  try {
+    const anahtar = Object.keys(localStorage).concat(Object.keys(sessionStorage)).find((k) => /^sb-.*-auth-token$/.test(k));
+    var_ = !!anahtar;
+  } catch (e) {
+    return;
+  }
+  if (!var_) return;
+  const kutu = document.querySelector(".menu-butonlar");
+  if (!kutu || kutu.querySelector('[href="panel.html"]')) return;
+  kutu.innerHTML = `<a class="btn btn-ana btn-kucuk" href="panel.html">Panelim</a>`;
+}
+
 document.addEventListener("DOMContentLoaded", siteAdiniYerlestir);
+document.addEventListener("DOMContentLoaded", oturumMenusu);
 document.addEventListener("DOMContentLoaded", mobilMenu);
 document.addEventListener("DOMContentLoaded", tabloEtiketleri);

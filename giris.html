@@ -82,11 +82,8 @@
               <label class="onay-kutusu"><input type="checkbox" id="beniHatirla"> Beni hatırla</label>
               <a class="link-buton" href="#sifremi-unuttum">Şifremi unuttum</a>
             </div>
-            <div class="captcha-yeri" role="note">
-              <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
-              <div><strong>Güvenlik doğrulaması (CAPTCHA)</strong>Cloudflare Turnstile bu alana yerleştirilecek.</div>
-            </div>
-            <button class="btn btn-ana btn-blok" type="submit">Giriş yap</button>
+            <div class="captcha-kutu" id="girisCaptcha"></div>
+            <button class="btn btn-ana btn-blok" type="submit" id="girisDugme">Giriş yap</button>
           </form>
           <p class="form-alt">Henüz hesabınız yok mu? <a class="link-buton" href="#kayit">Uzman olarak kaydolun</a></p>
         </div>
@@ -133,19 +130,13 @@
               <label class="alan-etiket" for="kayitSifre2">Şifre (tekrar)</label>
               <input class="girdi" id="kayitSifre2" type="password" autocomplete="new-password" required>
             </div>
-            <label class="onay-kutusu">
-              <input type="checkbox" id="kayitKvkk" required>
-              <span><a href="kvkk-aydinlatma.html#uzmanlar" target="_blank">KVKK Aydınlatma Metni</a>'ni okudum ve anladım.</span>
-            </label>
-            <label class="onay-kutusu">
-              <input type="checkbox" id="kayitRiza" required>
-              <span>Profil bilgilerimin danışanların görebileceği şekilde yayınlanmasına <a href="#" target="_blank">açık rıza</a> veriyorum.</span>
-            </label>
-            <div class="captcha-yeri" role="note">
-              <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
-              <div><strong>Güvenlik doğrulaması (CAPTCHA)</strong>Cloudflare Turnstile bu alana yerleştirilecek.</div>
-            </div>
-            <button class="btn btn-ana btn-blok" type="submit">Hesap oluştur</button>
+            <p class="form-not">
+              Kişisel verileriniz, <a href="kvkk-aydinlatma.html#uzmanlar" target="_blank" rel="noopener">KVKK Aydınlatma Metni</a>'nde
+              anlatıldığı şekilde işlenir. Profiliniz, unvanınız doğrulanıp yayına alındığında danışanların görebileceği şekilde yayımlanır;
+              hangi iletişim bilgilerinizin görüneceğine siz karar verirsiniz.
+            </p>
+            <div class="captcha-kutu" id="kayitCaptcha"></div>
+            <button class="btn btn-ana btn-blok" type="submit" id="kayitDugme">Hesap oluştur</button>
           </form>
           <p class="form-alt">Zaten hesabınız var mı? <a class="link-buton" href="#giris">Giriş yapın</a></p>
         </div>
@@ -156,6 +147,8 @@
           <h1>E-postanızı doğrulayın</h1>
           <p class="aciklama"><strong id="dogrulamaAdresi">E-posta adresinize</strong> bir doğrulama bağlantısı gönderdik. Hesabınızı etkinleştirmek için bağlantıya tıklayın. Bağlantı 24 saat geçerlidir.</p>
           <div class="mesaj mesaj-bilgi">E-posta gelmediyse istenmeyen (spam) klasörünü kontrol edin.</div>
+          <div class="mesaj" id="tekrarMesaj" role="status" hidden></div>
+          <div class="captcha-kutu" id="tekrarCaptcha"></div>
           <button class="btn btn-cizgi btn-blok" type="button" id="tekrarGonder">Bağlantıyı tekrar gönder</button>
           <hr class="ayrac">
           <p class="aciklama" style="margin:0"><strong>Sonraki adım:</strong> E-postanızı doğruladıktan sonra unvan belgenizi yükleyip profilinizi doldurursunuz. Profiliniz incelendikten sonra yayına alınır.</p>
@@ -172,11 +165,8 @@
               <label class="alan-etiket" for="unuttumEposta">E-posta adresi</label>
               <input class="girdi" id="unuttumEposta" type="email" autocomplete="email" inputmode="email" required>
             </div>
-            <div class="captcha-yeri" role="note">
-              <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
-              <div><strong>Güvenlik doğrulaması (CAPTCHA)</strong>Cloudflare Turnstile bu alana yerleştirilecek.</div>
-            </div>
-            <button class="btn btn-ana btn-blok" type="submit">Yenileme bağlantısı gönder</button>
+            <div class="captcha-kutu" id="unuttumCaptcha"></div>
+            <button class="btn btn-ana btn-blok" type="submit" id="unuttumDugme">Yenileme bağlantısı gönder</button>
           </form>
           <p class="form-alt"><a class="link-buton" href="#giris">Giriş ekranına dön</a></p>
         </div>
@@ -191,12 +181,36 @@
           <p class="form-alt"><a class="link-buton" href="#giris">Giriş ekranına dön</a></p>
         </div>
 
+        <!-- GÖRÜNÜM 6: YENİ ŞİFRE BELİRLE (e-postadaki yenileme bağlantısından gelinir) -->
+        <div data-gorunum="yeni-sifre" hidden>
+          <h1>Yeni şifrenizi belirleyin</h1>
+          <p class="aciklama">Hesabınız için yeni bir şifre seçin.</p>
+          <div class="mesaj mesaj-hata" id="yeniSifreHata" role="alert" hidden></div>
+          <form id="yeniSifreFormu" novalidate>
+            <div class="form-alani">
+              <label class="alan-etiket" for="yeniSifre">Yeni şifre</label>
+              <div class="sifre-kutu">
+                <input class="girdi" id="yeniSifre" type="password" autocomplete="new-password" required aria-describedby="yeniSifreKurallari">
+                <button class="sifre-goster" type="button" data-sifre-goster="yeniSifre" aria-label="Şifreyi göster"></button>
+              </div>
+              <p class="alan-ipucu" id="yeniSifreKurallari">En az 10 karakter; büyük harf, küçük harf ve rakam içermeli.</p>
+            </div>
+            <div class="form-alani">
+              <label class="alan-etiket" for="yeniSifre2">Yeni şifre (tekrar)</label>
+              <input class="girdi" id="yeniSifre2" type="password" autocomplete="new-password" required>
+            </div>
+            <button class="btn btn-ana btn-blok" type="submit" id="yeniSifreDugme">Şifremi güncelle</button>
+          </form>
+        </div>
+
       </div>
     </section>
   </main>
 
   <script src="assets/js/ayarlar.js"></script>
   <script src="assets/js/ortak.js"></script>
+  <script src="assets/vendor/supabase/supabase.js"></script>
+  <script src="assets/js/oturum.js"></script>
   <script src="assets/js/giris.js"></script>
 </body>
 </html>
