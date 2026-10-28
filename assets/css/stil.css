@@ -421,7 +421,7 @@ select.girdi {
 .profil-duzen > * { min-width: 0; }
 @media (min-width: 960px) {
   .profil-duzen { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; gap: 24px; }
-  .profil-yan { position: sticky; top: 88px; }
+  .profil-yan { position: sticky; top: 132px; }
 }
 .profil-ana { display: grid; gap: 16px; }
 
@@ -1232,3 +1232,40 @@ html { scroll-padding-top: 124px; }
 .yazi-yazar small { display: block; color: var(--soluk); }
 .yazi-govde p { font-size: 1.06rem; line-height: 1.75; margin: 0 0 1.1em; }
 .yazi-not { margin-top: 32px; padding: 14px 16px; background: var(--bilgi-acik); border-radius: 10px; font-size: 0.9rem; color: var(--soluk); }
+
+/* ---------- Profil: isim yanındaki onay işareti ve açıklama balonu ---------- */
+.profil-bas h1 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.onay-sarici { position: relative; display: inline-flex; }
+.onay-dugme {
+  display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; border: none; border-radius: 50%;
+  background: var(--vurgu); color: #fff; cursor: pointer; box-shadow: 0 0 0 3px var(--altin-acik), 0 0 0 4px var(--altin);
+}
+.onay-dugme .ikon { width: 19px; height: 19px; }
+.onay-dugme:focus-visible { outline: 3px solid var(--altin); outline-offset: 3px; }
+.onay-balon {
+  position: absolute; z-index: 20; top: calc(100% + 12px); left: 50%; transform: translateX(-50%);
+  width: min(320px, calc(100vw - 48px)); padding: 14px 16px; border-radius: 12px;
+  background: var(--vurgu-koyu); color: #fff; font-family: Inter, system-ui, sans-serif;
+  font-size: 0.86rem; font-weight: 400; line-height: 1.5; box-shadow: 0 12px 28px rgba(12, 30, 44, 0.25);
+}
+.onay-balon::before {
+  content: ""; position: absolute; top: -6px; left: 50%; width: 12px; height: 12px;
+  background: var(--vurgu-koyu); transform: translateX(-50%) rotate(45deg);
+}
+.onay-balon strong { display: block; margin-bottom: 4px; font-size: 0.95rem; color: #f3e6cf; }
+.onay-balon small { display: block; margin-top: 8px; color: rgba(255, 255, 255, 0.75); font-size: 0.78rem; }
+/* Dar ekranda balon başlığın tüm genişliğine yayılır; ekrandan taşmaz. */
+@media (max-width: 559px) {
+  .profil-bas h1 { position: relative; }
+  .onay-sarici { position: static; }
+  .onay-balon { left: 0; right: 0; width: auto; transform: none; }
+  .onay-balon::before { display: none; }
+}
+
+/* ---------- Profil: görüşme biçimi ve hedef kitle etiketleri ---------- */
+.profil-etiket-satirlari { display: grid; gap: 10px; margin-top: 18px; }
+.etiket-satiri { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.etiket-satir-baslik { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--soluk); min-width: 128px; }
+.etiket-bicim { display: inline-flex; align-items: center; gap: 6px; background: var(--vurgu-acik); color: var(--vurgu-koyu); border-color: transparent; font-weight: 500; }
+.etiket-bicim .ikon { width: 15px; height: 15px; }
+.etiket-kitle { background: var(--altin-acik); color: #6b5230; border-color: #ead9bd; font-weight: 500; }

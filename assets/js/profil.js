@@ -12,7 +12,9 @@
  */
 (function () {
   const alan = document.getElementById("profilIcerik");
-  const id = new URLSearchParams(location.search).get("id");
+  // Hem ?id= hem ?slug= kabul edilir (eski bağlantılar bozulmasın).
+  const parametreler = new URLSearchParams(location.search);
+  const id = parametreler.get("id") || parametreler.get("slug");
 
   // Sayfanın kalıcı adresi (canonical). Alan adı değişse de doğru çalışır.
   const sayfaKoku = location.origin + location.pathname.replace(/[^/]*$/, "");
@@ -270,13 +272,20 @@
 
     // --- Doğrulama rozeti ---
     // Yalnızca yöneticinin belgeleri inceleyip yayına aldığı gerçek profillerde gösterilir (bkz. veri.js → dogrulandi).
+    // İsmin hemen yanındaki onay işareti: dokununca/tıklayınca (ve klavyeyle) açıklama balonu açılır.
+    const isimRozeti = u.dogrulandi
+      ? `<span class="onay-sarici">
+          <button class="onay-dugme" type="button" aria-expanded="false" aria-controls="onayBalonu" aria-label="Unvanı doğrulandı — ayrıntıyı göster">${ikon("dogrulama")}</button>
+          <span class="onay-balon" id="onayBalonu" role="tooltip" hidden>
+            <strong>Unvanı doğrulandı</strong>
+            Psikoloji lisans ve klinik psikoloji yüksek lisans diplomaları platform yönetimi tarafından incelenmiştir.
+            <small>Bu inceleme bir ruhsat, kamu kurumu onayı ya da bağımsız çalışma izni değildir; hizmetin niteliğine
+            veya sonuçlarına ilişkin bir garanti anlamına gelmez.</small>
+          </span>
+        </span>`
+      : "";
     const rozet = u.dogrulandi
-      ? `<details class="dogrulama-detay">
-          <summary>${ikon("dogrulama")}Unvanı doğrulandı ${ikon("bilgi")}<span class="gorunmez">Ne anlama geliyor?</span></summary>
-          <p>Bu profilde belirtilen mesleki unvana ilişkin belgeler platform yönetimi tarafından incelenmiştir.
-             Bu inceleme bir ruhsat, kamu kurumu onayı ya da bağımsız çalışma izni değildir; uzmanın sunduğu hizmetlerin
-             niteliğine, kullandığı yöntemlere ya da sonuçlarına ilişkin bir garanti anlamına gelmez.</p>
-        </details>`
+      ? ""
       : u.ornek
         ? `<p class="ornek-rozet">${ikon("bilgi")}Örnek profil — gerçek bir uzmana ait değildir, unvan doğrulaması yapılmamıştır.</p>`
         : "";
@@ -284,19 +293,32 @@
     // --- Üst kısım ---
     const ozet = [
       konum ? `<span>${ikon("konum")}${esc(konum)}</span>` : "",
-      u.gorusme.length ? `<span>${ikon("video")}${esc(gorusmeMetni(u.gorusme))}</span>` : "",
       u.deneyimYili ? `<span>${ikon("deneyim")}${esc(u.deneyimYili)} yıllık mesleki deneyim</span>` : "",
       doluMu(u.diller) ? `<span>${ikon("dil")}${esc(u.diller.join(", "))}</span>` : "",
     ].join("");
 
     const kabul = kabulDurumu(u);
 
+    // Seans biçimi ve hedef kitle: üst kısımda etiket olarak.
+    const bicimEtiketleri = [
+      yuzyuze ? `<span class="etiket etiket-bicim">${ikon("konum")}Yüz yüze</span>` : "",
+      online ? `<span class="etiket etiket-bicim">${ikon("video")}Online</span>` : "",
+    ].join("");
+    const kitleEtiketleri = u.yasGruplari.map((g) => `<span class="etiket etiket-kitle">${esc(g)}</span>`).join("");
+    const ustEtiketler =
+      bicimEtiketleri || kitleEtiketleri
+        ? `<div class="profil-etiket-satirlari">
+            ${bicimEtiketleri ? `<div class="etiket-satiri"><span class="etiket-satir-baslik">Görüşme</span><div class="etiketler">${bicimEtiketleri}</div></div>` : ""}
+            ${kitleEtiketleri ? `<div class="etiket-satiri"><span class="etiket-satir-baslik">Çalıştığı gruplar</span><div class="etiketler">${kitleEtiketleri}</div></div>` : ""}
+          </div>`
+        : "";
+
     const ust = `
       <section class="blok profil-ust-blok">
         <div class="profil-bas">
           ${avatarHtml(u, "avatar-buyuk")}
           <div class="profil-kimlik">
-            <h1>${esc(u.ad)}</h1>
+            <h1>${esc(u.ad)}${isimRozeti}</h1>
             <div class="rozetler">
               <span class="rozet">${esc(u.unvan)}</span>
               <span class="durum ${kabul.sinif}">${kabul.metin}</span>
@@ -308,6 +330,7 @@
           </div>
         </div>
         <p class="paylas-bildirim" id="paylasBildirim" role="status" aria-live="polite"></p>
+        ${ustEtiketler}
         ${u.kisaTanitim ? `<p class="tanitim">${esc(u.kisaTanitim)}</p>` : ""}
         ${ozet ? `<div class="ozet-bilgiler">${ozet}</div>` : ""}
         ${u.guncellenme && tarihMetni(u.guncellenme) ? `<p class="guncellik">Profil bilgileri en son <time datetime="${esc(u.guncellenme)}">${tarihMetni(u.guncellenme)}</time> tarihinde güncellendi.</p>` : ""}
@@ -327,12 +350,11 @@
 
     // --- Uzmanlık, yaklaşım, gruplar ---
     let alanlar = "";
-    if (doluMu(u.uzmanliklar) || doluMu(u.yaklasimlar) || doluMu(u.yasGruplari)) {
+    if (doluMu(u.uzmanliklar) || doluMu(u.yaklasimlar)) {
       alanlar = blok(
         "Çalışma alanları",
         (doluMu(u.uzmanliklar) ? `<h3>Uzmanlık alanları</h3><div class="etiketler">${u.uzmanliklar.map(renkliEtiket).join("")}</div>` : "") +
-          (doluMu(u.yaklasimlar) ? `<h3>Terapi yaklaşımları ve yöntemleri</h3>${etiketler(u.yaklasimlar)}` : "") +
-          (doluMu(u.yasGruplari) ? `<h3>Çalıştığı gruplar</h3>${etiketler(u.yasGruplari)}` : ""),
+          (doluMu(u.yaklasimlar) ? `<h3>Terapi yaklaşımları ve ekoller</h3>${etiketler(u.yaklasimlar)}` : ""),
         "katman"
       );
     }
@@ -358,7 +380,7 @@
     if (doluMu(u.egitim) || doluMu(u.sertifikalar)) {
       const liste = (dizi) => `<ul class="liste-sade">${dizi.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>`;
       egitim = blok(
-        "Eğitim ve sertifikalar",
+        "Eğitim ve yetkinlik",
         (doluMu(u.egitim) ? `<h3>Akademik eğitim</h3>${liste(u.egitim)}` : "") +
           (doluMu(u.sertifikalar) ? `<h3>Mesleki eğitimler ve sertifikalar</h3>${liste(u.sertifikalar)}` : ""),
         "kep"
@@ -426,7 +448,7 @@
       ${kirinti}
       <div class="profil-duzen">
         <div class="profil-ana">
-          ${ust}${hakkinda}${alanlar}${seans}${egitim}${yazilar}${sss}
+          ${ust}${egitim}${hakkinda}${alanlar}${seans}${yazilar}${sss}
         </div>
         ${yan}
       </div>
@@ -465,6 +487,48 @@
         const kapali = metin.classList.toggle("kapali");
         devami.textContent = kapali ? "Devamını oku" : "Daha az göster";
         devami.setAttribute("aria-expanded", String(!kapali));
+      });
+    }
+
+    // Onay balonu: dokunma/tıklama ile aç-kapa; farenin üzerine gelince de açılır; Esc ve dışarı tıklama kapatır.
+    const onayDugme = alan.querySelector(".onay-dugme");
+    if (onayDugme) {
+      const balon = document.getElementById("onayBalonu");
+      const ayarla = (acik) => {
+        balon.hidden = !acik;
+        onayDugme.setAttribute("aria-expanded", String(acik));
+      };
+      // "sabit": tıklama/dokunmayla açıldı (fare çekilince kapanmaz). "uzerinde": fare işaretin üzerinde.
+      let sabit = false;
+      let uzerinde = false;
+      onayDugme.addEventListener("click", (e) => {
+        e.stopPropagation();
+        sabit = !sabit;
+        ayarla(sabit || uzerinde);
+      });
+      const sarici = onayDugme.parentElement;
+      if (matchMedia("(hover: hover)").matches) {
+        sarici.addEventListener("mouseenter", () => {
+          uzerinde = true;
+          ayarla(true);
+        });
+        sarici.addEventListener("mouseleave", () => {
+          uzerinde = false;
+          if (!sabit) ayarla(false);
+        });
+      }
+      document.addEventListener("click", (e) => {
+        if (!sarici.contains(e.target)) {
+          sabit = false;
+          ayarla(false);
+        }
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !balon.hidden) {
+          sabit = false;
+          ayarla(false);
+          onayDugme.focus();
+        }
       });
     }
 
