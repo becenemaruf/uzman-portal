@@ -1269,3 +1269,4 @@ html { scroll-padding-top: 124px; }
 .etiket-bicim { display: inline-flex; align-items: center; gap: 6px; background: var(--vurgu-acik); color: var(--vurgu-koyu); border-color: transparent; font-weight: 500; }
 .etiket-bicim .ikon { width: 15px; height: 15px; }
 .etiket-kitle { background: var(--altin-acik); color: #6b5230; border-color: #ead9bd; font-weight: 500; }
+.profil-etiket-satirlari + .paylas-bildirim + .tanitim, .profil-etiket-satirlari + .tanitim { margin-top: 18px; }
