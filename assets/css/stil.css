@@ -68,7 +68,7 @@ input, select, button, textarea { font: inherit; color: inherit; }
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--cizgi);
 }
-.ust .kapsayici { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; }
+.ust .kapsayici { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 84px; }
 .logo {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: var(--serif); font-weight: 600; font-size: 1.25rem;
@@ -86,7 +86,28 @@ input, select, button, textarea { font: inherit; color: inherit; }
   padding: 8px 12px; border-radius: 8px;
 }
 .ust-menu .metin-link:hover { color: var(--metin); background: #ece8df; }
-@media (max-width: 640px) { .ust-menu .metin-link { display: none; } }
+.ust-menu .metin-link[aria-current="page"] { color: var(--metin); font-weight: 600; }
+.menu-baglantilar, .menu-butonlar { display: flex; align-items: center; gap: 4px; }
+.menu-butonlar { gap: 8px; margin-left: 10px; }
+.menu-dugme {
+  display: none; width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--cizgi-koyu);
+  background: var(--yuzey); color: var(--metin); cursor: pointer; place-items: center;
+}
+.menu-dugme .ikon { width: 22px; height: 22px; }
+/* Dar ekranlarda menü, ☰ düğmesiyle açılan bir panele dönüşür */
+@media (max-width: 1079px) {
+  .menu-dugme { display: grid; }
+  .ust-menu {
+    display: none; position: absolute; top: calc(100% + 1px); left: 0; right: 0; z-index: 40;
+    flex-direction: column; align-items: stretch; gap: 12px; padding: 14px 16px 18px;
+    background: var(--yuzey); border-bottom: 1px solid var(--cizgi); box-shadow: 0 16px 32px rgba(28, 35, 33, 0.12);
+  }
+  .ust-menu.acik { display: flex; }
+  .menu-baglantilar { flex-direction: column; align-items: stretch; gap: 2px; }
+  .ust-menu .metin-link { display: block; padding: 12px 12px; font-size: 1rem; }
+  .menu-butonlar { margin: 4px 0 0; display: grid; grid-template-columns: 1fr 1fr; }
+  .menu-butonlar .btn { min-height: 46px; }
+}
 
 /* ---------- Butonlar ---------- */
 .btn {
@@ -884,7 +905,7 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
   background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: var(--yaricap);
   padding: 16px 18px; font-size: 0.92rem;
 }
-@media (min-width: 960px) { .icindekiler { position: sticky; top: 84px; } }
+@media (min-width: 960px) { .icindekiler { position: sticky; top: 104px; } }
 .icindekiler-baslik { margin: 0 0 8px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--soluk); }
 .icindekiler ol { margin: 0; padding: 0; list-style: none; counter-reset: ic; display: grid; gap: 2px; }
 .icindekiler li { counter-increment: ic; }
@@ -900,7 +921,7 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
 
 /* Metin gövdesi */
 .kurumsal-metin { min-width: 0; max-width: 760px; }
-.kurumsal-bolum { padding: 8px 0 28px; scroll-margin-top: 84px; }
+.kurumsal-bolum { padding: 8px 0 28px; scroll-margin-top: 104px; }
 .kurumsal-bolum + .kurumsal-bolum { border-top: 1px solid var(--cizgi); padding-top: 32px; }
 .kurumsal-bolum h2 { font-size: clamp(1.45rem, 3.2vw, 1.85rem); margin: 0 0 14px; }
 .kurumsal-bolum > p, .kurumsal-bolum li { line-height: 1.7; color: #2a3430; }
@@ -1098,8 +1119,8 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
 .haber-not { margin: 14px 0 0; font-size: 0.82rem; color: var(--soluk); }
 
 /* ---------- Marka logosu ---------- */
-.logo-gorsel { display: block; height: 50px; width: auto; }
-@media (max-width: 400px) { .logo-gorsel { height: 36px; } }
+.logo-gorsel { display: block; height: 64px; width: auto; }
+@media (max-width: 400px) { .logo-gorsel { height: 54px; } }
 .alt-logo { display: inline-block; justify-self: start; }
 .alt-logo img { display: block; width: 240px; max-width: 100%; height: auto; }
 
@@ -1128,3 +1149,17 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
   .blok-baslik { padding: 16px 28px; }
   .blok-icerik { padding: 22px 28px 26px; }
 }
+
+/* İletişim sayfası */
+html { scroll-padding-top: 96px; }
+.iletisim-sayfa { padding-top: 28px; padding-bottom: 56px; display: grid; gap: 18px; max-width: 1000px; }
+.iletisim-ara-baslik { font-size: clamp(1.35rem, 3vw, 1.7rem); margin: 10px 0 0; }
+.konu-kartlari { display: grid; gap: 12px; }
+@media (min-width: 640px) { .konu-kartlari { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 960px) { .konu-kartlari { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.konu-kart {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  padding: 18px; border-radius: var(--yaricap); background: var(--yuzey); border: 1px solid var(--cizgi); border-top: 3px solid var(--vurgu);
+}
+.konu-kart h3 { font-size: 1.05rem; margin: 0; }
+.konu-kart p { margin: 0 0 6px; color: #3a433f; font-size: 0.94rem; line-height: 1.55; flex: 1; }

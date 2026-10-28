@@ -23,10 +23,21 @@
       <a class="logo" href="index.html" aria-label="Klinik Psikologlar ana sayfa">
         <img class="logo-gorsel" src="assets/img/marka/logo.webp" alt="Klinik Psikologlar" width="720" height="181">
       </a>
-      <nav class="ust-menu" aria-label="Ana menü">
-        <a class="metin-link" href="index.html">Uzmanlar</a>
-        <a class="metin-link" href="index.html#uzmanlar-icin">Uzmanlar İçin</a>
-        <a class="btn btn-cizgi btn-kucuk" href="giris.html">Uzman Girişi</a>
+      <button class="menu-dugme" type="button" aria-expanded="false" aria-controls="anaMenu">
+        <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <span class="gorunmez">Menü</span>
+      </button>
+      <nav class="ust-menu" id="anaMenu" aria-label="Ana menü">
+        <div class="menu-baglantilar">
+        <a class="metin-link" href="index.html#aramaFormu">Psikolog Bul</a>
+        <a class="metin-link" href="index.html#yazilar">Blog</a>
+        <a class="metin-link" href="hakkimizda.html">Hakkımızda</a>
+        <a class="metin-link" href="iletisim.html">İletişim</a>
+        </div>
+        <div class="menu-butonlar">
+          <a class="btn btn-cizgi btn-kucuk" href="giris.html">Uzman Girişi</a>
+          <a class="btn btn-ana btn-kucuk" href="giris.html#kayit">Profil Oluştur</a>
+        </div>
       </nav>
     </div>
   </header>
@@ -52,7 +63,7 @@
         <a href="kvkk-aydinlatma.html">KVKK Aydınlatma Metni</a>
         <a href="gizlilik-politikasi.html">Gizlilik Politikası</a>
         <a href="cerez-politikasi.html">Çerez Politikası</a>
-        <a href="#">İletişim</a>
+        <a href="iletisim.html">İletişim</a>
       </nav>
       <p>© <span data-yil></span> <span data-site-adi>Klinik Psikologlar</span></p>
     </div>

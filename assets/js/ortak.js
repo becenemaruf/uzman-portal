@@ -207,5 +207,32 @@ function tabloEtiketleri() {
   });
 }
 
+// Mobil menü: ☰ düğmesi paneli açar/kapatır; bağlantıya tıklanınca, dışarı dokununca ya da Esc ile kapanır.
+function mobilMenu() {
+  const dugme = document.querySelector(".menu-dugme");
+  const menu = document.getElementById("anaMenu");
+  if (!dugme || !menu) return;
+  const kapat = () => {
+    menu.classList.remove("acik");
+    dugme.setAttribute("aria-expanded", "false");
+  };
+  dugme.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const acik = menu.classList.toggle("acik");
+    dugme.setAttribute("aria-expanded", String(acik));
+  });
+  menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", kapat));
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target)) kapat();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && menu.classList.contains("acik")) {
+      kapat();
+      dugme.focus();
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", siteAdiniYerlestir);
+document.addEventListener("DOMContentLoaded", mobilMenu);
 document.addEventListener("DOMContentLoaded", tabloEtiketleri);
