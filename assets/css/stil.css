@@ -72,7 +72,7 @@ input, select, button, textarea { font: inherit; color: inherit; }
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--cizgi);
 }
-.ust .kapsayici { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 84px; }
+.ust .kapsayici { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 112px; }
 .logo {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: var(--serif); font-weight: 600; font-size: 1.25rem;
@@ -909,7 +909,7 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
   background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: var(--yaricap);
   padding: 16px 18px; font-size: 0.92rem;
 }
-@media (min-width: 960px) { .icindekiler { position: sticky; top: 104px; } }
+@media (min-width: 960px) { .icindekiler { position: sticky; top: 132px; } }
 .icindekiler-baslik { margin: 0 0 8px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--soluk); }
 .icindekiler ol { margin: 0; padding: 0; list-style: none; counter-reset: ic; display: grid; gap: 2px; }
 .icindekiler li { counter-increment: ic; }
@@ -925,7 +925,7 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
 
 /* Metin gövdesi */
 .kurumsal-metin { min-width: 0; max-width: 760px; }
-.kurumsal-bolum { padding: 8px 0 28px; scroll-margin-top: 104px; }
+.kurumsal-bolum { padding: 8px 0 28px; scroll-margin-top: 132px; }
 .kurumsal-bolum + .kurumsal-bolum { border-top: 1px solid var(--cizgi); padding-top: 32px; }
 .kurumsal-bolum h2 { font-size: clamp(1.45rem, 3.2vw, 1.85rem); margin: 0 0 14px; }
 .kurumsal-bolum > p, .kurumsal-bolum li { line-height: 1.7; color: #2a3430; }
@@ -1066,7 +1066,7 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
 .kontrol-listesi li { position: relative; padding-left: 32px; line-height: 1.65; color: #2a3430; }
 .kontrol-listesi li::before {
   content: ""; position: absolute; left: 0; top: 3px; width: 20px; height: 20px; border-radius: 50%;
-  background: var(--vurgu-acik) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d5c48' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 4.5 4.5L19 7'/%3E%3C/svg%3E") center / 12px no-repeat;
+  background: var(--vurgu-acik) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231c4a66' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 4.5 4.5L19 7'/%3E%3C/svg%3E") center / 12px no-repeat;
 }
 .durum-rozet { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
 .durum-rozet.uygulaniyor { background: #e3f3ea; color: #1e6a43; }
@@ -1123,8 +1123,9 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
 .haber-not { margin: 14px 0 0; font-size: 0.82rem; color: var(--soluk); }
 
 /* ---------- Marka logosu ---------- */
-.logo-gorsel { display: block; height: 64px; width: auto; }
-@media (max-width: 400px) { .logo-gorsel { height: 54px; } }
+.logo-gorsel { display: block; height: 88px; width: auto; }
+@media (max-width: 1079px) { .ust .kapsayici { height: 92px; } .logo-gorsel { height: 72px; } }
+@media (max-width: 400px) { .ust .kapsayici { height: 84px; } .logo-gorsel { height: 62px; } }
 .alt-logo { display: inline-block; justify-self: start; }
 .alt-logo img { display: block; width: 240px; max-width: 100%; height: auto; }
 
@@ -1155,7 +1156,7 @@ textarea.girdi { resize: vertical; min-height: 120px; line-height: 1.5; }
 }
 
 /* İletişim sayfası */
-html { scroll-padding-top: 96px; }
+html { scroll-padding-top: 124px; }
 .iletisim-sayfa { padding-top: 28px; padding-bottom: 56px; display: grid; gap: 18px; max-width: 1000px; }
 .iletisim-ara-baslik { font-size: clamp(1.35rem, 3vw, 1.7rem); margin: 10px 0 0; }
 .konu-kartlari { display: grid; gap: 12px; }
