@@ -431,7 +431,12 @@ select.girdi {
 }
 @media (min-width: 700px) { .blok { padding: 28px; } }
 .blok h2 { font-size: 1.3rem; margin: 0 0 14px; }
-.blok h3 { font-family: var(--sans); font-size: 0.85rem; font-weight: 600; color: var(--soluk); text-transform: uppercase; letter-spacing: 0.04em; margin: 18px 0 10px; }
+.blok h3 {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--serif); font-size: 1.12rem; font-weight: 600; color: var(--vurgu);
+  margin: 26px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #e6e9ee;
+}
+.blok h3::before { content: ""; width: 4px; height: 1.05em; border-radius: 2px; background: var(--altin); flex: none; }
 .blok h3:first-of-type { margin-top: 0; }
 .blok p { margin: 0 0 12px; }
 .blok p:last-child { margin-bottom: 0; }
