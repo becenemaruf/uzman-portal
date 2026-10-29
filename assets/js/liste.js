@@ -126,7 +126,7 @@
     // SIRALAMA
     // 1) Arama metni varsa: adı eşleşenler önce, sonra unvanı/alanı eşleşenler.
     // 2) Yeni danışan kabul edenler önce, kabul durumu güncel olmayanlar sonra.
-    // 3) Aynı gruptakiler arasında her gün değişen adil sıra (gunlukSira).
+    // 3) Aynı gruptakiler arasında ziyaretçiye özel rastgele sıra (gunlukSira, bkz. ortak.js).
     // Alfabetik sıra bilerek kullanılmaz: Adı A ile başlayan uzmanlar kalıcı avantaj kazanmasın.
     const aranan = normallestir(f.aramaMetni);
     const skor = (u) => {

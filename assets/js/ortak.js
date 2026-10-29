@@ -168,8 +168,25 @@ function kabulDurumu(u) {
  * Böylece sıralama her gün değişir ama gün içinde sabit kalır: Sayfa yenilense ya da
  * sayfalar arasında gezilse bile aynı uzman iki kez görünmez, kimse kalıcı olarak önde kalmaz.
  */
+/* RASTGELE SIRA
+ * Her ziyaretçi uzmanları kendine özel rastgele bir sırayla görür; böylece hiçbir uzman
+ * herkes için kalıcı olarak üstte ya da altta kalmaz. Sıra ziyaret boyunca sabittir
+ * (sayfa değiştirip geri dönünce liste karışmaz); tarayıcı sekmesi kapatılınca yeni sıra oluşur.
+ * Tarayıcı depolaması kapalıysa o günün tarihine göre bir sıra kullanılır. */
+function siraTohumu() {
+  try {
+    let t = sessionStorage.getItem("kpSiraTohumu");
+    if (!t) {
+      t = Math.random().toString(36).slice(2, 12);
+      sessionStorage.setItem("kpSiraTohumu", t);
+    }
+    return t;
+  } catch (e) {
+    return new Date().toISOString().slice(0, 10);
+  }
+}
 function gunlukSira(id) {
-  const anahtar = id + "|" + new Date().toISOString().slice(0, 10);
+  const anahtar = id + "|" + siraTohumu();
   let h = 2166136261;
   for (let i = 0; i < anahtar.length; i++) {
     h ^= anahtar.charCodeAt(i);
