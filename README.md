@@ -143,3 +143,15 @@ Bu konular yayına geçmeden önce netleşmeli. Kesinliği olmayan hukuki varsay
 ## Yayın
 
 Site GitHub Pages üzerinden yayınlanacak; ilerleyen aşamada markaya ait alan adı bağlanacak.
+
+## Yol haritası (sıradaki işler)
+
+1. **Uzman paneli — profil düzenleme:** fotoğraf, tanıtım, çalışma alanları, yaklaşımlar, eğitim, seans bilgileri, iletişim tercihleri ve **sosyal medya** (Instagram, LinkedIn, X, YouTube, Facebook, TikTok, kişisel web sitesi; isteğe bağlı, yalnızca ilgili sitenin adresini kabul eder, profilde iletişim kutusunun altında küçük simgeler).
+2. **Diploma yükleme ve "İncelemeye gönder"** (psikoloji lisans + klinik psikoloji yüksek lisans).
+3. **Yönetici onay ekranı:** belge inceleme, onay / ek belge / ret, içerik denetimi.
+4. **Kartvizit profili:** profil sayfasının kendisi kartvizit olarak kullanılır (ayrı site değil).
+   - Kısa kalıcı adres: `klinikpsikologlar.com.tr/ad-soyad` (her uzman için sabit sayfa üretilir; Google ve WhatsApp önizlemeleri için)
+   - QR kod indirme, "Rehbere kaydet" (vCard — yalnızca izin verilen bilgiler), yazdırılabilir kartvizit görünümü
+   - Şablon sabit, içerik onaydan geçer; profil yayından kalkarsa adres bir süre "artık aktif değil" sayfasına gider
+5. **Gerçek e-posta servisi** (Resend, `@klinikpsikologlar.com.tr`) ve Türkçe e-posta şablonları.
+6. KVKK metnindeki eksikler (avukatla), gerçek İletişim sayfası, 90 günlük mesaj temizliği için günlük iş.
