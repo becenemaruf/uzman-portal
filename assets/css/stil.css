@@ -642,7 +642,12 @@ body.mobil-cubuk-var { padding-bottom: 84px; }
 }
 .manset-slayt h2 { font-size: clamp(1.45rem, 3.6vw, 2.1rem); margin: 0; max-width: 24ch; }
 .manset-slayt p { margin: 0 0 6px; max-width: 54ch; font-size: 1.02rem; }
-.manset-gorsel { width: 100%; height: 100%; max-height: 280px; object-fit: contain; padding: 20px 32px 20px 0; }
+/* Görsel slaytın sağ yarısını kenardan kenara doldurur; kenarlarda ince çizgi kalmasın diye
+   üstte, sağda ve altta 2 piksel taşar (taşan kısım yuvarlak köşelerle birlikte kesilir). */
+.manset-gorsel {
+  align-self: stretch; display: block; width: calc(100% + 2px); height: calc(100% + 4px); min-height: 100%;
+  margin: -2px -2px -2px 0; object-fit: cover; object-position: center;
+}
 @media (max-width: 699px) { .manset-gorsel { display: none; } }
 
 .tema-yesil { background: var(--vurgu); color: #fff; }
