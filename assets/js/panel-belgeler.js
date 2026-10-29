@@ -146,6 +146,7 @@ const Belgeler = (() => {
                       <select class="girdi" id="belgeTuru">${Object.entries(TURLER)
                         .map(([k, v]) => `<option value="${k}">${v.ad}</option>`)
                         .join("")}</select>
+                      <p class="alan-ipucu">Kutuya tıklayınca açılan listeden, yüklediğiniz belgenin türünü seçin: lisans mezuniyeti, klinik psikoloji yüksek lisans mezuniyeti, Sağlık Bakanlığı sağlık personeli belgesi, uzmanlık / unvan belgesi ya da diğer. Her belgeyi ayrı ayrı yükleyin.</p>
                     </div>
                     <div class="form-alani">
                       <label class="alan-etiket" for="belgeDosya">Dosya</label>
@@ -162,7 +163,7 @@ const Belgeler = (() => {
                   <div class="form-alani" id="kodAlani">
                     <label class="alan-etiket" for="belgeKodu">Belge doğrulama kodu</label>
                     <input class="girdi" id="belgeKodu" maxlength="64" autocomplete="off" spellcheck="false" placeholder="ör. YOK1A2B3C4D5E6F7">
-                    <p class="alan-ipucu">e-Devlet belgesinin alt kısmında, karekodun yanında yazan "Barkod" ya da "Doğrulama Kodu". Yönetim bu kodla belgenin gerçekliğini e-Devlet üzerinden kontrol eder.</p>
+                    <p class="alan-ipucu"><strong>Kod nerede?</strong> e-Devlet belgesinin <strong>sağ üst köşesindeki barkodun hemen altında</strong> yazan belge numarası (ör. YOK1A2B3C4D5E6F7 benzeri). Yönetim bu numarayla belgenin gerçekliğini e-Devlet üzerinden kontrol eder.</p>
                   </div>
                   <div class="mesaj" id="belgeDurum" role="status" hidden></div>
                   <div class="duzen-alt"><button class="btn btn-ana btn-kucuk" type="submit" id="belgeYukle">Belgeyi yükle</button></div>
