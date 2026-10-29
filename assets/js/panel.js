@@ -4,7 +4,7 @@
  *  - İlk girişte, kayıt sırasında verilen ad/soyad/unvan ile "taslak" profil oluşturur
  *    (veritabanı kuralı gereği taslak profil herkese açık değildir; yalnızca uzman ve yönetici görür).
  *  - Profil durumunu ve sıradaki adımları gösterir.
- * Profil düzenleme, belge yükleme ve mesajlar bir sonraki adımda bu sayfaya eklenecek.
+ * Bölümler: #profil (profil düzenleme), #belgeler, #mesajlar, #hesap-sil.
  */
 (function () {
   const sb = Oturum.istemci;
@@ -96,7 +96,7 @@
       .join("")}</ol>`;
   }
 
-  function ciz(kullanici, p, yonetici, eksik = []) {
+  function ciz(kullanici, p, yonetici, eksik = [], okunmamis = 0) {
     p._eksik = eksik.length;
     const d = DURUMLAR[p.durum] || DURUMLAR.taslak;
     const tamAd = `${p.ad} ${p.soyad}`;
@@ -153,10 +153,21 @@
         </section>
       </div>
 
+      <section class="blok panel-kart panel-mesaj-kart">
+        <div>
+          <h2>Mesajlarım ${okunmamis ? `<span class="sekme-sayi okunmamis-sayi">${okunmamis} yeni</span>` : ""}</h2>
+          <p class="soluk">"Uzmana Mesaj Gönder" formundan size gelen mesajlar. Danışana kendiniz dönersiniz; mesajlar 90 gün sonra silinir.</p>
+        </div>
+        <a class="btn ${okunmamis ? "btn-ana" : "btn-cizgi"} btn-kucuk" href="#mesajlar">${ikon("mesaj")}Mesajlarımı aç</a>
+      </section>
+
       <section class="blok panel-kart panel-guvenlik">
         <h2>Hesap</h2>
         <p class="soluk">Şifrenizi değiştirmek için çıkış yapıp giriş ekranındaki "Şifremi unuttum" bağlantısını kullanabilirsiniz.</p>
-        <button class="btn btn-cizgi btn-kucuk" type="button" data-cikis>Çıkış yap</button>
+        <div class="panel-dugmeler">
+          <button class="btn btn-cizgi btn-kucuk" type="button" data-cikis>Çıkış yap</button>
+          <a class="btn btn-cizgi btn-kucuk tehlike" href="#hesap-sil">Hesabımı sil</a>
+        </div>
       </section>`;
     alan.querySelectorAll("[data-cikis]").forEach((b) => b.addEventListener("click", cikis));
 
@@ -179,7 +190,79 @@
     });
   }
 
-  // Yönetici görünümü: profil sayıları. Onay ekranı bir sonraki adımda eklenecek.
+  // HESABIMI SİL: e-posta adresini yazarak onay → "hesap-sil" sunucu fonksiyonu
+  function hesapSilCiz(kullanici, p) {
+    alan.innerHTML = `
+      <nav class="kirinti" aria-label="Bulunduğunuz yer">
+        <ol><li><a href="panel.html#">Panel</a></li><li><span aria-current="page">Hesabımı sil</span></li></ol>
+      </nav>
+      <section class="panel-baslik"><div><p class="bolum-ust-yazi">Uzman paneli</p><h1>Hesabımı sil</h1></div></section>
+      <section class="blok panel-kart hesap-sil-kart">
+        <h2>Bu işlem geri alınamaz</h2>
+        <p>Hesabınızı sildiğinizde şunlar <strong>kalıcı olarak</strong> silinir:</p>
+        <ul class="madde-listesi">
+          <li>Profiliniz ve profilinizdeki tüm bilgiler (fotoğraf, tanıtım, eğitim, iletişim bilgileri, sosyal medya)</li>
+          <li>Yüklediğiniz doğrulama belgeleri ve inceleme kayıtları</li>
+          <li>Size gelen mesajlar ve yazılarınız</li>
+          <li>Giriş hesabınız (${esc(kullanici.email)})</li>
+        </ul>
+        <p class="soluk">Profiliniz sitede hemen görünmez olur. Daha sonra yeniden katılmak isterseniz yeni bir kayıt oluşturup doğrulama sürecinden tekrar geçmeniz gerekir.
+          Yalnızca bir süreliğine danışan almak istemiyorsanız, silmek yerine panelinizdeki <strong>"Yeni danışan kabul ediyorum"</strong> seçeneğini kapatabilirsiniz.</p>
+        <form id="hesapSilFormu" novalidate>
+          <div class="form-alani">
+            <label class="alan-etiket" for="silEposta">Onaylamak için hesabınızın e-posta adresini yazın</label>
+            <input class="girdi" id="silEposta" type="email" autocomplete="off" spellcheck="false" placeholder="${esc(kullanici.email)}">
+          </div>
+          <div class="mesaj" id="silDurum" role="status" hidden></div>
+          <div class="panel-dugmeler">
+            <a class="btn btn-cizgi" href="panel.html#">Vazgeç</a>
+            <button class="btn btn-cizgi tehlike" type="submit" id="silDugme">Hesabımı kalıcı olarak sil</button>
+          </div>
+        </form>
+      </section>`;
+    const form = document.getElementById("hesapSilFormu");
+    const durum = document.getElementById("silDurum");
+    const yaz = (metin, tur) => {
+      durum.className = `mesaj mesaj-${tur}`;
+      durum.textContent = metin;
+      durum.hidden = false;
+    };
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const eposta = document.getElementById("silEposta").value.trim();
+      if (eposta.toLowerCase() !== String(kullanici.email).toLowerCase()) return yaz("E-posta adresi hesabınızınkiyle aynı değil.", "hata");
+      const dugme = document.getElementById("silDugme");
+      dugme.disabled = true;
+      dugme.textContent = "Siliniyor…";
+      try {
+        const { data, error } = await sb.functions.invoke("hesap-sil", { body: { eposta } });
+        if (error || !data || !data.silindi) {
+          let mesaj = "Hesabınız silinemedi. Lütfen tekrar deneyin.";
+          try {
+            const govde = error && error.context ? await error.context.json() : null;
+            if (govde && govde.hata) mesaj = govde.hata;
+          } catch (h) {
+            /* yanıt okunamadı */
+          }
+          throw new Error(mesaj);
+        }
+        try {
+          await Oturum.cikis();
+        } catch (h) {
+          /* oturum zaten kapanmış olabilir */
+        }
+        alan.innerHTML = `<div class="bos-durum" style="margin:32px 0 48px"><h1 class="bos-baslik">Hesabınız silindi</h1>
+          <p>Profiliniz ve tüm bilgileriniz kalıcı olarak silindi. Bizi tercih ettiğiniz için teşekkür ederiz.</p>
+          <div class="bos-durum-butonlar"><a class="btn btn-ana" href="index.html">Ana sayfaya dön</a></div></div>`;
+      } catch (h) {
+        console.error(h);
+        yaz(h.message || "Hesabınız silinemedi. Lütfen tekrar deneyin.", "hata");
+        dugme.disabled = false;
+        dugme.textContent = "Hesabımı kalıcı olarak sil";
+      }
+    });
+  }
+
   function hata(metin) {
     alan.innerHTML = `
       <div class="bos-durum" role="alert" style="margin:32px 0 48px">
@@ -210,10 +293,14 @@
         await ProfilDuzenle.ac(alan, profil.id, kullanici);
       } else if (location.hash === "#belgeler") {
         await Belgeler.ac(alan, profil, kullanici);
+      } else if (location.hash === "#mesajlar") {
+        await Mesajlar.ac(alan, profil);
+      } else if (location.hash === "#hesap-sil") {
+        hesapSilCiz(kullanici, profil);
       } else {
         const guncel = (await profilGetir(kullanici.id)) || profil;
-        const eksik = await ProfilDuzenle.eksikler(profil.id).catch(() => []);
-        ciz(kullanici, guncel, yonetici, eksik);
+        const [eksik, okunmamis] = await Promise.all([ProfilDuzenle.eksikler(profil.id).catch(() => []), Mesajlar.okunmamisSayisi(profil.id)]);
+        ciz(kullanici, guncel, yonetici, eksik, okunmamis);
       }
       window.scrollTo(0, 0);
     } catch (e) {

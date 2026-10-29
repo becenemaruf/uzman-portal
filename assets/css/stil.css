@@ -1731,3 +1731,28 @@ body.profil-renkli .blok h3 { color: color-mix(in srgb, var(--profil-renk) 85%, 
 .renk-onizleme-govde { background: #fff; border-radius: 0 0 10px 10px; padding: 12px; display: grid; gap: 6px; }
 .renk-onizleme-govde span { height: 7px; border-radius: 4px; background: #e6e8ea; }
 .renk-onizleme-govde span:last-child { width: 60%; }
+
+/* Uzman paneli: mesajlar ve hesap silme */
+.panel-mesaj-kart { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-top: 16px; }
+.panel-mesaj-kart > div { flex: 1 1 320px; }
+.panel-mesaj-kart h2 { display: flex; align-items: center; gap: 10px; }
+.panel-mesaj-kart .btn { gap: 8px; }
+.panel-mesaj-kart .ikon { width: 18px; height: 18px; }
+.okunmamis-sayi { background: var(--altin); color: #fff; font-family: var(--sans); font-size: 0.78rem; padding: 2px 9px; }
+.mesaj-listesi { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.mesaj-kart { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; }
+.mesaj-kart.okunmamis { border-color: var(--altin); box-shadow: inset 4px 0 0 var(--altin); }
+.mesaj-kart summary { list-style: none; cursor: pointer; padding: 14px 16px; display: grid; gap: 4px; }
+.mesaj-kart summary::-webkit-details-marker { display: none; }
+.mesaj-kart-bas { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.yeni-nokta { width: 9px; height: 9px; border-radius: 50%; background: var(--altin); flex: none; }
+.mesaj-onizleme { color: var(--soluk); font-size: 0.93rem; overflow-wrap: anywhere; }
+.mesaj-kart details[open] .mesaj-onizleme { display: none; }
+.mesaj-govde { padding: 0 16px 16px; border-top: 1px solid var(--cizgi); padding-top: 14px; }
+.mesaj-govde .on-metin { overflow-wrap: anywhere; }
+.mesaj-donus { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 10px; }
+.mesaj-donus .btn { gap: 8px; }
+.mesaj-donus .ikon { width: 16px; height: 16px; }
+.hesap-sil-kart { border-top: 4px solid var(--hata); max-width: 760px; }
+.hesap-sil-kart h2 { color: var(--hata); }
+.hesap-sil-kart form { margin-top: 18px; }
