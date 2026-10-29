@@ -63,7 +63,7 @@
 
     alan.innerHTML = `
       <section class="panel-baslik"><div><p class="bolum-ust-yazi">İçerik yönetimi</p><h1>Genel site ayarları</h1>
-        <p class="soluk">Boş bıraktığınız alan sitede gösterilmez. ${a.guncellenme ? `Son kayıt: ${esc(new Date(a.guncellenme).toLocaleString("tr-TR"))}.` : ""}</p></div></section>
+        <p class="soluk">Boş bıraktığınız alan sitede gösterilmez. <span id="sonKayit">${a.guncellenme ? `Son kayıt: ${esc(new Date(a.guncellenme).toLocaleString("tr-TR"))}.` : ""}</span></p></div></section>
       <form id="ayarFormu" novalidate class="yonetim-icerik">
         ${ALANLAR.map(
           (b) => `<section class="blok panel-kart ayar-bolum"><h2>${esc(b.bolum)}</h2>
@@ -101,6 +101,8 @@
       dugme.textContent = "Ayarları kaydet";
       if (error) return Yonetim.mesaj(m, "Kaydedilemedi: " + Yonetim.hataMetni(error), "hata");
       Yonetim.kirliYap(false);
+      const sk = document.getElementById("sonKayit");
+      if (sk) sk.textContent = `Son kayıt: ${new Date().toLocaleString("tr-TR")}.`;
       Yonetim.mesaj(m, "Ayarlar kaydedildi. Sitede hemen geçerli olur (sayfayı yenileyin).", "basari");
     });
   });
