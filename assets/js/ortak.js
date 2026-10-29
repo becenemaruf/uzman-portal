@@ -232,6 +232,8 @@ const IKON_YOLLARI = {
   kapat: '<path d="M6 6l12 12M18 6 6 18"/>',
   disari: '<path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>',
   kep: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/>',
+  universite: '<path d="M3 9.5 12 4l9 5.5"/><path d="M4 21h16M5 18h14"/><path d="M6.5 10.5V18M10 10.5V18M14 10.5V18M17.5 10.5V18"/>',
+  rozet: '<circle cx="12" cy="9" r="5.5"/><path d="m9.5 9 1.7 1.7L14.5 7.5"/><path d="M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/>',
   katman: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
   soru: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7"/><path d="M12 17h.01"/>',
   bilgi: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>',

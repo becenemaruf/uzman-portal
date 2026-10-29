@@ -438,8 +438,8 @@
       const liste = (dizi) => `<ul class="liste-sade">${dizi.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>`;
       egitim = blok(
         "Eğitim ve yetkinlik",
-        (doluMu(u.egitim) ? `<h3>Akademik eğitim</h3>${liste(u.egitim)}` : "") +
-          (doluMu(u.sertifikalar) ? `<h3>Mesleki eğitimler ve sertifikalar</h3>${liste(u.sertifikalar)}` : ""),
+        (doluMu(u.egitim) ? `<h3 class="ikonlu">${ikon("universite")}Akademik eğitim</h3>${liste(u.egitim)}` : "") +
+          (doluMu(u.sertifikalar) ? `<h3 class="ikonlu">${ikon("rozet")}Mesleki eğitimler ve sertifikalar</h3>${liste(u.sertifikalar)}` : ""),
         "kep"
       );
     }
