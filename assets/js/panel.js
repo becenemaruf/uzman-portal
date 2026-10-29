@@ -4,7 +4,7 @@
  *  - İlk girişte, kayıt sırasında verilen ad/soyad/unvan ile "taslak" profil oluşturur
  *    (veritabanı kuralı gereği taslak profil herkese açık değildir; yalnızca uzman ve yönetici görür).
  *  - Profil durumunu ve sıradaki adımları gösterir.
- * Bölümler: #profil (profil düzenleme), #belgeler, #mesajlar, #hesap-sil.
+ * Bölümler: #profil (profil düzenleme), #belgeler, #mesajlar, #bildirimler, #hesap-sil.
  */
 (function () {
   const sb = Oturum.istemci;
@@ -339,6 +339,8 @@
         await Belgeler.ac(alan, profil, kullanici);
       } else if (location.hash === "#mesajlar") {
         await Mesajlar.ac(alan, profil);
+      } else if (location.hash === "#bildirimler") {
+        await Bildirimler.ac(alan, profil);
       } else if (location.hash === "#hesap-sil") {
         hesapSilCiz(kullanici, profil);
       } else {
@@ -346,6 +348,8 @@
         const [eksik, okunmamis] = await Promise.all([ProfilDuzenle.eksikler(profil.id).catch(() => []), Mesajlar.okunmamisSayisi(profil.id)]);
         ciz(kullanici, guncel, yonetici, eksik, okunmamis);
       }
+      // Bildirim zili ve okunmamış kritik bildirim şeridi (her görünümde)
+      if (location.hash !== "#hesap-sil") Bildirimler.guncelle(alan, profil);
       window.scrollTo(0, 0);
     } catch (e) {
       console.error(e);

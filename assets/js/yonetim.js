@@ -14,6 +14,7 @@ const Yonetim = (() => {
   const MENU = [
     { kod: "", ad: "Özet", ikon: "katman" },
     { kod: "basvurular", ad: "Uzman başvuruları", ikon: "dogrulama" },
+    { kod: "bildirimler", ad: "Sistem bildirimleri", ikon: "zil" },
     { grup: "İçerik yönetimi" },
     { kod: "mansetler", ad: "Manşetler (slider)", ikon: "yazi" },
     { kod: "duyurular", ad: "Duyurular ve tanıtımlar", ikon: "bilgi" },
@@ -33,7 +34,7 @@ const Yonetim = (() => {
   }
 
   function menuCiz(aktifKod) {
-    const ust = { basvuru: "basvurular", manset: "mansetler", duyuru: "duyurular", sayfa: "sayfalar" }[aktifKod] ?? aktifKod;
+    const ust = { basvuru: "basvurular", manset: "mansetler", duyuru: "duyurular", sayfa: "sayfalar", bildirim: "bildirimler" }[aktifKod] ?? aktifKod;
     return `<nav class="yonetim-menu" aria-label="Yönetim bölümleri">
       ${MENU.map((m) =>
         m.grup

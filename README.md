@@ -74,6 +74,10 @@ yonetim.html          Yönetici paneli (başvurular + içerik yönetimi)
 assets/js/yonetim*.js Yönetici paneli bölümleri (çerçeve, başvurular, manşet/duyuru, sabit sayfalar, ayarlar)
 assets/js/site-icerik.js  Panelden gelen ayarları ve sabit sayfa sürümlerini sitede uygular
 assets/js/duyurular.js    Ana sayfadaki duyuru kartları
+assets/js/panel-mesajlar.js, panel-bildirimler.js  Uzman paneli: mesaj kutusu, bildirim merkezi
+assets/durum.json     Acil durum duyurusu (GitHub'dan düzenlenir, Supabase'e bağlı değil)
+supabase/functions/bildirim-gonder/  Sistem bildirimlerinin e-posta/SMS gönderimi ve planlı gönderim
+supabase/functions/hesap-sil/        Uzmanın kendi hesabını silmesi
 assets/js/guvenli-html.js + assets/vendor/dompurify/  Sayfa içeriği HTML temizleyici (DOMPurify 3, Apache-2.0/MPL-2.0)
 supabase/functions/karar-bildir/  Yönetici kararını uzmana e-postayla bildiren fonksiyon
 supabase/functions/belge-temizle/ Karardan 30 gün sonra belge dosyalarını silen günlük iş
@@ -171,4 +175,10 @@ Site GitHub Pages üzerinden yayınlanacak; ilerleyen aşamada markaya ait alan 
    - Gizli depo, kısa süreli indirme bağlantısı; önemli belgelerde indiren uzmanın adıyla filigran (isteğe bağlı).
 6. **Meslektaş davet bağlantısı:** Onaylanmış uzmanlar, yalnızca klinik psikolog meslektaşlarını davet edebilecekleri kişisel bir bağlantı paylaşır (WhatsApp/kopyala). Davet edilen kişi yine diploma doğrulamasından geçer; daveti kimin yaptığı kaydedilir, panelde "davetinizle katılanlar" görünür. Davet, sıralamada öne çıkma gibi bir ayrıcalık sağlamaz.
 7. ~~**Gerçek e-posta servisi**~~ — yapıldı (Resend, bildirim@klinikpsikologlar.com.tr; şablonlar supabase/eposta-sablonlari). (Resend, `@klinikpsikologlar.com.tr`) ve Türkçe e-posta şablonları.
+9. ~~**Sistem bildirimleri**~~ — yapıldı (yonetim.html#bildirimler; uzman panelinde zil + panel.html#bildirimler):
+   - Tablolar: `sistem_bildirimleri`, `bildirim_alicilari` ((bildirim, uzman) tekil → çift gönderim yok), `uzman_bildirim_tercihleri` (e-posta açık / SMS kapalı varsayılan; SMS izni zamanıyla kaydedilir).
+   - Gönderim yalnızca `bildirim-gonder` fonksiyonuyla: tek seferlik durum geçişi, Resend toplu gönderim + Idempotency-Key, başarısızları yeniden deneme, planlı gönderim (pg_cron, 5 dk).
+   - Kritik bildirimler uzman panelinin üstünde şerit olarak; e-postayı kapatan uzmana da gider. Gönderimden önce özet + onay kutusu.
+   - SMS: arayüz, sayaç (Türkçe karakter/segment), izin ve kayıt hazır; **sağlayıcı bağlanmadı** (`SMS_SAGLAYICILARI` içine eklenecek, anahtarlar Edge Function Secrets'a).
+   - Acil durum: `assets/durum.json` ("aktif": true) — Supabase'den bağımsız, tüm sayfalarda duyuru şeridi.
 8. KVKK metnindeki eksikler (avukatla), gerçek İletişim sayfası, 90 günlük mesaj temizliği için günlük iş.
