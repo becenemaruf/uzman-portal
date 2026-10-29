@@ -11,8 +11,8 @@ const Belgeler = (() => {
   const DEPO = "dogrulama-belgeleri";
   const EN_FAZLA_MB = 10;
   const TURLER = {
-    diploma: { ad: "Psikoloji lisans diploması", zorunlu: true },
-    yuksek_lisans: { ad: "Klinik psikoloji yüksek lisans diploması", zorunlu: true },
+    diploma: { ad: "Psikoloji lisans mezuniyeti", zorunlu: true },
+    yuksek_lisans: { ad: "Klinik psikoloji yüksek lisans mezuniyeti", zorunlu: true },
     uzmanlik_belgesi: { ad: "Uzmanlık / unvan belgesi (varsa)", zorunlu: false },
     diger: { ad: "Diğer belge (ör. isim değişikliği, denklik)", zorunlu: false },
   };
@@ -35,7 +35,7 @@ const Belgeler = (() => {
   async function yukle() {
     const [p, b, g] = await Promise.all([
       sb.from("uzmanlar").select("id, slug, ad, soyad, unvan, durum").eq("id", profil.id).single(),
-      sb.from("dogrulama_belgeleri").select("id, belge_turu, dosya_yolu, durum, yonetici_notu, yuklenme").eq("uzman_id", profil.id).order("yuklenme"),
+      sb.from("dogrulama_belgeleri").select("id, belge_turu, kaynak, dogrulama_kodu, dosya_yolu, durum, yonetici_notu, yuklenme").eq("uzman_id", profil.id).order("yuklenme"),
       sb.from("uzman_gizli").select("ret_nedeni, yonetici_notu").eq("uzman_id", profil.id).maybeSingle(),
     ]);
     if (p.error) throw p.error;
@@ -54,7 +54,7 @@ const Belgeler = (() => {
     return `<li class="belge-satir">
       <div class="belge-bilgi">
         <strong>${esc((TURLER[x.belge_turu] || TURLER.diger).ad)}</strong>
-        <span class="alan-ipucu">${esc(dosyaAdi)} · ${tarihMetni(x.yuklenme)}</span>
+        <span class="alan-ipucu">${x.kaynak === "edevlet" ? `e-Devlet belgesi · doğrulama kodu: <code>${esc(x.dogrulama_kodu || "")}</code>` : "Diploma görüntüsü"} · ${esc(dosyaAdi)} · ${tarihMetni(x.yuklenme)}</span>
         ${x.yonetici_notu ? `<span class="belge-not">Yönetici notu: ${esc(x.yonetici_notu)}</span>` : ""}
       </div>
       <span class="panel-durum ${d.sinif}">${d.ad}</span>
@@ -85,7 +85,7 @@ const Belgeler = (() => {
         <div>
           <p class="bolum-ust-yazi">Uzman paneli</p>
           <h1>Belgeler ve inceleme</h1>
-          <p class="soluk">Unvanınızın doğrulanması için diplomalarınızı yükleyin ve profilinizi incelemeye gönderin.</p>
+          <p class="soluk">Unvanınızın doğrulanması için mezuniyet belgelerinizi (e-Devlet ya da diploma) yükleyin ve profilinizi incelemeye gönderin.</p>
         </div>
       </section>
 
@@ -99,7 +99,8 @@ const Belgeler = (() => {
         <section class="blok panel-kart">
           <h2>Belgelerim</h2>
           <p class="soluk duzen-aciklama">
-            PDF, JPG ya da PNG; her dosya en fazla ${EN_FAZLA_MB} MB. Belgenin tamamı, adınız ve okulun adı okunur olmalıdır.
+            Lisans ve yüksek lisans mezuniyetleriniz için <strong>e-Devlet'ten alınan YÖK mezun belgesini</strong> yüklemenizi öneririz;
+            her mezuniyet için ayrı belge oluşturulur. Diploma görüntüsü de kabul edilir (PDF, JPG ya da PNG; en fazla ${EN_FAZLA_MB} MB; tamamı okunur olmalıdır).
             Belgeleriniz <strong>yalnızca unvan doğrulaması için</strong> kullanılır; sitede yayımlanmaz ve yalnızca siz ile platform yönetimi görebilir.
             Ayrıntılar için <a href="kvkk-aydinlatma.html#uzmanlar" target="_blank" rel="noopener">KVKK Aydınlatma Metni</a>.
           </p>
@@ -118,6 +119,18 @@ const Belgeler = (() => {
                       <label class="alan-etiket" for="belgeDosya">Dosya</label>
                       <input class="girdi" type="file" id="belgeDosya" accept="application/pdf,image/jpeg,image/png">
                     </div>
+                  </div>
+                  <fieldset class="secim-grubu">
+                    <legend class="alan-etiket">Belge biçimi</legend>
+                    <div class="kutucuklar kaynak-secim">
+                      <label class="onay-kutusu"><input type="radio" name="kaynak" value="edevlet" checked> <span><strong>e-Devlet mezun belgesi</strong> (önerilen)<br><small class="alan-ipucu">e-Devlet → "YÖK Mezun Belgesi Sorgulama" → PDF olarak indirin.</small></span></label>
+                      <label class="onay-kutusu"><input type="radio" name="kaynak" value="diploma"> <span><strong>Diploma</strong> taraması ya da fotoğrafı<br><small class="alan-ipucu">e-Devlet'te görünmeyen mezuniyetler için (ör. yurt dışı).</small></span></label>
+                    </div>
+                  </fieldset>
+                  <div class="form-alani" id="kodAlani">
+                    <label class="alan-etiket" for="belgeKodu">Belge doğrulama kodu</label>
+                    <input class="girdi" id="belgeKodu" maxlength="64" autocomplete="off" spellcheck="false" placeholder="ör. YOK1A2B3C4D5E6F7">
+                    <p class="alan-ipucu">e-Devlet belgesinin alt kısmında, karekodun yanında yazan "Barkod" ya da "Doğrulama Kodu". Yönetim bu kodla belgenin gerçekliğini e-Devlet üzerinden kontrol eder.</p>
                   </div>
                   <div class="mesaj" id="belgeDurum" role="status" hidden></div>
                   <div class="duzen-alt"><button class="btn btn-ana btn-kucuk" type="submit" id="belgeYukle">Belgeyi yükle</button></div>
@@ -159,7 +172,12 @@ const Belgeler = (() => {
 
   function baglaOlaylar() {
     const form = $("belgeFormu");
-    if (form) form.addEventListener("submit", belgeYukle);
+    if (form) {
+      form.addEventListener("submit", belgeYukle);
+      const kodGoster = () => ($("kodAlani").hidden = form.querySelector('input[name="kaynak"]:checked').value !== "edevlet");
+      form.querySelectorAll('input[name="kaynak"]').forEach((k) => k.addEventListener("change", kodGoster));
+      kodGoster();
+    }
 
     alan.querySelectorAll("[data-goster]").forEach((d) =>
       d.addEventListener("click", async () => {
@@ -237,9 +255,13 @@ const Belgeler = (() => {
   async function belgeYukle(e) {
     e.preventDefault();
     const tur = $("belgeTuru").value;
+    const kaynak = document.querySelector('input[name="kaynak"]:checked').value;
+    const kod = $("belgeKodu").value.replace(/\s+/g, "").trim();
     const dosya = $("belgeDosya").files[0];
     const dugme = $("belgeYukle");
     if (!dosya) return durumYaz("belgeDurum", "Önce bir dosya seçin.", "hata");
+    if (kaynak === "edevlet" && !/^[A-Za-z0-9-]{4,64}$/.test(kod))
+      return durumYaz("belgeDurum", "e-Devlet belgesindeki doğrulama kodunu yazın (yalnızca harf, rakam ve tire).", "hata");
     if (!/^(application\/pdf|image\/jpeg|image\/png)$/.test(dosya.type)) return durumYaz("belgeDurum", "Yalnızca PDF, JPG ya da PNG yükleyebilirsiniz.", "hata");
     if (dosya.size > EN_FAZLA_MB * 1024 * 1024) return durumYaz("belgeDurum", `Dosya ${EN_FAZLA_MB} MB'tan büyük olamaz. Telefonla çektiyseniz daha düşük çözünürlükte deneyin ya da PDF'e çevirin.`, "hata");
     const uzanti = dosya.type === "application/pdf" ? "pdf" : dosya.type === "image/png" ? "png" : "jpg";
@@ -249,7 +271,7 @@ const Belgeler = (() => {
     try {
       const { error: yErr } = await sb.storage.from(DEPO).upload(yol, dosya, { contentType: dosya.type, upsert: false });
       if (yErr) throw yErr;
-      const { error } = await sb.from("dogrulama_belgeleri").insert({ uzman_id: profil.id, belge_turu: tur, dosya_yolu: yol });
+      const { error } = await sb.from("dogrulama_belgeleri").insert({ uzman_id: profil.id, belge_turu: tur, dosya_yolu: yol, kaynak, dogrulama_kodu: kaynak === "edevlet" ? kod : null });
       if (error) {
         await sb.storage.from(DEPO).remove([yol]);
         throw error;

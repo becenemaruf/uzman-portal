@@ -1459,3 +1459,8 @@ html { scroll-padding-top: 124px; }
 .gonder-kontrol li.tamam { color: var(--soluk); }
 .gonder-kontrol .bos-daire { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--cizgi-koyu); flex: none; margin: 0 1px; }
 .gonder-kontrol a { color: var(--vurgu); font-size: 0.88rem; }
+.kaynak-secim { grid-template-columns: 1fr; }
+@media (min-width: 720px) { .kaynak-secim { grid-template-columns: 1fr 1fr; } }
+.kaynak-secim .onay-kutusu { align-items: flex-start; border: 1px solid var(--cizgi); border-radius: 10px; padding: 10px 12px; }
+.kaynak-secim small { font-size: 0.82rem; }
+.belge-bilgi code { font-size: 0.85rem; background: var(--vurgu-acik); padding: 1px 6px; border-radius: 4px; color: var(--vurgu-koyu); }

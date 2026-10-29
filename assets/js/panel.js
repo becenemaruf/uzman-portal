@@ -11,7 +11,7 @@
   const alan = document.getElementById("panelIcerik");
 
   const DURUMLAR = {
-    taslak: { etiket: "Taslak", sinif: "taslak", metin: "Profiliniz henüz yayında değil. Bilgilerinizi doldurup diplomalarınızı yükledikten sonra incelemeye gönderebilirsiniz." },
+    taslak: { etiket: "Taslak", sinif: "taslak", metin: "Profiliniz henüz yayında değil. Bilgilerinizi doldurup mezuniyet belgelerinizi yükledikten sonra incelemeye gönderebilirsiniz." },
     incelemede: { etiket: "İncelemede", sinif: "incelemede", metin: "Profiliniz ve belgeleriniz yönetim tarafından inceleniyor. Sonuç e-posta ile bildirilecek." },
     ek_belge: { etiket: "Ek belge bekleniyor", sinif: "uyari", metin: "İnceleme için ek belge istendi. Yönetici notunu okuyup belgeyi yükledikten sonra tekrar incelemeye gönderin." },
     yayinda: { etiket: "Yayında", sinif: "yayinda", metin: "Profiliniz doğrulandı ve danışanlar tarafından görülebiliyor." },
@@ -78,7 +78,7 @@
     const liste = [
       { baslik: "E-posta adresinizi doğrulayın", tamam: true },
       { baslik: "Profil bilgilerinizi doldurun", metin: "Fotoğraf, tanıtım, çalışma alanları, eğitim, görüşme, iletişim ve sosyal medya.", tamam: gonderildi || p._eksik === 0, baglanti: { adres: "#profil", yazi: "Profilimi düzenle" } },
-      { baslik: "Diplomalarınızı yükleyin", metin: "Psikoloji lisans ve klinik psikoloji yüksek lisans diplomaları (PDF ya da fotoğraf).", tamam: gonderildi, baglanti: { adres: "#belgeler", yazi: "Belgelerim" } },
+      { baslik: "Mezuniyet belgelerinizi yükleyin", metin: "Psikoloji lisans ve klinik psikoloji yüksek lisans: e-Devlet mezun belgesi (önerilen) ya da diploma.", tamam: gonderildi, baglanti: { adres: "#belgeler", yazi: "Belgelerim" } },
       { baslik: "İncelemeye gönderin", metin: "Yönetim belgelerinizi inceler; gerekirse ek belge ister.", tamam: gonderildi, baglanti: gonderildi ? null : { adres: "#belgeler", yazi: "İncelemeye gönder" } },
       { baslik: "Profiliniz yayında", metin: "Unvanınız doğrulanınca profiliniz ve onay işaretiniz danışanlara görünür.", tamam: yayinda },
     ];
