@@ -96,6 +96,26 @@
       .join("")}</ol>`;
   }
 
+  // "Neden ayrıntılı bilgi ve belge istiyoruz?" notu. Uzman kapatınca bu tarayıcıda, o hesap için bir daha gösterilmez.
+  const BILGI_NOTU_ANAHTARI = "kpBilgiNotuKapali:";
+  function bilgiNotuKapali(kullaniciId) {
+    try {
+      return localStorage.getItem(BILGI_NOTU_ANAHTARI + kullaniciId) === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+  function bilgiNotu() {
+    return `<section class="bilgi-notu" id="bilgiNotu" aria-labelledby="bilgiNotuBaslik">
+      <button class="bilgi-notu-kapat" type="button" id="bilgiNotuKapat" aria-label="Bilgilendirme notunu kapat">${ikon("kapat")}</button>
+      <h2 id="bilgiNotuBaslik"><span class="bilgi-notu-ikon" aria-hidden="true">${ikon("bilgi")}</span>Neden Ayrıntılı Bilgi ve Belge Talep Ediyoruz?</h2>
+      <p>KlinikPsikologlar.com.tr olarak amacımız yalnızca klinik psikologları listeleyen bir rehber oluşturmak değil; mesleki unvanların, eğitim bilgilerinin ve uzmanlık alanlarının doğru biçimde sunulduğu, bilgi kirliliğinden uzak, güvenilir bir platform geliştirmektir.</p>
+      <p>Bu nedenle profil oluşturma sürecimizde bazı bilgileri ayrıntılı olarak talep ediyor, mesleki eğitim ve unvan belgelerini inceliyoruz. Bu işlemlerin zamanınızı aldığının farkındayız. Ancak doğrulanmamış unvanların, yanıltıcı mesleki beyanların ve gerçeği yansıtmayan uzmanlık bilgilerinin önüne geçebilmek için bu süreci önemsiyoruz.</p>
+      <p>Gösterdiğiniz özen, yalnızca kendi mesleki kimliğinizin doğru temsil edilmesine değil, platformdaki bütün klinik psikologların güvenilirliğine de katkı sağlayacaktır.</p>
+      <p class="bilgi-notu-tesekkur">Anlayışınız ve katkınız için teşekkür ederiz.</p>
+    </section>`;
+  }
+
   function ciz(kullanici, p, yonetici, eksik = [], okunmamis = 0) {
     p._eksik = eksik.length;
     const d = DURUMLAR[p.durum] || DURUMLAR.taslak;
@@ -109,6 +129,8 @@
         </div>
         ${yonetici ? `<span class="rozet yonetici-rozet">${ikon("kilit")}Yönetici hesabı</span>` : ""}
       </section>
+
+      ${bilgiNotuKapali(kullanici.id) ? "" : bilgiNotu()}
 
       <div class="panel-izgara">
         <section class="blok panel-kart">
@@ -170,6 +192,18 @@
         </div>
       </section>`;
     alan.querySelectorAll("[data-cikis]").forEach((b) => b.addEventListener("click", cikis));
+
+    const notKapat = document.getElementById("bilgiNotuKapat");
+    if (notKapat)
+      notKapat.addEventListener("click", () => {
+        try {
+          localStorage.setItem(BILGI_NOTU_ANAHTARI + kullanici.id, "1");
+        } catch (e) {
+          /* depolama kapalıysa yalnızca bu açılışta gizlenir */
+        }
+        const kutu = document.getElementById("bilgiNotu");
+        if (kutu) kutu.remove();
+      });
 
     const anahtar = document.getElementById("yeniDanisan");
     anahtar.addEventListener("change", async () => {

@@ -1756,3 +1756,24 @@ body.profil-renkli .blok h3 { color: color-mix(in srgb, var(--profil-renk) 85%, 
 .hesap-sil-kart { border-top: 4px solid var(--hata); max-width: 760px; }
 .hesap-sil-kart h2 { color: var(--hata); }
 .hesap-sil-kart form { margin-top: 18px; }
+
+/* Uzman paneli: kapatılabilir bilgilendirme notu */
+.bilgi-notu {
+  position: relative; margin: 0 0 16px; padding: 20px 56px 18px 22px;
+  background: var(--vurgu-acik); border: 1px solid #c9dbe6; border-radius: var(--yaricap);
+  color: var(--metin); line-height: 1.7;
+}
+@media (min-width: 700px) { .bilgi-notu { padding: 22px 64px 20px 26px; } }
+.bilgi-notu h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 1.15rem; color: var(--vurgu-koyu); }
+.bilgi-notu-ikon { flex: none; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--vurgu); color: #fff; }
+.bilgi-notu-ikon .ikon { width: 17px; height: 17px; }
+.bilgi-notu p { margin: 0 0 10px; max-width: 95ch; font-size: 0.97rem; overflow-wrap: anywhere; }
+.bilgi-notu p:last-child { margin-bottom: 0; }
+.bilgi-notu-tesekkur { font-weight: 600; color: var(--vurgu-koyu); }
+.bilgi-notu-kapat {
+  position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; display: grid; place-items: center;
+  border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--soluk); cursor: pointer;
+}
+.bilgi-notu-kapat:hover { background: #fff; border-color: #c9dbe6; color: var(--vurgu-koyu); }
+.bilgi-notu-kapat:focus-visible { outline: 3px solid rgba(28, 74, 102, 0.3); outline-offset: 2px; }
+.bilgi-notu-kapat .ikon { width: 18px; height: 18px; }
