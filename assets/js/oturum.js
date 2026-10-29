@@ -75,6 +75,9 @@ const Oturum = (() => {
     if (kod === "email_not_confirmed" || m.includes("email not confirmed"))
       return "E-posta adresiniz henüz doğrulanmamış. Gelen kutunuzdaki doğrulama bağlantısına tıklayın.";
     if (kod === "user_already_exists" || m.includes("already registered")) return "Bu e-posta adresiyle zaten bir hesap var. Giriş yapmayı deneyin.";
+    // Sızdırılmış şifre koruması: şifre daha önce bir veri sızıntısında görülmüşse
+    if ((hata && Array.isArray(hata.reasons) && hata.reasons.includes("pwned")) || m.includes("easy to guess") || m.includes("pwned"))
+      return "Bu şifre daha önce internetteki bir veri sızıntısında görülmüş ya da kolay tahmin edilebilir. Güvenliğiniz için başka bir şifre seçin.";
     if (kod === "weak_password" || m.includes("password should")) return "Şifre yeterince güçlü değil. Lütfen kurallara uyan bir şifre seçin.";
     if (kod === "same_password" || m.includes("different from the old")) return "Yeni şifre eskisiyle aynı olamaz.";
     if (kod === "over_email_send_rate_limit" || kod === "over_request_rate_limit" || m.includes("rate limit") || m.includes("too many"))
