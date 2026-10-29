@@ -123,8 +123,17 @@
           <div class="panel-dugmeler">
             <a class="btn btn-ana btn-kucuk" href="#profil">Profilimi düzenle</a>
             <a class="btn btn-cizgi btn-kucuk" href="uzman.html?id=${encodeURIComponent(p.slug)}&onizleme=1">Profilimi önizle</a>
-            ${p.durum === "yayinda" ? `<a class="btn btn-cizgi btn-kucuk" href="uzman.html?id=${encodeURIComponent(p.slug)}">Profilimi görüntüle</a>` : ""}
+            ${
+              p.durum === "yayinda"
+                ? `<a class="btn btn-cizgi btn-kucuk" href="uzman.html?id=${encodeURIComponent(p.slug)}" target="_blank" rel="noopener">${ikon("disari")}Profilimi görüntüle<span class="gorunmez"> (yeni sekmede açılır)</span></a>`
+                : `<span class="btn btn-cizgi btn-kucuk pasif-dugme" aria-disabled="true" title="Profiliniz yayına alındıktan sonra açılır">${ikon("disari")}Profilimi görüntüle</span>`
+            }
           </div>
+          ${
+            p.durum === "yayinda"
+              ? `<p class="alan-ipucu panel-adres">Herkese açık adresiniz: <a href="uzman.html?id=${encodeURIComponent(p.slug)}" target="_blank" rel="noopener">${esc(location.host)}/uzman.html?id=${esc(p.slug)}</a></p>`
+              : `<p class="alan-ipucu panel-adres">"Profilimi görüntüle", profiliniz yayına alındıktan sonra açılır. O zamana kadar <strong>Profilimi önizle</strong> ile danışanların göreceği halini görebilirsiniz.</p>`
+          }
           ${
             eksik.length
               ? `<div class="eksik-kutu"><strong>Profilinizde eksik olanlar</strong><ul>${eksik.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`
