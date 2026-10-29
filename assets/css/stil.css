@@ -1697,7 +1697,13 @@ body.profil-renkli .blok-baslik {
   color: color-mix(in srgb, var(--profil-renk) 82%, #000);
 }
 body.profil-renkli .blok-ikon { background: var(--profil-renk); }
-body.profil-renkli .profil-ust-blok { border-top: 4px solid var(--profil-renk); }
+body.profil-renkli .profil-ust-blok {
+  border-top: 4px solid var(--profil-renk);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--profil-renk) 10%, #fff) 0%, color-mix(in srgb, var(--profil-renk) 6%, #fff) 100%);
+  border-color: color-mix(in srgb, var(--profil-renk) 18%, #fff);
+  border-top-color: var(--profil-renk);
+}
+body.profil-renkli .profil-ust-blok hr, body.profil-renkli .profil-ust-blok [class*="cizgi"] { border-color: color-mix(in srgb, var(--profil-renk) 18%, #fff); }
 body.profil-renkli .profil-bas .avatar { box-shadow: 0 0 0 4px #fff, 0 0 0 6px color-mix(in srgb, var(--profil-renk) 45%, #fff); }
 body.profil-renkli .blok h3 { color: color-mix(in srgb, var(--profil-renk) 85%, #000); }
 
