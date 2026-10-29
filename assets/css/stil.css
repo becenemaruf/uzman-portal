@@ -1397,3 +1397,27 @@ html { scroll-padding-top: 124px; }
 
 .sosyal-etiket { display: inline-flex; align-items: center; gap: 6px; }
 .sosyal-etiket .ikon { width: 16px; height: 16px; color: var(--vurgu); }
+
+/* ---------- Panel: içerik rehberi ve ifade denetimi ---------- */
+.icerik-rehberi { margin: 0 0 18px; border: 1px solid #ead9bd; background: var(--altin-acik); border-radius: 12px; padding: 4px 16px 12px; }
+.icerik-rehberi summary { cursor: pointer; display: flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 600; color: #6b5230; }
+.icerik-rehberi summary .ikon { width: 18px; height: 18px; }
+.icerik-rehberi p { font-size: 0.9rem; margin: 6px 0 10px; color: #4d3f28; line-height: 1.55; }
+.rehber-iki { display: grid; gap: 12px; }
+@media (min-width: 760px) { .rehber-iki { grid-template-columns: 1fr 1fr; } }
+.rehber-evet, .rehber-hayir { background: var(--yuzey); border-radius: 10px; padding: 12px 14px; font-size: 0.88rem; }
+.rehber-evet { border-left: 4px solid #2e9e64; }
+.rehber-hayir { border-left: 4px solid var(--hata); }
+.rehber-evet ul, .rehber-hayir ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 6px; }
+.rehber-hayir em { color: var(--soluk); font-size: 0.85rem; }
+.ifade-sonuc { margin: -4px 0 14px; font-size: 0.86rem; }
+.ifade-temiz { display: flex; align-items: center; gap: 6px; margin: 0; color: #1f5f3d; }
+.ifade-temiz .ikon { width: 15px; height: 15px; }
+.ifade-uyari { padding: 10px 12px; border-radius: 10px; background: #fdf3e6; border: 1px solid #f0d3a8; color: #5c3d12; }
+.ifade-uyari ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 8px; }
+.ifade-kelime { font-weight: 600; color: #8a3b12; }
+.ifade-tur { display: inline-block; font-size: 0.74rem; padding: 1px 7px; border-radius: 999px; background: #f6dfc0; color: #6b4310; margin-left: 4px; }
+.ifade-uyari em { display: block; font-style: normal; color: #1c4a66; margin-top: 2px; }
+.mesaj-uyari { background: #fffaf2; border: 1px solid #f0d3a8; color: #5c3d12; }
+.mesaj-uyari .ifade-uyari { border: none; padding: 0; background: none; }
+.mesaj-uyari p { margin: 8px 0 0; }

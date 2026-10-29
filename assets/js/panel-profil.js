@@ -16,6 +16,40 @@ const ProfilDuzenle = (() => {
   const SINIR = { alan: 12, yaklasim: 8, egitim: 10, sertifika: 15, sss: 8 };
   const DUZENLENEBILIR_DURUMLAR = ["taslak", "ek_belge", "reddedildi"];
 
+  /* İçerik rehberi: sağlık hizmetleri tanıtım mevzuatı ve sağlık okuryazarlığı gereği profil metinleri
+   * yalnızca tanıtım amaçlı olmalı; reklam dili kullanılamaz. */
+  const ICERIK_REHBERI = `
+    <details class="icerik-rehberi" open>
+      <summary>${ikon("bilgi")}Özgeçmişinizi yazarken lütfen okuyun</summary>
+      <p>İlgili mevzuat gereği profil metinleri <strong>yalnızca sizi tanıtan cümlelerle sınırlı</strong> olmalıdır. Reklam dili ve
+         sağlık okuryazarlığını zedeleyen ifadeler <strong>kesinlikle yasaktır</strong>; bu tür içerikler yayına alınmaz.</p>
+      <div class="rehber-iki">
+        <div class="rehber-evet">
+          <strong>Yer verin</strong>
+          <ul>
+            <li>Mezun olduğunuz üniversite ve yüksek lisans programınız</li>
+            <li>Aldığınız mesleki eğitimler ve sertifikalar</li>
+            <li>Kullandığınız terapi yaklaşımları ve teknikleri</li>
+            <li>Katkı sunduğunuz kaynaklar (kitap, bölüm, çeviri)</li>
+            <li>Farklı platformlarda yayımlanmış yazılarınız</li>
+            <li>Çalıştığınız yaş grupları ve konular</li>
+          </ul>
+        </div>
+        <div class="rehber-hayir">
+          <strong>Yer vermeyin</strong>
+          <ul>
+            <li>Danışan memnuniyeti, yorumları ya da referansları<br><em>“Danışanlarımız hakkımızda ne düşünüyor?”</em></li>
+            <li>Üstünlük ve karşılaştırma iddiaları<br><em>“Dünyanın en deneyimli uzmanlarından eğitim aldım, Türkiye’deki ilk ve en deneyimli uzmanlardan biriyim.”</em></li>
+            <li>Sonuç vaadi ve garanti<br><em>“Kesin çözüm”, “birkaç seansta”, “kalıcı sonuç”</em></li>
+            <li>Tıbbi ifadeler: <em>muayene, tedavi, hasta</em> (yerine: görüşme, terapi süreci, danışan)</li>
+            <li>Fiyat, indirim, kampanya bilgisi; metin içinde telefon, e-posta ya da bağlantı</li>
+          </ul>
+        </div>
+      </div>
+      <p class="alan-ipucu">Yazarken metniniz otomatik olarak kontrol edilir ve sorunlu olabilecek ifadeler aşağıda gösterilir.
+         Bu kontrol bir öneridir; son değerlendirme yönetici incelemesinde yapılır.</p>
+    </details>`;
+
   let p = null; // uzmanlar satırı
   let kullanici = null;
   let listeler = { alanlar: [], yaklasimlar: [] };
@@ -45,6 +79,20 @@ const ProfilDuzenle = (() => {
     return "Kaydedilemedi. Lütfen tekrar deneyin.";
   }
 
+  /* Kaydetmeden önce metinleri denetler. Sorunlu ifade varsa ilk tıklamada uyarır;
+   * uzman metni düzeltmeden kaydetmek isterse ikinci tıklamada ("Yine de kaydet") kaydeder. */
+  function denetimOnayi(form, metinler, listeyiGoster = true) {
+    const bulgular = IfadeDenetimi.tara(metinler.join("\n"));
+    if (!bulgular.length || form.dataset.onay === "1") return true;
+    form.dataset.onay = "1";
+    const el = form.querySelector(".bolum-durum");
+    el.className = "bolum-durum mesaj mesaj-uyari";
+    el.innerHTML = `${listeyiGoster ? IfadeDenetimi.html(bulgular) : `<strong>Yukarıda işaretlenen ${bulgular.length} ifadeyi gözden geçirmenizi öneririz.</strong>`}<p>Düzeltmenizi öneririz. Metni bu haliyle kaydetmek isterseniz düğmeye tekrar basın; ifadeler yönetici incelemesinde değerlendirilir.</p>`;
+    el.hidden = false;
+    form.querySelector('button[type="submit"]').textContent = "Yine de kaydet";
+    return false;
+  }
+
   async function kaydetIsi(bolum, dugme, is) {
     dugme.disabled = true;
     const eski = dugme.textContent;
@@ -52,14 +100,20 @@ const ProfilDuzenle = (() => {
     durumYaz(bolum, "");
     try {
       const sonuc = await is();
-      if (sonuc === false) return; // doğrulama hatası: mesaj zaten yazıldı
+      if (sonuc === false) return; // doğrulama hatası ya da denetim uyarısı: mesaj zaten yazıldı
+      const form = dugme.closest("form");
+      if (form && form.dataset.onay) {
+        delete form.dataset.onay;
+        dugme.dataset.yazi = "";
+      }
       durumYaz(bolum, "Kaydedildi.", "basari");
     } catch (e) {
       console.error(e);
       durumYaz(bolum, hataMetni(e), "hata");
     } finally {
       dugme.disabled = false;
-      dugme.textContent = eski;
+      const form = dugme.closest("form");
+      if (!(form && form.dataset.onay === "1")) dugme.textContent = dugme.dataset.ilk || eski;
     }
   }
 
@@ -196,7 +250,12 @@ const ProfilDuzenle = (() => {
             .join("")}</select>`,
           "Bazı danışanlar terapist cinsiyetine göre arama yapar; isteğe bağlıdır."
         )}
-        ${alanHtml("dDeneyim", "Mesleki deneyim (yıl)", `<input class="girdi" id="dDeneyim" type="number" min="0" max="70" inputmode="numeric" value="${p.deneyim_yili ?? ""}">`)}
+        ${alanHtml(
+          "dDeneyim",
+          "Mesleki aktif süre (yıl)",
+          `<input class="girdi" id="dDeneyim" type="number" min="0" max="70" inputmode="numeric" value="${p.deneyim_yili ?? ""}">`,
+          "Mesleğinizi aktif olarak sürdürdüğünüz toplam yıl. Profilde yalnızca \"Mesleki aktif süre: … yıl\" olarak görünür."
+        )}
       </div>
       <fieldset class="secim-grubu">
         <legend class="alan-etiket">Görüşme yaptığınız diller</legend>
@@ -210,19 +269,20 @@ const ProfilDuzenle = (() => {
   function tanitimBolumu() {
     return bolum(
       "tanitim",
-      "Tanıtım",
-      `Kendinizi ve çalışma biçiminizi danışanın anlayacağı bir dille anlatın. Sağlık hizmeti tanıtım kuralları gereği
-       <strong>tedavi ya da sonuç garantisi, "en iyi / kesin çözüm" gibi ifadeler, danışan yorumları ve fiyat bilgisi yazmayın</strong>;
-       bu tür içerikler yayına alınmaz.`,
-      `${alanHtml("dKisa", "Kısa tanıtım", `<textarea class="girdi" id="dKisa" rows="2" maxlength="200">${esc(p.kisa_tanitim || "")}</textarea>`)}
+      "Tanıtım ve özgeçmiş",
+      "",
+      `${ICERIK_REHBERI}
+      ${alanHtml("dKisa", "Kısa tanıtım", `<textarea class="girdi" id="dKisa" rows="2" maxlength="200">${esc(p.kisa_tanitim || "")}</textarea>`)}
       ${sayacli("dKisa", 200)}
+      <div class="ifade-sonuc" data-denetim="dKisa" aria-live="polite"></div>
       ${alanHtml(
         "dHakkinda",
         "Hakkımda",
         `<textarea class="girdi" id="dHakkinda" rows="9" maxlength="5000">${esc(p.hakkinda || "")}</textarea>`,
         "Paragrafları ayırmak için bir satır boş bırakın."
       )}
-      ${sayacli("dHakkinda", 5000)}`
+      ${sayacli("dHakkinda", 5000)}
+      <div class="ifade-sonuc" data-denetim="dHakkinda" aria-live="polite"></div>`
     );
   }
 
@@ -276,7 +336,7 @@ const ProfilDuzenle = (() => {
       </div>
       ${alanHtml(
         "dAdres",
-        "Muayenehane adresi",
+        "Çalışma adresi (ofis)",
         `<input class="girdi" id="dAdres" maxlength="200" placeholder="ör. Caferağa Mah. Moda Cad. No:1 D:3" value="${esc(p.muayenehane_adres || "")}">`,
         "Bu adres profilinizde <strong>herkese açık</strong> görünür ve danışanlar buradan yol tarifi alabilir. Paylaşmak istemiyorsanız boş bırakın."
       )}`
@@ -327,7 +387,7 @@ const ProfilDuzenle = (() => {
     return bolum(
       "sss",
       "Sık sorulan sorular",
-      `Danışanların ilk görüşme öncesi merak ettiklerini yanıtlayın (en fazla ${SINIR.sss} soru).`,
+      `Danışanların ilk görüşme öncesi merak ettiklerini yanıtlayın (en fazla ${SINIR.sss} soru). Yanıtlar da tanıtım kurallarına tabidir: sonuç vaadi, üstünlük iddiası, fiyat ve danışan yorumu yazmayın.`,
       `<ol class="liste-satirlar" id="sssListe">${sss.map(sssSatir).join("")}</ol>
        <button class="btn btn-cizgi btn-kucuk" type="button" id="sssEkle">+ Soru ekle</button>`
     );
@@ -484,7 +544,7 @@ const ProfilDuzenle = (() => {
         g.unvan_oneki = $("dOnek").value || null;
         if (!kontrol(g.ad && g.soyad, "temel", "Ad ve soyad boş bırakılamaz.")) return false;
       }
-      if (!kontrol(deneyim === null || (Number.isInteger(deneyim) && deneyim >= 0 && deneyim <= 70), "temel", "Deneyim yılı 0 ile 70 arasında bir tam sayı olmalı.")) return false;
+      if (!kontrol(deneyim === null || (Number.isInteger(deneyim) && deneyim >= 0 && deneyim <= 70), "temel", "Mesleki aktif süre 0 ile 70 arasında bir tam sayı olmalı.")) return false;
       if (!kontrol(g.diller.length > 0, "temel", "En az bir görüşme dili seçin.")) return false;
       const { error } = await sb.from("uzmanlar").update(g).eq("id", p.id);
       if (error) throw error;
@@ -494,6 +554,7 @@ const ProfilDuzenle = (() => {
       const kisa = $("dKisa").value.trim();
       const hakkinda = $("dHakkinda").value.replace(/\r\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
       if (!kontrol(say(kisa) <= 200 && say(hakkinda) <= 5000, "tanitim", "Metin sınırı aşıldı.")) return false;
+      if (!denetimOnayi($("bolum-tanitim"), [kisa, hakkinda], false)) return false;
       const { error } = await sb.from("uzmanlar").update({ kisa_tanitim: kisa || null, hakkinda: hakkinda || null }).eq("id", p.id);
       if (error) throw error;
       p.kisa_tanitim = kisa || null;
@@ -537,6 +598,7 @@ const ProfilDuzenle = (() => {
       const e = oku("egitim");
       const s = oku("sertifika");
       if (!kontrol([...e, ...s].every((m) => say(m) >= 2 && say(m) <= 300), "egitim", "Her satır 2 ile 300 karakter arasında olmalı.")) return false;
+      if (!denetimOnayi(form, [...e, ...s])) return false;
       let r = await sb.from("uzman_egitimler").delete().eq("uzman_id", p.id);
       if (r.error) throw r.error;
       const satirlar = [
@@ -555,6 +617,7 @@ const ProfilDuzenle = (() => {
         .filter((x) => x.soru || x.cevap);
       if (!kontrol(satirlar.every((x) => say(x.soru) >= 5 && say(x.soru) <= 200), "sss", "Her soru 5 ile 200 karakter arasında olmalı.")) return false;
       if (!kontrol(satirlar.every((x) => say(x.cevap) >= 2 && say(x.cevap) <= 1500), "sss", "Her cevap 2 ile 1500 karakter arasında olmalı.")) return false;
+      if (!denetimOnayi(form, satirlar.flatMap((x) => [x.soru, x.cevap]))) return false;
       let r = await sb.from("uzman_sss").delete().eq("uzman_id", p.id);
       if (r.error) throw r.error;
       if (satirlar.length) {
@@ -666,6 +729,31 @@ const ProfilDuzenle = (() => {
     );
 
     sayaclariBagla(alan);
+
+    // Canlı ifade denetimi (yazmayı bıraktıktan kısa süre sonra)
+    alan.querySelectorAll("[data-denetim]").forEach((kutu) => {
+      const girdi = $(kutu.dataset.denetim);
+      let sayac;
+      const calistir = () => {
+        kutu.innerHTML = girdi.value.trim() ? IfadeDenetimi.html(IfadeDenetimi.tara(girdi.value)) : "";
+      };
+      girdi.addEventListener("input", () => {
+        clearTimeout(sayac);
+        sayac = setTimeout(calistir, 500);
+      });
+      calistir();
+    });
+    // Metin değişirse "Yine de kaydet" onayı geçersiz olur.
+    alan.querySelectorAll("form.duzen-bolum").forEach((form) => {
+      const dugme = form.querySelector('button[type="submit"]');
+      dugme.dataset.ilk = dugme.textContent;
+      form.addEventListener("input", () => {
+        if (form.dataset.onay === "1") {
+          delete form.dataset.onay;
+          dugme.textContent = dugme.dataset.ilk;
+        }
+      });
+    });
     listeleriBagla(alan);
     alanSirasiGoster();
 

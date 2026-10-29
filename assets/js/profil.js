@@ -269,7 +269,7 @@
         .join("");
     }
 
-    // --- Yol tarifi: yalnızca yüz yüze çalışan ve muayenehane adresini yayımlamayı seçen uzmanlarda ---
+    // --- Yol tarifi: yalnızca yüz yüze çalışan ve çalışma adresini yayımlamayı seçen uzmanlarda ---
     const s = u.seans || {};
     // Uzman adrese ilçe/il yazmışsa tekrar eklenmez.
     const adresKucuk = String(s.adres || "").toLocaleLowerCase("tr");
@@ -304,7 +304,7 @@
     // --- Üst kısım ---
     const ozet = [
       konum ? `<span>${ikon("konum")}${esc(konum)}</span>` : "",
-      u.deneyimYili ? `<span>${ikon("deneyim")}${esc(u.deneyimYili)} yıllık mesleki deneyim</span>` : "",
+      u.deneyimYili ? `<span>${ikon("deneyim")}Mesleki aktif süre: ${esc(u.deneyimYili)} yıl</span>` : "",
       doluMu(u.diller) ? `<span>${ikon("dil")}${esc(u.diller.join(", "))}</span>` : "",
     ].join("");
 
@@ -375,7 +375,7 @@
       ["Görüşme şekli", u.gorusme.length ? gorusmeMetni(u.gorusme) : ""],
       ["Seans süresi", s.sure],
       ["Online platform", online ? s.onlinePlatform : ""],
-      ["Muayenehane", acikAdres],
+      ["Çalışma adresi", acikAdres],
     ].filter(([, deger]) => deger);
     const seans = seansSatirlari.length
       ? blok(

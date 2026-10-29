@@ -102,7 +102,7 @@
           </div>
         </div>
         <div class="yazi-govde">${govde}</div>
-        <p class="yazi-not">Bu yazı genel bilgilendirme amaçlıdır; tanı ya da tedavi yerine geçmez. Kendinize ya da bir yakınınıza ilişkin
+        <p class="yazi-not">Bu yazı genel bilgilendirme amaçlıdır; bir uzmanla yapılacak görüşmenin yerine geçmez. Kendinize ya da bir yakınınıza ilişkin
           durumlar için bir ruh sağlığı uzmanına danışın. Acil bir durumdaysanız 112'yi arayın.</p>
       </article>`;
     const geri = document.querySelector(".geri-link");
