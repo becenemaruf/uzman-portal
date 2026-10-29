@@ -1443,3 +1443,19 @@ html { scroll-padding-top: 124px; }
 .panel-baslik-dugmeler { display: flex; flex-wrap: wrap; gap: 8px; }
 .panel-baslik-dugmeler .btn { gap: 8px; }
 .panel-baslik-dugmeler .ikon { width: 18px; height: 18px; }
+
+/* ---------- Panel: belgeler ve inceleme ---------- */
+.belge-listesi { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 10px; }
+.belge-satir { display: grid; gap: 8px 14px; align-items: center; padding: 12px 14px; border: 1px solid var(--cizgi); border-radius: 12px; background: var(--yuzey-ikincil); }
+@media (min-width: 720px) { .belge-satir { grid-template-columns: 1fr auto auto; } }
+.belge-bilgi { display: grid; gap: 2px; min-width: 0; }
+.belge-bilgi .alan-ipucu { margin: 0; word-break: break-all; }
+.belge-not { font-size: 0.86rem; color: #8a3b12; }
+.belge-dugmeler { display: flex; gap: 6px; flex-wrap: wrap; }
+.belge-yukle { margin-top: 8px; padding-top: 14px; border-top: 1px dashed var(--cizgi-koyu); }
+.gonder-kontrol { list-style: none; margin: 8px 0 14px; padding: 0; display: grid; gap: 8px; }
+.gonder-kontrol li { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+.gonder-kontrol li .ikon { width: 18px; height: 18px; color: #1f5f3d; flex: none; }
+.gonder-kontrol li.tamam { color: var(--soluk); }
+.gonder-kontrol .bos-daire { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--cizgi-koyu); flex: none; margin: 0 1px; }
+.gonder-kontrol a { color: var(--vurgu); font-size: 0.88rem; }

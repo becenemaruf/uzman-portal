@@ -146,8 +146,8 @@ Site GitHub Pages üzerinden yayınlanacak; ilerleyen aşamada markaya ait alan 
 
 ## Yol haritası (sıradaki işler)
 
-1. **Uzman paneli — profil düzenleme:** fotoğraf, tanıtım, çalışma alanları, yaklaşımlar, eğitim, seans bilgileri, iletişim tercihleri ve **sosyal medya** (Instagram, LinkedIn, X, YouTube, Facebook, TikTok, kişisel web sitesi; isteğe bağlı, yalnızca ilgili sitenin adresini kabul eder, profilde iletişim kutusunun altında küçük simgeler).
-2. **Diploma yükleme ve "İncelemeye gönder"** (psikoloji lisans + klinik psikoloji yüksek lisans).
+1. ~~**Uzman paneli — profil düzenleme**~~ — yapıldı. fotoğraf, tanıtım, çalışma alanları, yaklaşımlar, eğitim, seans bilgileri, iletişim tercihleri ve **sosyal medya** (Instagram, LinkedIn, X, YouTube, Facebook, TikTok, kişisel web sitesi; isteğe bağlı, yalnızca ilgili sitenin adresini kabul eder, profilde iletişim kutusunun altında küçük simgeler).
+2. ~~**Diploma yükleme ve "İncelemeye gönder"**~~ — yapıldı (panel.html#belgeler; veritabanı iki diploma olmadan incelemeye almaz).
 3. **Yönetici onay ekranı:** belge inceleme, onay / ek belge / ret, içerik denetimi.
 4. **Kartvizit profili:** profil sayfasının kendisi kartvizit olarak kullanılır (ayrı site değil).
    - Kısa kalıcı adres: `klinikpsikologlar.com.tr/ad-soyad` (her uzman için sabit sayfa üretilir; Google ve WhatsApp önizlemeleri için)
@@ -158,5 +158,5 @@ Site GitHub Pages üzerinden yayınlanacak; ilerleyen aşamada markaya ait alan 
    - Telifli ölçek/test konmaz; şablonlar avukat kontrolünden geçer, sürüm tarihi ve "şablondur, uyarlayınız" notu taşır.
    - Gizli depo, kısa süreli indirme bağlantısı; önemli belgelerde indiren uzmanın adıyla filigran (isteğe bağlı).
 6. **Meslektaş davet bağlantısı:** Onaylanmış uzmanlar, yalnızca klinik psikolog meslektaşlarını davet edebilecekleri kişisel bir bağlantı paylaşır (WhatsApp/kopyala). Davet edilen kişi yine diploma doğrulamasından geçer; daveti kimin yaptığı kaydedilir, panelde "davetinizle katılanlar" görünür. Davet, sıralamada öne çıkma gibi bir ayrıcalık sağlamaz.
-7. **Gerçek e-posta servisi** (Resend, `@klinikpsikologlar.com.tr`) ve Türkçe e-posta şablonları.
+7. ~~**Gerçek e-posta servisi**~~ — yapıldı (Resend, bildirim@klinikpsikologlar.com.tr; şablonlar supabase/eposta-sablonlari). (Resend, `@klinikpsikologlar.com.tr`) ve Türkçe e-posta şablonları.
 8. KVKK metnindeki eksikler (avukatla), gerçek İletişim sayfası, 90 günlük mesaj temizliği için günlük iş.

@@ -78,8 +78,8 @@
     const liste = [
       { baslik: "E-posta adresinizi doğrulayın", tamam: true },
       { baslik: "Profil bilgilerinizi doldurun", metin: "Fotoğraf, tanıtım, çalışma alanları, eğitim, görüşme, iletişim ve sosyal medya.", tamam: gonderildi || p._eksik === 0, baglanti: { adres: "#profil", yazi: "Profilimi düzenle" } },
-      { baslik: "Diplomalarınızı yükleyin", metin: "Psikoloji lisans ve klinik psikoloji yüksek lisans diplomaları (PDF ya da fotoğraf).", tamam: gonderildi, yakinda: true },
-      { baslik: "İncelemeye gönderin", metin: "Yönetim belgelerinizi inceler; gerekirse ek belge ister.", tamam: gonderildi, yakinda: true },
+      { baslik: "Diplomalarınızı yükleyin", metin: "Psikoloji lisans ve klinik psikoloji yüksek lisans diplomaları (PDF ya da fotoğraf).", tamam: gonderildi, baglanti: { adres: "#belgeler", yazi: "Belgelerim" } },
+      { baslik: "İncelemeye gönderin", metin: "Yönetim belgelerinizi inceler; gerekirse ek belge ister.", tamam: gonderildi, baglanti: gonderildi ? null : { adres: "#belgeler", yazi: "İncelemeye gönder" } },
       { baslik: "Profiliniz yayında", metin: "Unvanınız doğrulanınca profiliniz ve onay işaretiniz danışanlara görünür.", tamam: yayinda },
     ];
     return `<ol class="panel-adimlar">${liste
@@ -243,6 +243,8 @@
     try {
       if (location.hash === "#profil") {
         await ProfilDuzenle.ac(alan, profil.id, kullanici);
+      } else if (location.hash === "#belgeler") {
+        await Belgeler.ac(alan, profil, kullanici);
       } else {
         const guncel = (await profilGetir(kullanici.id)) || profil;
         const eksik = await ProfilDuzenle.eksikler(profil.id).catch(() => []);
