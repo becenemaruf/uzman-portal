@@ -96,7 +96,8 @@
       .join("")}</ol>`;
   }
 
-  // "Neden ayrıntılı bilgi ve belge istiyoruz?" notu. Uzman kapatınca bu tarayıcıda, o hesap için bir daha gösterilmez.
+  // "Neden ayrıntılı bilgi ve belge talep ediyoruz?" notu. Başlık bir düğmedir: uzman notu açıp kapatabilir;
+  // kapalı/açık tercihi bu tarayıcıda, o hesap için saklanır. Not hiçbir zaman tamamen kaybolmaz.
   const BILGI_NOTU_ANAHTARI = "kpBilgiNotuKapali:";
   function bilgiNotuKapali(kullaniciId) {
     try {
@@ -105,14 +106,21 @@
       return false;
     }
   }
-  function bilgiNotu() {
-    return `<section class="bilgi-notu" id="bilgiNotu" aria-labelledby="bilgiNotuBaslik">
-      <button class="bilgi-notu-kapat" type="button" id="bilgiNotuKapat" aria-label="Bilgilendirme notunu kapat">${ikon("kapat")}</button>
-      <h2 id="bilgiNotuBaslik"><span class="bilgi-notu-ikon" aria-hidden="true">${ikon("bilgi")}</span>Neden Ayrıntılı Bilgi ve Belge Talep Ediyoruz?</h2>
-      <p>KlinikPsikologlar.com.tr olarak amacımız yalnızca klinik psikologları listeleyen bir rehber oluşturmak değil; mesleki unvanların, eğitim bilgilerinin ve uzmanlık alanlarının doğru biçimde sunulduğu, bilgi kirliliğinden uzak, güvenilir bir platform geliştirmektir.</p>
-      <p>Bu nedenle profil oluşturma sürecimizde bazı bilgileri ayrıntılı olarak talep ediyor, mesleki eğitim ve unvan belgelerini inceliyoruz. Bu işlemlerin zamanınızı aldığının farkındayız. Ancak doğrulanmamış unvanların, yanıltıcı mesleki beyanların ve gerçeği yansıtmayan uzmanlık bilgilerinin önüne geçebilmek için bu süreci önemsiyoruz.</p>
-      <p>Gösterdiğiniz özen, yalnızca kendi mesleki kimliğinizin doğru temsil edilmesine değil, platformdaki bütün klinik psikologların güvenilirliğine de katkı sağlayacaktır.</p>
-      <p class="bilgi-notu-tesekkur">Anlayışınız ve katkınız için teşekkür ederiz.</p>
+  function bilgiNotu(kapali) {
+    return `<section class="bilgi-notu ${kapali ? "kapali" : ""}" id="bilgiNotu">
+      <h2 class="bilgi-notu-baslik">
+        <button type="button" id="bilgiNotuDugme" aria-expanded="${kapali ? "false" : "true"}" aria-controls="bilgiNotuMetin">
+          <span class="bilgi-notu-ikon" aria-hidden="true">${ikon("bilgi")}</span>
+          <span class="bilgi-notu-yazi">Neden Ayrıntılı Bilgi ve Belge Talep Ediyoruz?</span>
+          <span class="bilgi-notu-ok" aria-hidden="true">${ikon("asagi")}</span>
+        </button>
+      </h2>
+      <div class="bilgi-notu-metin" id="bilgiNotuMetin" ${kapali ? "hidden" : ""}>
+        <p>KlinikPsikologlar.com.tr olarak amacımız yalnızca klinik psikologları listeleyen bir rehber oluşturmak değil; mesleki unvanların, eğitim bilgilerinin ve uzmanlık alanlarının doğru biçimde sunulduğu, bilgi kirliliğinden uzak, güvenilir bir platform geliştirmektir.</p>
+        <p>Bu nedenle profil oluşturma sürecimizde bazı bilgileri ayrıntılı olarak talep ediyor, mesleki eğitim ve unvan belgelerini inceliyoruz. Bu işlemlerin zamanınızı aldığının farkındayız. Ancak doğrulanmamış unvanların, yanıltıcı mesleki beyanların ve gerçeği yansıtmayan uzmanlık bilgilerinin önüne geçebilmek için bu süreci önemsiyoruz.</p>
+        <p>Gösterdiğiniz özen, yalnızca kendi mesleki kimliğinizin doğru temsil edilmesine değil, platformdaki bütün klinik psikologların güvenilirliğine de katkı sağlayacaktır.</p>
+        <p class="bilgi-notu-tesekkur">Anlayışınız ve katkınız için teşekkür ederiz.</p>
+      </div>
     </section>`;
   }
 
@@ -130,7 +138,7 @@
         ${yonetici ? `<span class="rozet yonetici-rozet">${ikon("kilit")}Yönetici hesabı</span>` : ""}
       </section>
 
-      ${bilgiNotuKapali(kullanici.id) ? "" : bilgiNotu()}
+      ${bilgiNotu(bilgiNotuKapali(kullanici.id))}
 
       <div class="panel-izgara">
         <section class="blok panel-kart">
@@ -193,17 +201,19 @@
       </section>`;
     alan.querySelectorAll("[data-cikis]").forEach((b) => b.addEventListener("click", cikis));
 
-    const notKapat = document.getElementById("bilgiNotuKapat");
-    if (notKapat)
-      notKapat.addEventListener("click", () => {
-        try {
-          localStorage.setItem(BILGI_NOTU_ANAHTARI + kullanici.id, "1");
-        } catch (e) {
-          /* depolama kapalıysa yalnızca bu açılışta gizlenir */
-        }
-        const kutu = document.getElementById("bilgiNotu");
-        if (kutu) kutu.remove();
-      });
+    const notDugme = document.getElementById("bilgiNotuDugme");
+    notDugme.addEventListener("click", () => {
+      const acik = notDugme.getAttribute("aria-expanded") === "true";
+      notDugme.setAttribute("aria-expanded", acik ? "false" : "true");
+      document.getElementById("bilgiNotuMetin").hidden = acik;
+      document.getElementById("bilgiNotu").classList.toggle("kapali", acik);
+      try {
+        if (acik) localStorage.setItem(BILGI_NOTU_ANAHTARI + kullanici.id, "1");
+        else localStorage.removeItem(BILGI_NOTU_ANAHTARI + kullanici.id);
+      } catch (e) {
+        /* depolama kapalıysa tercih yalnızca bu açılışta geçerli */
+      }
+    });
 
     const anahtar = document.getElementById("yeniDanisan");
     anahtar.addEventListener("change", async () => {
