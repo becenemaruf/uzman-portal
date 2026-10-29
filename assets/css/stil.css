@@ -1456,6 +1456,9 @@ html { scroll-padding-top: 124px; }
 .gonder-kontrol { list-style: none; margin: 8px 0 14px; padding: 0; display: grid; gap: 8px; }
 .gonder-kontrol li { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
 .gonder-kontrol li .ikon { width: 18px; height: 18px; color: #1f5f3d; flex: none; }
+.aydinlatma-notu { border: 1px solid #d9e2ea; background: #f6f9fb; border-radius: 12px; padding: 12px 16px; margin: 0 0 16px; font-size: 0.9rem; }
+.aydinlatma-notu ul { margin: 6px 0 6px; padding-left: 18px; display: grid; gap: 4px; }
+.aydinlatma-notu p { margin: 4px 0 0; }
 .belge-yollari { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 10px; margin: 4px 0 16px; }
 .belge-yolu { border: 1px solid var(--cizgi, #dfe3e8); border-radius: 12px; padding: 12px 14px; background: #fafbfc; }
 .belge-yolu.tamam { border-color: #9cc9ad; background: #f1f8f3; }

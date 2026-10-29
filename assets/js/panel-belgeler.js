@@ -39,7 +39,7 @@ const Belgeler = (() => {
   async function yukle() {
     const [p, b, g] = await Promise.all([
       sb.from("uzmanlar").select("id, slug, ad, soyad, unvan, durum").eq("id", profil.id).single(),
-      sb.from("dogrulama_belgeleri").select("id, belge_turu, kaynak, dogrulama_kodu, dosya_yolu, durum, yonetici_notu, yuklenme").eq("uzman_id", profil.id).order("yuklenme"),
+      sb.from("dogrulama_belgeleri").select("id, belge_turu, kaynak, dogrulama_kodu, dosya_yolu, durum, yonetici_notu, yuklenme, dosya_silindi").eq("uzman_id", profil.id).order("yuklenme"),
       sb.from("uzman_gizli").select("ret_nedeni, yonetici_notu").eq("uzman_id", profil.id).maybeSingle(),
     ]);
     if (p.error) throw p.error;
@@ -66,7 +66,9 @@ const Belgeler = (() => {
       </div>
       <span class="panel-durum ${d.sinif}">${d.ad}</span>
       <div class="belge-dugmeler">
-        <button class="btn btn-cizgi btn-kucuk" type="button" data-goster="${esc(x.dosya_yolu)}">Görüntüle</button>
+        ${x.dosya_silindi
+          ? `<span class="alan-ipucu" title="Belge dosyaları, inceleme kararından 30 gün sonra güvenliğiniz için silinir; doğrulama kaydı korunur.">Dosya silindi (saklama süresi doldu)</span>`
+          : `<button class="btn btn-cizgi btn-kucuk" type="button" data-goster="${esc(x.dosya_yolu)}">Görüntüle</button>`}
         ${silinebilir ? `<button class="btn btn-cizgi btn-kucuk" type="button" data-sil="${x.id}" data-yol="${esc(x.dosya_yolu)}">Sil</button>` : ""}
       </div>
     </li>`;
@@ -121,9 +123,18 @@ const Belgeler = (() => {
             <strong>2)</strong> Sağlık Bakanlığı sağlık personeli sisteminde klinik psikolog olarak kayıtlı olduğunuzu gösteren belge.
             Mümkünse <strong>e-Devlet'ten alınan, doğrulama kodlu belgeleri</strong> yükleyin (mezuniyetler için YÖK mezun belgesi; her mezuniyet ayrı belgedir).
             Diploma ya da belge görüntüsü de kabul edilir (PDF, JPG ya da PNG; en fazla ${EN_FAZLA_MB} MB; tamamı okunur olmalıdır).
-            Belgeleriniz <strong>yalnızca unvan doğrulaması için</strong> kullanılır; sitede yayımlanmaz ve yalnızca siz ile platform yönetimi görebilir.
-            Ayrıntılar için <a href="kvkk-aydinlatma.html#uzmanlar" target="_blank" rel="noopener">KVKK Aydınlatma Metni</a>.
           </p>
+          <div class="aydinlatma-notu" role="note">
+            <strong>Belgeleriniz nasıl işlenir?</strong>
+            <ul>
+              <li><strong>Amaç:</strong> Yalnızca klinik psikolog unvanınızın doğrulanması. Belgeler sitede yayımlanmaz.</li>
+              <li><strong>Kimler görür:</strong> Yalnızca siz ve platform yönetimi. e-Devlet belgelerinin gerçekliği, doğrulama koduyla e-Devlet üzerinden kontrol edilir.</li>
+              <li><strong>Saklama:</strong> Belge dosyası, inceleme kararından <strong>30 gün sonra otomatik silinir</strong>. Yalnızca doğrulama kaydı (belge türü, doğrulama kodu, karar ve tarihi) hesabınız açık kaldığı sürece tutulur.</li>
+              <li><strong>Nerede:</strong> Dosyalar şifreli bağlantıyla, erişimi kısıtlı bir depoda, hizmet sağlayıcımız Supabase'in Almanya (Frankfurt) veri merkezinde saklanır.</li>
+              <li><strong>Haklarınız:</strong> Belgelerinize erişme, düzeltilmesini ya da silinmesini isteme hakkınız vardır. Ayrıntılar: <a href="kvkk-aydinlatma.html#uzmanlar" target="_blank" rel="noopener">KVKK Aydınlatma Metni</a>.</li>
+            </ul>
+            <p class="alan-ipucu">İpucu: Belgede unvan doğrulamasıyla ilgisi olmayan bilgiler (ör. not ortalaması) varsa, doğrulama kodu ve ad-soyad okunur kalmak şartıyla bunları kapatabilirsiniz.</p>
+          </div>
           ${yollar}
           ${belgeler.length ? `<ul class="belge-listesi">${belgeler.map(belgeSatiri).join("")}</ul>` : `<p class="alan-ipucu">Henüz belge yüklemediniz.</p>`}
           ${

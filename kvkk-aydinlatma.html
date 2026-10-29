@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/stil.css?v=20261029k">
+  <link rel="stylesheet" href="assets/css/stil.css?v=20261029l">
 </head>
 <body>
 
@@ -159,7 +159,7 @@
                 <tr><th scope="row">İletişim</th><td>Hesap e-posta adresi; isteğe bağlı olarak telefon, WhatsApp numarası ve iletişim e-posta adresi ile bunların her biri için verdiğiniz yayımlama tercihi</td></tr>
                 <tr><th scope="row">Mesleki bilgiler</th><td>Mesleki unvan, mesleki aktif süre, eğitim ve sertifikalar, çalışma alanları, terapi yaklaşımları, çalışılan yaş grupları, seans dilleri, tanıtım ve “hakkımda” metinleri, sık sorulan sorular, şehir, ilçe, muayenehane adresi, görüşme biçimi ve süresi, kullanılan online görüşme platformu, yeni danışan kabul durumu</td></tr>
                 <tr><th scope="row">Görsel</th><td>Yüklemeyi tercih ederseniz profil fotoğrafı</td></tr>
-                <tr><th scope="row">Doğrulama bilgileri</th><td>Unvanınızı göstermek için yüklediğiniz diploma ve mesleki belgeler; bu belgelerin inceleme durumu, varsa ret nedeni ve inceleme notları. Belgeler, üzerlerinde yer alan diğer kişisel verileri de (ör. kimlik numarası) içerebilir.</td></tr>
+                <tr><th scope="row">Doğrulama bilgileri</th><td>Unvanınızı doğrulamak için yüklediğiniz diploma, e-Devlet mezuniyet belgeleri, Sağlık Bakanlığı sağlık personeli belgesi ve diğer mesleki belgeler ile bunların doğrulama kodları; bu belgelerin inceleme durumu, varsa ret nedeni ve inceleme notları. Belgeler, üzerlerinde yer alan diğer kişisel verileri de (ör. kimlik numarası) içerebilir.</td></tr>
                 <tr><th scope="row">İşlem güvenliği</th><td>Şifrenizin geri döndürülemez biçimde saklanan özeti, oturum ve giriş kayıtları (tarih, IP adresi, tarayıcı bilgisi), e-posta doğrulama ve şifre sıfırlama kayıtları, güvenlik doğrulaması (CAPTCHA) sonucu</td></tr>
                 <tr><th scope="row">Hukuki işlem</th><td>Aydınlatma metnini okuduğunuza ilişkin beyanın tarihi; profilinizde, belgelerinizde ve yazılarınızda yapılan değişikliklerin kaydı (kimin, ne zaman, hangi bilgiyi değiştirdiği)</td></tr>
               </tbody>
@@ -311,6 +311,7 @@
               <thead><tr><th scope="col">Hizmet sağlayıcı</th><th scope="col">Hizmet</th><th scope="col">Verilerin bulunduğu yer</th></tr></thead>
               <tbody>
                 <tr><td>Supabase, Inc.</td><td>Veritabanı, uzman hesapları, dosya depolama (doğrulama belgeleri dahil), mesaj iletme sunucu fonksiyonu</td><td>Almanya (Frankfurt veri merkezi)</td></tr>
+                <tr><td>Resend, Inc.</td><td>Hesap e-postaları (kayıt doğrulama, şifre yenileme) ve uzmana bildirim e-postaları</td><td>İrlanda (AB, eu-west-1 bölgesi)</td></tr>
                 <tr><td>GitHub, Inc.</td><td>Sitenin sayfalarının yayımlanması</td><td>Yurt dışı <span class="eksik">Konum hukuki incelemede netleşecek</span></td></tr>
                 <tr><td>Cloudflare, Inc.</td><td>Formlarda güvenlik doğrulaması (Turnstile)</td><td>Yurt dışı <span class="eksik">Konum hukuki incelemede netleşecek</span></td></tr>
                 <tr><td>Google LLC</td><td>Yazı tiplerinin sunulması (Google Fonts)</td><td>Yurt dışı <span class="eksik">Konum hukuki incelemede netleşecek</span></td></tr>
@@ -334,8 +335,9 @@
               <tbody>
                 <tr><td>“Uzmana Mesaj Gönder” formuyla bırakılan mesajlar</td><td>En fazla 90 gün; uzman mesajı daha önce silebilir</td></tr>
                 <tr><td>Uzman hesabı ve profil bilgileri</td><td>Hesap açık kaldığı sürece; hesap kapatıldıktan sonra <span class="eksik">süre belirlenecek</span></td></tr>
-                <tr><td>Diploma ve doğrulama belgeleri</td><td><span class="eksik">Süre belirlenecek</span></td></tr>
-                <tr><td>Reddedilen başvurulara ait bilgi ve belgeler</td><td><span class="eksik">Süre belirlenecek</span></td></tr>
+                <tr><td>Diploma, mezuniyet ve Sağlık Bakanlığı belgelerinin dosyaları (onaylanan ya da kabul edilmeyen)</td><td>İnceleme kararından 30 gün sonra otomatik olarak silinir</td></tr>
+                <tr><td>Doğrulama kaydı (belge türü, e-Devlet doğrulama kodu, karar ve tarihi)</td><td>Hesap açık kaldığı sürece; hesap kapatıldıktan sonra <span class="eksik">süre belirlenecek</span></td></tr>
+                <tr><td>Reddedilen başvurulara ait diğer bilgiler (ret nedeni, inceleme notları)</td><td><span class="eksik">Süre belirlenecek</span></td></tr>
                 <tr><td>Değişiklik kayıtları ile giriş ve güvenlik kayıtları</td><td><span class="eksik">Süre belirlenecek</span></td></tr>
                 <tr><td>İletişim formu başvuruları</td><td><span class="eksik">Süre belirlenecek</span></td></tr>
                 <tr><td>Hizmet sağlayıcıların sunucu kayıtları</td><td>İlgili hizmet sağlayıcının kendi saklama politikası</td></tr>
@@ -418,7 +420,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/ayarlar.js?v=20261029k"></script>
-  <script src="assets/js/ortak.js?v=20261029k"></script>
+  <script src="assets/js/ayarlar.js?v=20261029l"></script>
+  <script src="assets/js/ortak.js?v=20261029l"></script>
 </body>
 </html>

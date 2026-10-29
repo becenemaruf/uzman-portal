@@ -147,7 +147,7 @@ Site GitHub Pages üzerinden yayınlanacak; ilerleyen aşamada markaya ait alan 
 ## Yol haritası (sıradaki işler)
 
 1. ~~**Uzman paneli — profil düzenleme**~~ — yapıldı. fotoğraf, tanıtım, çalışma alanları, yaklaşımlar, eğitim, seans bilgileri, iletişim tercihleri ve **sosyal medya** (Instagram, LinkedIn, X, YouTube, Facebook, TikTok, kişisel web sitesi; isteğe bağlı, yalnızca ilgili sitenin adresini kabul eder, profilde iletişim kutusunun altında küçük simgeler).
-2. ~~**Diploma yükleme ve "İncelemeye gönder"**~~ — yapıldı (panel.html#belgeler; veritabanı, lisans + klinik psikoloji yüksek lisans belgeleri ya da Sağlık Bakanlığı sağlık personeli belgesi olmadan incelemeye almaz).
+2. ~~**Diploma yükleme ve "İncelemeye gönder"**~~ — yapıldı (panel.html#belgeler; veritabanı, lisans + klinik psikoloji yüksek lisans belgeleri ya da Sağlık Bakanlığı sağlık personeli belgesi olmadan incelemeye almaz). Belge dosyaları karardan 30 gün sonra `belge-temizle` fonksiyonuyla (her gün 03:17 UTC, pg_cron) otomatik silinir; doğrulama kaydı kalır.
 3. **Yönetici onay ekranı:** belge inceleme, onay / ek belge / ret, içerik denetimi.
 4. **Kartvizit profili:** profil sayfasının kendisi kartvizit olarak kullanılır (ayrı site değil).
    - Kısa kalıcı adres: `klinikpsikologlar.com.tr/ad-soyad` (her uzman için sabit sayfa üretilir; Google ve WhatsApp önizlemeleri için)
