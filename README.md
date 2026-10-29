@@ -12,7 +12,7 @@ Türkiye'nin klinik psikolog rehberi: Unvanı doğrulanmış klinik psikologlar�
 | 2 | Herkese açık uzman dizini (arama, filtreler, kartlar) ve profil sayfası — örnek verilerle | ✅ İlk taslak |
 | 3 | Uzman Girişi ekranları: giriş, kayıt, e-posta doğrulama, şifremi unuttum, CAPTCHA yeri | ✅ İlk taslak (sunucusuz) |
 | 4 | Uzman paneli: profil düzenleme, fotoğraf, yazılar, görünürlük istatistikleri | — |
-| 5 | Yönetici paneli: unvan/diploma doğrulama, profil onayı | — |
+| 5 | Yönetici paneli (yonetim.html): başvuru onayı, manşetler, duyurular, sabit sayfalar (sürüm geçmişli), genel site ayarları | ✅ Tamam |
 | 6a | Veritabanı kurulumu (Supabase, Frankfurt): tablolar, güvenlik kuralları, dosya depoları — 22 senaryoluk testten geçti | ✅ Tamam |
 | 6b | Siteyi veritabanına bağlama: örnek verilerin aktarımı ✅, liste/profil/blog/manşet veritabanından ✅, mesaj formu ✅; gerçek kayıt, giriş, CAPTCHA | ⏳ Kayıt ve giriş sırada |
 | 7 | Google'da bulunabilirlik: her uzmana kalıcı adres (`/uzman/elif-aydin`), sayfa başlıkları, paylaşım önizlemesi, site haritası. GitHub Actions ile otomatik sayfa üretimi (framework değişikliği gerekmez) | — |
@@ -70,6 +70,13 @@ supabase/functions/mesaj-gonder/  Mesaj formunu CAPTCHA ve gönderim sınırıyl
 supabase/functions/haberler/      aktuelpsikoloji.com RSS beslemesini sade JSON'a çeviren sunucu fonksiyonu (15 dk önbellek)
 hakkimizda.html, kvkk-aydinlatma.html, gizlilik-politikasi.html, cerez-politikasi.html  Kurumsal ve yasal sayfalar (taslak; sarı etiketli alanlar yayın öncesi tamamlanacak)
 assets/js/haberler.js Ana sayfadaki "Psikoloji gündeminden" haber önizlemeleri
+yonetim.html          Yönetici paneli (başvurular + içerik yönetimi)
+assets/js/yonetim*.js Yönetici paneli bölümleri (çerçeve, başvurular, manşet/duyuru, sabit sayfalar, ayarlar)
+assets/js/site-icerik.js  Panelden gelen ayarları ve sabit sayfa sürümlerini sitede uygular
+assets/js/duyurular.js    Ana sayfadaki duyuru kartları
+assets/js/guvenli-html.js + assets/vendor/dompurify/  Sayfa içeriği HTML temizleyici (DOMPurify 3, Apache-2.0/MPL-2.0)
+supabase/functions/karar-bildir/  Yönetici kararını uzmana e-postayla bildiren fonksiyon
+supabase/functions/belge-temizle/ Karardan 30 gün sonra belge dosyalarını silen günlük iş
 ```
 
 ## Veritabanı (Supabase)
@@ -148,7 +155,12 @@ Site GitHub Pages üzerinden yayınlanacak; ilerleyen aşamada markaya ait alan 
 
 1. ~~**Uzman paneli — profil düzenleme**~~ — yapıldı. fotoğraf, tanıtım, çalışma alanları, yaklaşımlar, eğitim, seans bilgileri, iletişim tercihleri ve **sosyal medya** (Instagram, LinkedIn, X, YouTube, Facebook, TikTok, kişisel web sitesi; isteğe bağlı, yalnızca ilgili sitenin adresini kabul eder, profilde iletişim kutusunun altında küçük simgeler).
 2. ~~**Diploma yükleme ve "İncelemeye gönder"**~~ — yapıldı (panel.html#belgeler; veritabanı, lisans + klinik psikoloji yüksek lisans belgeleri ya da Sağlık Bakanlığı sağlık personeli belgesi olmadan incelemeye almaz). Belge dosyaları karardan 30 gün sonra `belge-temizle` fonksiyonuyla (her gün 03:17 UTC, pg_cron) otomatik silinir; doğrulama kaydı kalır.
-3. **Yönetici onay ekranı:** belge inceleme, onay / ek belge / ret, içerik denetimi.
+3. ~~**Yönetici paneli**~~ — yapıldı (`yonetim.html`, yalnızca `yoneticiler` tablosundaki hesaplar):
+   - **Uzman başvuruları:** belge görüntüleme (60 sn'lik bağlantı), e-Devlet kodu (kopyala + e-Devlet'te doğrula), belge bazında kabul/ret, ifade denetimi, Onayla / Ek belge iste / Reddet / Askıya al, uzmana otomatik e-posta (`karar-bildir`), profil geçmişi; özet ekranında yayındaki profillerdeki son değişiklikler.
+   - **Manşetler:** ekle/düzenle/sil, masaüstü + mobil görsel, sıralama okları, tarih aralığı, aktif/pasif, canlı önizleme.
+   - **Duyurular:** üç alan (arama altı, liste arası — her 12 kartta bir, sayfa altı); "Duyuru" etiketiyle, uzman sonuçlarından ayrı.
+   - **Sabit sayfalar:** Hakkımızda, İletişim, KVKK, Gizlilik, Çerez — sade editör, taslak / önizleme / yayımla, sürüm geçmişi ve eski sürüme dönüş; yayında sürüm yoksa dosyadaki orijinal metin görünür. İçerik DOMPurify ile temizlenir + veritabanında ikinci güvenlik kuralı.
+   - **Genel ayarlar:** iletişim/destek e-postası, kurumsal adres, sosyal medya, ana sayfa ve footer açıklaması, manşet/duyuru göster-gizle, ana sayfa SEO başlığı/açıklaması.
 4. **Kartvizit profili:** profil sayfasının kendisi kartvizit olarak kullanılır (ayrı site değil).
    - Kısa kalıcı adres: `klinikpsikologlar.com.tr/ad-soyad` (her uzman için sabit sayfa üretilir; Google ve WhatsApp önizlemeleri için)
    - QR kod indirme, "Rehbere kaydet" (vCard — yalnızca izin verilen bilgiler), yazdırılabilir kartvizit görünümü

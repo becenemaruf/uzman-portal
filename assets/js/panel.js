@@ -180,41 +180,6 @@
   }
 
   // Yönetici görünümü: profil sayıları. Onay ekranı bir sonraki adımda eklenecek.
-  async function yoneticiCiz(kullanici) {
-    const { data, error } = await sb.from("uzmanlar").select("durum, ornek");
-    if (error) throw error;
-    const gercek = data.filter((x) => !x.ornek);
-    const say = (d) => gercek.filter((x) => x.durum === d).length;
-    const kutu = (sayi, etiket, vurgu) =>
-      `<div class="sayac-kutu ${vurgu ? "vurgulu" : ""}"><strong>${sayi}</strong><span>${etiket}</span></div>`;
-    alan.innerHTML = `
-      <section class="panel-baslik">
-        <div>
-          <p class="bolum-ust-yazi">Yönetici paneli</p>
-          <h1>Hoş geldiniz</h1>
-          <p class="soluk">${esc(kullanici.email)}</p>
-        </div>
-        <span class="rozet yonetici-rozet">${ikon("kilit")}Yönetici hesabı</span>
-      </section>
-      <section class="blok panel-kart">
-        <h2>Uzman profilleri</h2>
-        <div class="sayaclar">
-          ${kutu(say("incelemede"), "İnceleme bekliyor", say("incelemede") > 0)}
-          ${kutu(say("ek_belge"), "Ek belge istendi")}
-          ${kutu(say("yayinda"), "Yayında")}
-          ${kutu(say("taslak"), "Taslak")}
-          ${kutu(say("reddedildi") + say("askida"), "Reddedilen / askıda")}
-        </div>
-        <p class="soluk" style="margin-top:14px">Sayılara örnek (deneme) profiller dahil değildir (${data.length - gercek.length} örnek profil var).</p>
-        <span class="yakinda-etiket">Profil ve belge onay ekranı çok yakında açılacak</span>
-      </section>
-      <section class="blok panel-kart panel-guvenlik">
-        <h2>Hesap</h2>
-        <button class="btn btn-cizgi btn-kucuk" type="button" data-cikis>Çıkış yap</button>
-      </section>`;
-    alan.querySelectorAll("[data-cikis]").forEach((b) => b.addEventListener("click", cikis));
-  }
-
   function hata(metin) {
     alan.innerHTML = `
       <div class="bos-durum" role="alert" style="margin:32px 0 48px">
@@ -271,8 +236,9 @@
       const yonetici = await yoneticiMi(kullanici.id);
       let profil = await profilGetir(kullanici.id);
       // Yönetici hesaplarına otomatik uzman profili açılmaz (kimse kendi profilini onaylayamasın).
+      // Yönetici hesapları yönetim paneline yönlendirilir.
       if (!profil && yonetici) {
-        await yoneticiCiz(kullanici);
+        location.replace("yonetim.html");
         return;
       }
       if (!profil) profil = await taslakOlustur(kullanici);

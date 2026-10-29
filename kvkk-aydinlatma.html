@@ -30,9 +30,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/stil.css?v=20261029o">
+  <link rel="stylesheet" href="assets/css/stil.css?v=20261029p">
 </head>
-<body>
+<body data-sayfa="kvkk-aydinlatma">
 
   <div class="ornek-uyari">Taslak sürüm: Bu metin hukuki inceleme ve eksik bilgilerin tamamlanması sonrasında yürürlüğe girecektir.</div>
 
@@ -64,13 +64,13 @@
     <section class="kurumsal-bas">
       <div class="kapsayici">
         <p class="ust-etiket">KVKK</p>
-        <h1>Kişisel Verilerin İşlenmesine İlişkin Aydınlatma Metni</h1>
-        <p class="kurumsal-giris">
+        <h1 data-sayfa-baslik>Kişisel Verilerin İşlenmesine İlişkin Aydınlatma Metni</h1>
+        <p class="kurumsal-giris" data-sayfa-giris>
           Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu'nun (“Kanun”) 10. maddesi uyarınca; <span data-site-adi>Klinik Psikologlar</span>'ı
           kullanan uzmanların, siteyi ziyaret edenlerin ve formlarımız aracılığıyla bize ya da uzmanlara ulaşan kişilerin kişisel verilerinin
           nasıl işlendiğini açıklamak için hazırlanmıştır. Bu metin bilgilendirme amaçlıdır; sizden onay ya da rıza istemez.
         </p>
-        <p class="guncelleme-tarihi">Sürüm 0.1 (taslak) · Son güncelleme: <time datetime="2026-10-27">27 Ekim 2026</time></p>
+        <p class="guncelleme-tarihi" data-sayfa-tarih>Sürüm 0.1 (taslak) · Son güncelleme: <time datetime="2026-10-27">27 Ekim 2026</time></p>
       </div>
     </section>
 
@@ -92,7 +92,7 @@
         </ol>
       </nav>
 
-      <article class="kurumsal-metin">
+      <article class="kurumsal-metin" data-sayfa-icerik>
 
         <!-- 1. VERİ SORUMLUSU -->
         <section id="veri-sorumlusu" class="kurumsal-bolum">
@@ -420,7 +420,10 @@
     </div>
   </footer>
 
-  <script src="assets/js/ayarlar.js?v=20261029o"></script>
-  <script src="assets/js/ortak.js?v=20261029o"></script>
+  <script src="assets/js/ayarlar.js?v=20261029p"></script>
+  <script src="assets/js/ortak.js?v=20261029p"></script>
+  <script src="assets/vendor/dompurify/purify.min.js"></script>
+  <script src="assets/js/guvenli-html.js?v=20261029p"></script>
+  <script src="assets/js/site-icerik.js?v=20261029p"></script>
 </body>
 </html>

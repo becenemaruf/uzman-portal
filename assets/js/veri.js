@@ -202,7 +202,7 @@ const Veri = (() => {
     async mansetleriGetir() {
       try {
         const bugun = new Date().toISOString().slice(0, 10);
-        const satirlar = await oku(`mansetler?select=tur,baslik,metin,buton_yazi,buton_adres,tema,gorsel_yolu,baslangic,bitis&aktif=eq.true&order=sira`);
+        const satirlar = await oku(`mansetler?select=tur,baslik,metin,buton_yazi,buton_adres,tema,gorsel_yolu,gorsel_mobil_yolu,baslangic,bitis&aktif=eq.true&order=sira`);
         return satirlar
           .filter((m) => (!m.baslangic || m.baslangic <= bugun) && (!m.bitis || m.bitis >= bugun))
           .map((m) => ({
@@ -212,7 +212,20 @@ const Veri = (() => {
             buton: m.buton_yazi && m.buton_adres ? { yazi: m.buton_yazi, adres: m.buton_adres } : null,
             tema: m.tema,
             gorsel: m.gorsel_yolu,
+            gorselMobil: m.gorsel_mobil_yolu,
           }));
+      } catch (e) {
+        console.error(e);
+        return [];
+      }
+    },
+
+    // Ana sayfa duyuruları (yalnızca aktif ve tarihi uygun olanlar; veritabanı kuralı da aynısını uygular)
+    async duyurulariGetir() {
+      try {
+        const bugun = new Date().toISOString().slice(0, 10);
+        const satirlar = await oku(`duyurular?select=id,konum,baslik,metin,buton_yazi,buton_adres,gorsel_yolu,baslangic,bitis&aktif=eq.true&order=sira`);
+        return satirlar.filter((d) => (!d.baslangic || d.baslangic <= bugun) && (!d.bitis || d.bitis >= bugun));
       } catch (e) {
         console.error(e);
         return [];

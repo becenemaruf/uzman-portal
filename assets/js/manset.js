@@ -10,6 +10,10 @@
   const alan = document.getElementById("manset");
   if (!alan) return;
 
+  // Yönetim panelindeki "Manşet alanını göster" ayarı kapalıysa alan hiç gösterilmez.
+  const ayarlar = typeof SiteIcerik !== "undefined" ? await SiteIcerik.ayarlar() : {};
+  if (ayarlar.manset_goster === false) return;
+
   const mansetler = await Veri.mansetleriGetir();
   if (!mansetler.length) return; // alan "hidden" olarak kalır
 
@@ -30,8 +34,9 @@
       const rel = disBaglanti ? ` target="_blank" rel="${reklam ? "sponsored " : ""}noopener"` : "";
       const butonSinif = m.tema === "yesil" ? "btn-beyaz" : "btn-ana";
       return `
-        <article class="manset-slayt tema-${esc(m.tema || "yesil")} ${m.gorsel ? "gorselli" : ""}"
+        <article class="manset-slayt tema-${esc(m.tema || "yesil")} ${m.gorsel ? "gorselli" : ""} ${m.gorselMobil ? "mobil-gorselli" : ""}"
                  role="group" aria-roledescription="slayt" aria-label="${i + 1} / ${n}">
+          ${m.gorselMobil ? `<img class="manset-gorsel-mobil" src="${esc(m.gorselMobil)}" alt="" loading="lazy">` : ""}
           <div class="manset-icerik">
             <span class="manset-etiket ${reklam ? "reklam" : ""}">${esc(TUR_ETIKETI[m.tur] || "Duyuru")}</span>
             <h2>${esc(m.baslik)}</h2>

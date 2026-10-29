@@ -210,6 +210,8 @@
 
     sayfalamaCiz(sayfaSayisi);
     adreseYaz();
+    // Duyuru kartları (varsa) liste arasına yerleşsin diye haber verilir (duyurular.js)
+    document.dispatchEvent(new CustomEvent("kartlar-cizildi", { detail: { alan: kartAlani, sayfa } }));
   }
 
   // Sayfa numaraları: çok sayfa varsa "1 … 4 5 6 … 12" şeklinde kısaltılır

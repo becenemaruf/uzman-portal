@@ -30,9 +30,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/stil.css?v=20261029o">
+  <link rel="stylesheet" href="assets/css/stil.css?v=20261029p">
 </head>
-<body>
+<body data-sayfa="gizlilik-politikasi">
 
   <div class="ornek-uyari">Taslak sürüm: Bu metin hukuki inceleme ve eksik bilgilerin tamamlanması sonrasında yürürlüğe girecektir.</div>
 
@@ -64,14 +64,14 @@
     <section class="kurumsal-bas">
       <div class="kapsayici">
         <p class="ust-etiket">Gizlilik</p>
-        <h1>Gizlilik Politikası</h1>
-        <p class="kurumsal-giris">
+        <h1 data-sayfa-baslik>Gizlilik Politikası</h1>
+        <p class="kurumsal-giris" data-sayfa-giris>
           <span data-site-adi>Klinik Psikologlar</span>, kullanıcılarının kişisel bilgilerinin gizliliğini ve güvenliğini önemser. Bu politika; uzman hesaplarını,
           mesleki profilleri, iletişim tercihlerini ve doğrulama belgelerini nasıl koruduğumuzu, hangi hizmet sağlayıcılarla çalıştığımızı ve sizin
           hangi seçeneklere sahip olduğunuzu açıklar. Kişisel verilerin hangi amaç ve hukuki sebeplerle işlendiği
           <a href="kvkk-aydinlatma.html">KVKK Aydınlatma Metni</a>'nde ayrıca anlatılmıştır.
         </p>
-        <p class="guncelleme-tarihi">Sürüm 0.1 (taslak) · Son güncelleme: <time datetime="2026-10-27">27 Ekim 2026</time></p>
+        <p class="guncelleme-tarihi" data-sayfa-tarih>Sürüm 0.1 (taslak) · Son güncelleme: <time datetime="2026-10-27">27 Ekim 2026</time></p>
       </div>
     </section>
 
@@ -94,7 +94,7 @@
         </ol>
       </nav>
 
-      <article class="kurumsal-metin">
+      <article class="kurumsal-metin" data-sayfa-icerik>
 
         <section id="ilkeler" class="kurumsal-bolum">
           <h2>1. Temel ilkelerimiz</h2>
@@ -413,7 +413,10 @@
     </div>
   </footer>
 
-  <script src="assets/js/ayarlar.js?v=20261029o"></script>
-  <script src="assets/js/ortak.js?v=20261029o"></script>
+  <script src="assets/js/ayarlar.js?v=20261029p"></script>
+  <script src="assets/js/ortak.js?v=20261029p"></script>
+  <script src="assets/vendor/dompurify/purify.min.js"></script>
+  <script src="assets/js/guvenli-html.js?v=20261029p"></script>
+  <script src="assets/js/site-icerik.js?v=20261029p"></script>
 </body>
 </html>
