@@ -322,7 +322,12 @@ const ProfilDuzenle = (() => {
       "Tanıtım ve özgeçmiş",
       "",
       `${ICERIK_REHBERI}
-      ${alanHtml("dKisa", "Kısa tanıtım", `<textarea class="girdi" id="dKisa" rows="2" maxlength="200">${esc(p.kisa_tanitim || "")}</textarea>`)}
+      ${alanHtml(
+        "dKisa",
+        "Kısa tanıtım",
+        `<textarea class="girdi" id="dKisa" rows="2" maxlength="200" placeholder="ör. Yetişkinler ve çiftlerle kaygı, ilişki ve yaşam geçişleri konularında çalışıyorum.">${esc(p.kisa_tanitim || "")}</textarea>`,
+        "Uzman listesinde adınızın altında görünen <strong>tek cümlelik özet</strong>. Üniversite ve eğitim bilgilerinizi \"Eğitim ve sertifikalar\" bölümüne yazın."
+      )}
       ${sayacli("dKisa", 200)}
       <div class="ifade-sonuc" data-denetim="dKisa" aria-live="polite"></div>
       ${alanHtml(
@@ -750,7 +755,7 @@ const ProfilDuzenle = (() => {
         <div>
           <p class="bolum-ust-yazi">Uzman paneli</p>
           <h1>Profilimi düzenle</h1>
-          <p class="soluk">Her bölümü ayrı ayrı kaydedebilirsiniz.${p.durum === "yayinda" ? " Profiliniz yayında; kaydettiğiniz değişiklikler hemen görünür." : ""}</p>
+          <p class="soluk"><a href="uzman.html?id=${encodeURIComponent(p.slug)}&onizleme=1">Profilimi önizle</a> · Her bölümü ayrı ayrı kaydedebilirsiniz.${p.durum === "yayinda" ? " Profiliniz yayında; kaydettiğiniz değişiklikler hemen görünür." : ""}</p>
         </div>
       </section>
       <div class="duzen-duzen">

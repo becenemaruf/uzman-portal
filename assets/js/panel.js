@@ -122,6 +122,7 @@
           </dl>
           <div class="panel-dugmeler">
             <a class="btn btn-ana btn-kucuk" href="#profil">Profilimi düzenle</a>
+            <a class="btn btn-cizgi btn-kucuk" href="uzman.html?id=${encodeURIComponent(p.slug)}&onizleme=1">Profilimi önizle</a>
             ${p.durum === "yayinda" ? `<a class="btn btn-cizgi btn-kucuk" href="uzman.html?id=${encodeURIComponent(p.slug)}">Profilimi görüntüle</a>` : ""}
           </div>
           ${

@@ -58,11 +58,43 @@
     document.getElementById("yenidenDene").addEventListener("click", baslat);
   }
 
+  // Önizleme: Panelden "Profilimi önizle" ile gelinir; tarayıcıdaki oturum anahtarı kullanılır.
+  const onizleme = parametreler.get("onizleme") === "1";
+  function oturumAnahtari() {
+    try {
+      for (const depo of [sessionStorage, localStorage]) {
+        const k = Object.keys(depo).find((x) => /^sb-.*-auth-token$/.test(x));
+        if (!k) continue;
+        const o = JSON.parse(depo.getItem(k));
+        if (o && o.access_token && (!o.expires_at || o.expires_at * 1000 > Date.now() + 30000)) return o.access_token;
+      }
+    } catch (e) {
+      /* depolama kapalı */
+    }
+    return null;
+  }
+
   async function baslat() {
     yukleniyorGoster();
     let u;
     try {
-      u = await Veri.uzmanGetir(id);
+      if (onizleme) {
+        const anahtar = oturumAnahtari();
+        if (!anahtar) {
+          alan.removeAttribute("aria-busy");
+          metaAyarla("robots", "noindex");
+          alan.innerHTML = `
+            <div class="bos-durum" style="margin-bottom:48px">
+              <h1 class="bos-baslik">Önizleme için giriş yapın</h1>
+              <p>Oturumunuzun süresi dolmuş olabilir. Panelinize girip "Profilimi önizle" düğmesini tekrar kullanın.</p>
+              <a class="btn btn-ana" href="panel.html">Panele git</a>
+            </div>`;
+          return;
+        }
+        u = await Veri.onizlemeGetir(id, anahtar);
+      } else {
+        u = await Veri.uzmanGetir(id);
+      }
     } catch (e) {
       console.error(e);
       hataGoster();
@@ -175,6 +207,10 @@
     betik.textContent = JSON.stringify(veri).replace(/</g, "\\u003c");
   }
 
+  function p_durumMetni(u) {
+    return u.durum && u.durum !== "yayinda" ? " Profiliniz henüz yayında değil; şu an yalnızca siz görebilirsiniz." : "";
+  }
+
   /* ---------- Profil çizimi ---------- */
   function ciz(u) {
     // Eksik alanlar hata üretmesin diye diziler her zaman dizi olarak ele alınır.
@@ -192,6 +228,16 @@
     const konum = [yuzyuze ? u.ilce : "", u.sehir].filter(Boolean).join(", ");
 
     seoAyarla(u, konum);
+    // Üstteki "örnek kişi" uyarısı yalnızca örnek (deneme) profillerde görünür.
+    const ornekUyari = document.querySelector(".ornek-uyari");
+    if (ornekUyari) ornekUyari.hidden = !u.ornek;
+    if (onizleme) metaAyarla("robots", "noindex");
+    const onizlemeSeridi = onizleme
+      ? `<div class="onizleme-seridi" role="note">
+          <div><strong>Önizleme</strong> — Profiliniz danışanlara bu şekilde görünecek.${p_durumMetni(u)}</div>
+          <div class="onizleme-dugmeler"><a class="btn btn-ana btn-kucuk" href="panel.html#profil">Düzenlemeye dön</a></div>
+        </div>`
+      : "";
 
     // --- Yardımcı parçalar ---
     const etiketler = (dizi) => `<div class="etiketler">${dizi.map((e) => `<span class="etiket">${esc(e)}</span>`).join("")}</div>`;
@@ -464,6 +510,7 @@
 
     alan.removeAttribute("aria-busy");
     alan.innerHTML = `
+      ${onizlemeSeridi}
       ${kirinti}
       <div class="profil-duzen">
         <div class="profil-ana">

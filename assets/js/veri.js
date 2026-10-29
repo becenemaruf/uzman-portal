@@ -24,11 +24,11 @@ const Veri = (() => {
   // Bağlantı çok yavaşsa 15 saniye sonra vazgeçilir; sayfa "yeniden dene" seçeneği gösterir.
   const ZAMAN_ASIMI_MS = 15000;
 
-  async function oku(yol) {
+  async function oku(yol, ekBasliklar = {}) {
     const denetim = new AbortController();
     const sayac = setTimeout(() => denetim.abort(), ZAMAN_ASIMI_MS);
     try {
-      const yanit = await fetch(`${ADRES}/${yol}`, { headers: BASLIKLAR, signal: denetim.signal });
+      const yanit = await fetch(`${ADRES}/${yol}`, { headers: { ...BASLIKLAR, ...ekBasliklar }, signal: denetim.signal });
       if (!yanit.ok) throw new Error(`Veri alınamadı (${yanit.status})`);
       return await yanit.json();
     } finally {
@@ -67,6 +67,7 @@ const Veri = (() => {
       // "yayinda" durumuna yalnızca yönetici, belgeleri inceledikten sonra geçirebilir
       // (bkz. ozel.uzman_degisikligini_denetle). Örnek (deneme) profiller hiçbir zaman "doğrulandı" sayılmaz.
       dogrulandi: s.durum === "yayinda" && !s.ornek,
+      durum: s.durum,
       ad: tamAd(s),
       foto: s.foto_yolu,
       unvan: s.unvan,
@@ -134,6 +135,17 @@ const Veri = (() => {
     async uzmanGetir(id) {
       if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id || "")) return null;
       const satirlar = await oku(`uzmanlar?select=${PROFIL_ALANLARI}&slug=eq.${encodeURIComponent(id)}&durum=eq.yayinda&unvan=${encodeURIComponent(UNVAN_SUZGECI)}&yazilar.durum=eq.yayinda`);
+      return satirlar.length ? uzmanaCevir(satirlar[0]) : null;
+    },
+
+    /* ÖNİZLEME: Uzman, henüz yayında olmayan kendi profilini görür.
+     * Uzmanın oturum anahtarıyla istenir; veritabanı kuralları (RLS) yalnızca kendi profilini döndürür,
+     * başkasının taslak profili bu yolla da görülemez. */
+    async onizlemeGetir(id, erisimAnahtari) {
+      if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id || "") || !erisimAnahtari) return null;
+      const satirlar = await oku(`uzmanlar?select=${PROFIL_ALANLARI}&slug=eq.${encodeURIComponent(id)}&yazilar.durum=eq.yayinda`, {
+        Authorization: `Bearer ${erisimAnahtari}`,
+      });
       return satirlar.length ? uzmanaCevir(satirlar[0]) : null;
     },
 

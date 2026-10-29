@@ -1433,3 +1433,5 @@ html { scroll-padding-top: 124px; }
 .kaydet-cubugu .btn-cizgi { background: transparent; color: #fff; border-color: rgba(255,255,255,.6); }
 .duzen-duzen { padding-bottom: 72px; }
 @media (min-width: 960px) { .duzen-menu { display: grid; overflow: visible; align-content: start; } }
+.onizleme-seridi { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin: 16px 0 4px; padding: 12px 16px; border-radius: 12px; background: var(--altin-acik); border: 1px solid #ead9bd; color: #5c4a2e; font-size: 0.92rem; }
+.onizleme-seridi strong { color: #6b4310; }

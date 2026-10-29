@@ -59,6 +59,8 @@
     meta("og:description", aciklama, true);
     meta("og:url", adres, true);
     if (y.yazar.ornek) meta("robots", "noindex");
+    const ornekUyari = document.querySelector(".ornek-uyari");
+    if (ornekUyari) ornekUyari.hidden = !y.yazar.ornek;
     const link = document.createElement("link");
     link.rel = "canonical";
     link.href = adres;
