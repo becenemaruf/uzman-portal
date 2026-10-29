@@ -153,5 +153,10 @@ Site GitHub Pages üzerinden yayınlanacak; ilerleyen aşamada markaya ait alan 
    - Kısa kalıcı adres: `klinikpsikologlar.com.tr/ad-soyad` (her uzman için sabit sayfa üretilir; Google ve WhatsApp önizlemeleri için)
    - QR kod indirme, "Rehbere kaydet" (vCard — yalnızca izin verilen bilgiler), yazdırılabilir kartvizit görünümü
    - Şablon sabit, içerik onaydan geçer; profil yayından kalkarsa adres bir süre "artık aktif değil" sayfasına gider
-5. **Gerçek e-posta servisi** (Resend, `@klinikpsikologlar.com.tr`) ve Türkçe e-posta şablonları.
-6. KVKK metnindeki eksikler (avukatla), gerçek İletişim sayfası, 90 günlük mesaj temizliği için günlük iş.
+5. **Alet Çantası** (uzman panelinde, herkese açık profilde değil): Yönetici panelinden yüklenen dokümanlar (onam formu, öykü alma formu, seans notu şablonu vb.; PDF ve Word) yalnızca unvanı doğrulanmış ve yayında olan uzmanların panelinde "Dokümanlar" bölümünde görünür.
+   - Tek yönlü: yönetim → uzman. Uzmanlar doldurulmuş danışan formu yükleyemez (özel nitelikli sağlık verisi).
+   - Telifli ölçek/test konmaz; şablonlar avukat kontrolünden geçer, sürüm tarihi ve "şablondur, uyarlayınız" notu taşır.
+   - Gizli depo, kısa süreli indirme bağlantısı; önemli belgelerde indiren uzmanın adıyla filigran (isteğe bağlı).
+6. **Meslektaş davet bağlantısı:** Onaylanmış uzmanlar, yalnızca klinik psikolog meslektaşlarını davet edebilecekleri kişisel bir bağlantı paylaşır (WhatsApp/kopyala). Davet edilen kişi yine diploma doğrulamasından geçer; daveti kimin yaptığı kaydedilir, panelde "davetinizle katılanlar" görünür. Davet, sıralamada öne çıkma gibi bir ayrıcalık sağlamaz.
+7. **Gerçek e-posta servisi** (Resend, `@klinikpsikologlar.com.tr`) ve Türkçe e-posta şablonları.
+8. KVKK metnindeki eksikler (avukatla), gerçek İletişim sayfası, 90 günlük mesaj temizliği için günlük iş.
