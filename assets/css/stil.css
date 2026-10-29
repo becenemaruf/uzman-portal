@@ -1440,3 +1440,6 @@ html { scroll-padding-top: 124px; }
 .pasif-dugme { opacity: .5; cursor: not-allowed; }
 .panel-adres { margin: 10px 0 0; }
 .panel-adres a { color: var(--vurgu); word-break: break-all; }
+.panel-baslik-dugmeler { display: flex; flex-wrap: wrap; gap: 8px; }
+.panel-baslik-dugmeler .btn { gap: 8px; }
+.panel-baslik-dugmeler .ikon { width: 18px; height: 18px; }

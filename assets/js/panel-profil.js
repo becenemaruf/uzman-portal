@@ -755,7 +755,11 @@ const ProfilDuzenle = (() => {
         <div>
           <p class="bolum-ust-yazi">Uzman paneli</p>
           <h1>Profilimi düzenle</h1>
-          <p class="soluk"><a href="uzman.html?id=${encodeURIComponent(p.slug)}&onizleme=1">Profilimi önizle</a> · Her bölümü ayrı ayrı kaydedebilirsiniz.${p.durum === "yayinda" ? " Profiliniz yayında; kaydettiğiniz değişiklikler hemen görünür." : ""}</p>
+          <p class="soluk">Her bölümü ayrı ayrı ya da en alttaki çubuktan hepsini birden kaydedebilirsiniz.${p.durum === "yayinda" ? " Profiliniz yayında; kaydettiğiniz değişiklikler hemen görünür." : ""}</p>
+        </div>
+        <div class="panel-baslik-dugmeler">
+          <a class="btn btn-cizgi" href="uzman.html?id=${encodeURIComponent(p.slug)}&onizleme=1" data-onizle>${ikon("goz")}Profilimi önizle</a>
+          ${p.durum === "yayinda" ? `<a class="btn btn-cizgi" href="uzman.html?id=${encodeURIComponent(p.slug)}" target="_blank" rel="noopener">${ikon("disari")}Profilimi görüntüle</a>` : ""}
         </div>
       </section>
       <div class="duzen-duzen">
@@ -827,7 +831,7 @@ const ProfilDuzenle = (() => {
     alanSirasiGoster();
     $("tumunuKaydet").addEventListener("click", tumunuKaydet);
     // Kaydedilmemiş değişiklik varken panele dönmeye çalışılırsa önce uyar.
-    alan.querySelectorAll('a[href="panel.html#"]').forEach((a) =>
+    alan.querySelectorAll('a[href="panel.html#"], a[data-onizle]').forEach((a) =>
       a.addEventListener("click", (e) => {
         if (a.hasAttribute("data-zorla")) {
           degisenler().forEach(temizIsaretle);
