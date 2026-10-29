@@ -3,7 +3,10 @@
  *
  * - Belgeler gizli "dogrulama-belgeleri" deposunda, uzmanın kendi klasöründe tutulur.
  *   Yalnızca uzmanın kendisi ve yöneticiler görebilir; görüntüleme 60 saniyelik geçici bağlantıyla yapılır.
- * - "İncelemeye gönder": Profil eksiksiz ve iki diploma yüklenmişse açılır. Veritabanı da diplomaları ayrıca denetler.
+ * - Unvan doğrulaması için iki yol vardır:
+ *     a) Lisans (Psikoloji ya da PDR) + Klinik psikoloji yüksek lisans mezuniyet belgesi
+ *     b) Sağlık Bakanlığı sağlık personeli kaydını gösteren belge
+ * - "İncelemeye gönder": Profil eksiksiz ve yollardan biri tamamsa açılır. Veritabanı da bunu ayrıca denetler.
  * - İnceleme sürerken uzman başvurusunu geri çekip düzeltme yapabilir.
  */
 const Belgeler = (() => {
@@ -11,8 +14,9 @@ const Belgeler = (() => {
   const DEPO = "dogrulama-belgeleri";
   const EN_FAZLA_MB = 10;
   const TURLER = {
-    diploma: { ad: "Psikoloji lisans mezuniyeti", zorunlu: true },
+    diploma: { ad: "Lisans mezuniyeti (Psikoloji ya da PDR)", zorunlu: true },
     yuksek_lisans: { ad: "Klinik psikoloji yüksek lisans mezuniyeti", zorunlu: true },
+    saglik_bakanligi: { ad: "Sağlık Bakanlığı sağlık personeli belgesi", zorunlu: true },
     uzmanlik_belgesi: { ad: "Uzmanlık / unvan belgesi (varsa)", zorunlu: false },
     diger: { ad: "Diğer belge (ör. isim değişikliği, denklik)", zorunlu: false },
   };
@@ -46,6 +50,9 @@ const Belgeler = (() => {
   }
 
   const gecerliVar = (tur) => belgeler.some((x) => x.belge_turu === tur && x.durum !== "reddedildi");
+  const mezuniyetYolu = () => gecerliVar("diploma") && gecerliVar("yuksek_lisans");
+  const bakanlikYolu = () => gecerliVar("saglik_bakanligi");
+  const belgelerTamam = () => mezuniyetYolu() || bakanlikYolu();
 
   function belgeSatiri(x) {
     const d = DURUM[x.durum] || DURUM.bekliyor;
@@ -54,7 +61,7 @@ const Belgeler = (() => {
     return `<li class="belge-satir">
       <div class="belge-bilgi">
         <strong>${esc((TURLER[x.belge_turu] || TURLER.diger).ad)}</strong>
-        <span class="alan-ipucu">${x.kaynak === "edevlet" ? `e-Devlet belgesi · doğrulama kodu: <code>${esc(x.dogrulama_kodu || "")}</code>` : "Diploma görüntüsü"} · ${esc(dosyaAdi)} · ${tarihMetni(x.yuklenme)}</span>
+        <span class="alan-ipucu">${x.kaynak === "edevlet" ? `e-Devlet belgesi · doğrulama kodu: <code>${esc(x.dogrulama_kodu || "")}</code>` : "Belge görüntüsü"} · ${esc(dosyaAdi)} · ${tarihMetni(x.yuklenme)}</span>
         ${x.yonetici_notu ? `<span class="belge-not">Yönetici notu: ${esc(x.yonetici_notu)}</span>` : ""}
       </div>
       <span class="panel-durum ${d.sinif}">${d.ad}</span>
@@ -71,9 +78,19 @@ const Belgeler = (() => {
     const yuklemeAcik = !incelemede;
     const kontrol = [
       ...eksikler.map((e) => ({ tamam: false, metin: e, baglanti: "#profil" })),
-      { tamam: gecerliVar("diploma"), metin: TURLER.diploma.ad },
-      { tamam: gecerliVar("yuksek_lisans"), metin: TURLER.yuksek_lisans.ad },
+      { tamam: belgelerTamam(), metin: "Doğrulama belgeleri (yukarıdaki iki yoldan biri)" },
     ];
+    const yol = (tamam, baslik, kalemler) => `
+      <div class="belge-yolu ${tamam ? "tamam" : ""}">
+        <strong>${tamam ? ikon("onay") : ""}${baslik}</strong>
+        <ul>${kalemler.map((k) => `<li class="${gecerliVar(k) ? "tamam" : ""}">${gecerliVar(k) ? "✓" : "○"} ${esc(TURLER[k].ad)}</li>`).join("")}</ul>
+      </div>`;
+    const yollar = `
+      <div class="belge-yollari">
+        ${yol(mezuniyetYolu(), "1. yol: Mezuniyet belgeleri", ["diploma", "yuksek_lisans"])}
+        <span class="belge-yollari-ya">ya da</span>
+        ${yol(bakanlikYolu(), "2. yol: Sağlık Bakanlığı kaydı", ["saglik_bakanligi"])}
+      </div>`;
     const hazir = kontrol.every((k) => k.tamam);
     const notlar = [gizli && gizli.ret_nedeni, gizli && gizli.yonetici_notu].filter(Boolean);
 
@@ -85,7 +102,7 @@ const Belgeler = (() => {
         <div>
           <p class="bolum-ust-yazi">Uzman paneli</p>
           <h1>Belgeler ve inceleme</h1>
-          <p class="soluk">Unvanınızın doğrulanması için mezuniyet belgelerinizi (e-Devlet ya da diploma) yükleyin ve profilinizi incelemeye gönderin.</p>
+          <p class="soluk">Unvanınızın doğrulanması için mezuniyet belgelerinizi ya da Sağlık Bakanlığı sağlık personeli belgenizi yükleyin ve profilinizi incelemeye gönderin.</p>
         </div>
       </section>
 
@@ -99,11 +116,15 @@ const Belgeler = (() => {
         <section class="blok panel-kart">
           <h2>Belgelerim</h2>
           <p class="soluk duzen-aciklama">
-            Lisans ve yüksek lisans mezuniyetleriniz için <strong>e-Devlet'ten alınan YÖK mezun belgesini</strong> yüklemenizi öneririz;
-            her mezuniyet için ayrı belge oluşturulur. Diploma görüntüsü de kabul edilir (PDF, JPG ya da PNG; en fazla ${EN_FAZLA_MB} MB; tamamı okunur olmalıdır).
+            Unvanınızı iki yoldan biriyle doğrulayabilirsiniz:
+            <strong>1)</strong> Psikoloji ya da PDR lisans <em>ve</em> klinik psikoloji yüksek lisans mezuniyet belgeleriniz,
+            <strong>2)</strong> Sağlık Bakanlığı sağlık personeli sisteminde klinik psikolog olarak kayıtlı olduğunuzu gösteren belge.
+            Mümkünse <strong>e-Devlet'ten alınan, doğrulama kodlu belgeleri</strong> yükleyin (mezuniyetler için YÖK mezun belgesi; her mezuniyet ayrı belgedir).
+            Diploma ya da belge görüntüsü de kabul edilir (PDF, JPG ya da PNG; en fazla ${EN_FAZLA_MB} MB; tamamı okunur olmalıdır).
             Belgeleriniz <strong>yalnızca unvan doğrulaması için</strong> kullanılır; sitede yayımlanmaz ve yalnızca siz ile platform yönetimi görebilir.
             Ayrıntılar için <a href="kvkk-aydinlatma.html#uzmanlar" target="_blank" rel="noopener">KVKK Aydınlatma Metni</a>.
           </p>
+          ${yollar}
           ${belgeler.length ? `<ul class="belge-listesi">${belgeler.map(belgeSatiri).join("")}</ul>` : `<p class="alan-ipucu">Henüz belge yüklemediniz.</p>`}
           ${
             yuklemeAcik
@@ -112,7 +133,7 @@ const Belgeler = (() => {
                     <div class="form-alani">
                       <label class="alan-etiket" for="belgeTuru">Belge türü</label>
                       <select class="girdi" id="belgeTuru">${Object.entries(TURLER)
-                        .map(([k, v]) => `<option value="${k}">${v.ad}${v.zorunlu ? " *" : ""}</option>`)
+                        .map(([k, v]) => `<option value="${k}">${v.ad}</option>`)
                         .join("")}</select>
                     </div>
                     <div class="form-alani">
@@ -123,8 +144,8 @@ const Belgeler = (() => {
                   <fieldset class="secim-grubu">
                     <legend class="alan-etiket">Belge biçimi</legend>
                     <div class="kutucuklar kaynak-secim">
-                      <label class="onay-kutusu"><input type="radio" name="kaynak" value="edevlet" checked> <span><strong>e-Devlet mezun belgesi</strong> (önerilen)<br><small class="alan-ipucu">e-Devlet → "YÖK Mezun Belgesi Sorgulama" → PDF olarak indirin.</small></span></label>
-                      <label class="onay-kutusu"><input type="radio" name="kaynak" value="diploma"> <span><strong>Diploma</strong> taraması ya da fotoğrafı<br><small class="alan-ipucu">e-Devlet'te görünmeyen mezuniyetler için (ör. yurt dışı).</small></span></label>
+                      <label class="onay-kutusu"><input type="radio" name="kaynak" value="edevlet" checked> <span><strong>e-Devlet belgesi</strong> (önerilen)<br><small class="alan-ipucu" id="edevletIpucu"></small></span></label>
+                      <label class="onay-kutusu"><input type="radio" name="kaynak" value="diploma"> <span><strong>Diploma ya da belge</strong> taraması / fotoğrafı<br><small class="alan-ipucu">e-Devlet'te görünmeyen kayıtlar için (ör. yurt dışı mezuniyeti).</small></span></label>
                     </div>
                   </fieldset>
                   <div class="form-alani" id="kodAlani">
@@ -161,10 +182,10 @@ const Belgeler = (() => {
         <p class="duzen-son"><a class="btn btn-cizgi" href="panel.html#">Panele dön</a></p>
       </div>`;
 
-    // İlk eksik zorunlu belge türü seçili gelsin
+    // Doğrulama tamamlanmadıysa ilk eksik mezuniyet belgesi seçili gelsin
     const sec = $("belgeTuru");
-    if (sec) {
-      const ilkEksik = Object.keys(TURLER).find((k) => TURLER[k].zorunlu && !gecerliVar(k));
+    if (sec && !belgelerTamam()) {
+      const ilkEksik = ["diploma", "yuksek_lisans"].find((k) => !gecerliVar(k));
       if (ilkEksik) sec.value = ilkEksik;
     }
     baglaOlaylar();
@@ -174,8 +195,15 @@ const Belgeler = (() => {
     const form = $("belgeFormu");
     if (form) {
       form.addEventListener("submit", belgeYukle);
-      const kodGoster = () => ($("kodAlani").hidden = form.querySelector('input[name="kaynak"]:checked').value !== "edevlet");
+      const kodGoster = () => {
+        $("kodAlani").hidden = form.querySelector('input[name="kaynak"]:checked').value !== "edevlet";
+        $("edevletIpucu").textContent =
+          $("belgeTuru").value === "saglik_bakanligi"
+            ? "e-Devlet → Sağlık Bakanlığı hizmetleri → sağlık personeli kaydınızı gösteren belgeyi PDF olarak indirin."
+            : "e-Devlet → \u201cYÖK Mezun Belgesi Sorgulama\u201d → PDF olarak indirin.";
+      };
       form.querySelectorAll('input[name="kaynak"]').forEach((k) => k.addEventListener("change", kodGoster));
+      $("belgeTuru").addEventListener("change", kodGoster);
       kodGoster();
     }
 
@@ -223,7 +251,7 @@ const Belgeler = (() => {
         const { error } = await sb.from("uzmanlar").update({ durum: "incelemede" }).eq("id", profil.id);
         if (error) {
           gonder.disabled = false;
-          durumYaz("gonderDurum", error.message && /diploma/i.test(error.message) ? error.message : "Gönderilemedi. Lütfen tekrar deneyin.", "hata");
+          durumYaz("gonderDurum", error.message && /belge/i.test(error.message) ? error.message : "Gönderilemedi. Lütfen tekrar deneyin.", "hata");
           return;
         }
         await yenile();

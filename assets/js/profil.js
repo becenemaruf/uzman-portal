@@ -335,7 +335,7 @@
           <button class="onay-dugme" type="button" aria-expanded="false" aria-controls="onayBalonu" aria-label="Unvanı doğrulandı — ayrıntıyı göster">${ikon("dogrulama")}</button>
           <span class="onay-balon" id="onayBalonu" role="tooltip" hidden>
             <strong>Unvanı doğrulandı</strong>
-            Psikoloji lisans ve klinik psikoloji yüksek lisans diplomaları platform yönetimi tarafından incelenmiştir.
+            Klinik psikolog unvanı; mezuniyet belgeleri (psikoloji ya da PDR lisans ve klinik psikoloji yüksek lisans) ya da Sağlık Bakanlığı sağlık personeli kaydı üzerinden platform yönetimi tarafından incelenmiştir.
             <small>Bu inceleme bir ruhsat, kamu kurumu onayı ya da bağımsız çalışma izni değildir; hizmetin niteliğine
             veya sonuçlarına ilişkin bir garanti anlamına gelmez.</small>
           </span>

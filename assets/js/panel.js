@@ -78,7 +78,7 @@
     const liste = [
       { baslik: "E-posta adresinizi doğrulayın", tamam: true },
       { baslik: "Profil bilgilerinizi doldurun", metin: "Fotoğraf, tanıtım, çalışma alanları, eğitim, görüşme, iletişim ve sosyal medya.", tamam: gonderildi || p._eksik === 0, baglanti: { adres: "#profil", yazi: "Profilimi düzenle" } },
-      { baslik: "Mezuniyet belgelerinizi yükleyin", metin: "Psikoloji lisans ve klinik psikoloji yüksek lisans: e-Devlet mezun belgesi (önerilen) ya da diploma.", tamam: gonderildi, baglanti: { adres: "#belgeler", yazi: "Belgelerim" } },
+      { baslik: "Doğrulama belgelerinizi yükleyin", metin: "Psikoloji ya da PDR lisans + klinik psikoloji yüksek lisans mezuniyet belgeleri ya da Sağlık Bakanlığı sağlık personeli belgesi.", tamam: gonderildi, baglanti: { adres: "#belgeler", yazi: "Belgelerim" } },
       { baslik: "İncelemeye gönderin", metin: "Yönetim belgelerinizi inceler; gerekirse ek belge ister.", tamam: gonderildi, baglanti: gonderildi ? null : { adres: "#belgeler", yazi: "İncelemeye gönder" } },
       { baslik: "Profiliniz yayında", metin: "Unvanınız doğrulanınca profiliniz ve onay işaretiniz danışanlara görünür.", tamam: yayinda },
     ];
@@ -206,7 +206,7 @@
           ${kutu(say("reddedildi") + say("askida"), "Reddedilen / askıda")}
         </div>
         <p class="soluk" style="margin-top:14px">Sayılara örnek (deneme) profiller dahil değildir (${data.length - gercek.length} örnek profil var).</p>
-        <span class="yakinda-etiket">Profil ve diploma onay ekranı çok yakında açılacak</span>
+        <span class="yakinda-etiket">Profil ve belge onay ekranı çok yakında açılacak</span>
       </section>
       <section class="blok panel-kart panel-guvenlik">
         <h2>Hesap</h2>

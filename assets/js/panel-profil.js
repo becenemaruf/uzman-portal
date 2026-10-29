@@ -421,7 +421,7 @@ const ProfilDuzenle = (() => {
     return bolum(
       "egitim",
       "Eğitim ve sertifikalar",
-      "Akademik eğitimleriniz profilinizde en üstte gösterilir. Psikoloji lisans ve klinik psikoloji yüksek lisans mezuniyet belgelerinizi (e-Devlet ya da diploma) ayrıca «Belgeler ve inceleme» bölümüne yükleyeceksiniz.",
+      "Akademik eğitimleriniz profilinizde en üstte gösterilir. Unvan doğrulaması için mezuniyet belgelerinizi ya da Sağlık Bakanlığı sağlık personeli belgenizi ayrıca «Belgeler ve inceleme» bölümüne yükleyeceksiniz.",
       `${listeDuzenleyici("egitim", "Akademik eğitim", egitimler.egitim, SINIR.egitim, "ör. Yüksek Lisans — Klinik Psikoloji, Ankara Üniversitesi (2018)")}
       ${listeDuzenleyici("sertifika", "Mesleki eğitimler ve sertifikalar", egitimler.sertifika, SINIR.sertifika, "ör. EMDR Düzey 1 ve 2 Eğitimi")}`
     );
