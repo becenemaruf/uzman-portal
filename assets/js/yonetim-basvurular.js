@@ -57,6 +57,7 @@
     if (error) throw error;
     const gercek = data.filter((x) => !x.ornek);
     const say = (d) => gercek.filter((x) => x.durum === d).length;
+    const { count: destekAcik } = await sb.from("destek_talepleri").select("id", { count: "exact", head: true }).eq("durum", "acik");
     const kutu = (sayi, etiket, filtre, vurgu) =>
       `<a class="sayac-kutu ${vurgu ? "vurgulu" : ""}" href="#basvurular/${filtre}"><strong>${sayi}</strong><span>${etiket}</span></a>`;
 
@@ -93,6 +94,10 @@
           ${kutu(say("reddedildi") + say("askida"), "Reddedilen / askıda", "reddedildi")}
         </div>
         <p class="alan-ipucu">Sayılara örnek (deneme) profiller dahil değildir (${data.length - gercek.length} örnek profil var).</p>
+      </section>
+      <section class="blok panel-kart">
+        <h2>Destek talepleri</h2>
+        <div class="sayaclar">${kutu(destekAcik || 0, "Yanıt bekleyen talep", "", (destekAcik || 0) > 0).replace('href="#basvurular/"', 'href="#destek"')}</div>
       </section>
       <section class="blok panel-kart">
         <h2>Yayındaki profillerde son değişiklikler</h2>

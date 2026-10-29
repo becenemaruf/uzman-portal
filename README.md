@@ -78,6 +78,8 @@ assets/js/panel-mesajlar.js, panel-bildirimler.js  Uzman paneli: mesaj kutusu, b
 assets/durum.json     Acil durum duyurusu (GitHub'dan düzenlenir, Supabase'e bağlı değil)
 supabase/functions/bildirim-gonder/  Sistem bildirimlerinin e-posta/SMS gönderimi ve planlı gönderim
 supabase/functions/hesap-sil/        Uzmanın kendi hesabını silmesi
+supabase/functions/destek/           Destek talepleri (herkese açık form, takip bağlantısı, e-posta bildirimleri)
+destek.html, assets/js/destek.js, panel-destek.js, yonetim-destek.js  Destek ekranları
 assets/js/guvenli-html.js + assets/vendor/dompurify/  Sayfa içeriği HTML temizleyici (DOMPurify 3, Apache-2.0/MPL-2.0)
 supabase/functions/karar-bildir/  Yönetici kararını uzmana e-postayla bildiren fonksiyon
 supabase/functions/belge-temizle/ Karardan 30 gün sonra belge dosyalarını silen günlük iş
@@ -181,4 +183,8 @@ Site GitHub Pages üzerinden yayınlanacak; ilerleyen aşamada markaya ait alan 
    - Kritik bildirimler uzman panelinin üstünde şerit olarak; e-postayı kapatan uzmana da gider. Gönderimden önce özet + onay kutusu.
    - SMS: arayüz, sayaç (Türkçe karakter/segment), izin ve kayıt hazır; **sağlayıcı bağlanmadı** (`SMS_SAGLAYICILARI` içine eklenecek, anahtarlar Edge Function Secrets'a).
    - Acil durum: `assets/durum.json` ("aktif": true) — Supabase'den bağımsız, tüm sayfalarda duyuru şeridi.
+10. ~~**Destek talepleri (ticket)**~~ — yapıldı:
+   - Giriş yapamayanlar: `destek.html` (CAPTCHA, saatte 3 talep), e-postayla gelen takip bağlantısı (`?talep=D-XXXXXX&anahtar=…`) ile yazışma. Kimlik doğrulanmış sayılmaz; yönetim ekranında uyarı var.
+   - Uzmanlar: panel.html#destek. Yönetim: yonetim.html#destek (yanıt, iç not, kapat/yeniden aç, konu).
+   - Tablolar: `destek_talepleri`, `destek_mesajlari` (iç notlar uzmana görünmez), `destek_erisim` (yalnızca sunucu). Fonksiyon: `destek`. Yönetime giden e-postalar Genel site ayarlarındaki destek/iletişim e-postasına gider.
 8. KVKK metnindeki eksikler (avukatla), gerçek İletişim sayfası, 90 günlük mesaj temizliği için günlük iş.

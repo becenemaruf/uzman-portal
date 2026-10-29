@@ -1854,3 +1854,24 @@ body.profil-renkli .blok h3 { color: color-mix(in srgb, var(--profil-renk) 85%, 
 
 .menu-dugme { position: relative; }
 .menu-dugme.bildirim-var::after { content: ""; position: absolute; top: 7px; right: 7px; width: 10px; height: 10px; border-radius: 50%; background: var(--hata); box-shadow: 0 0 0 2px var(--yuzey); }
+
+/* =====================================================================
+   DESTEK TALEPLERİ
+   ===================================================================== */
+.destek-sayfa { padding-top: 24px; padding-bottom: 56px; max-width: 1100px; }
+.destek-izgara { display: grid; gap: 16px; align-items: start; }
+@media (min-width: 900px) { .destek-izgara { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); } }
+.destek-ipucu .madde-listesi { margin: 0 0 12px; }
+.destek-ipucu h2, #destekFormu h2 { margin-top: 0; }
+.destek-ust { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 8px 16px; margin-bottom: 14px; }
+.destek-ust h2, .destek-baslik { margin: 0 0 4px; font-size: 1.35rem; }
+.destek-tamam { margin: 8px 0 24px; }
+.yazisma { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
+.yazisma-mesaj { padding: 12px 14px; border-radius: 12px; border: 1px solid var(--cizgi); background: var(--yuzey); max-width: 88%; }
+.yazisma-mesaj.sizden { justify-self: end; background: var(--vurgu-acik); border-color: #c9dbe6; }
+.yazisma-mesaj.yonetimden { justify-self: start; background: #fff; }
+.yazisma-mesaj.ic-not { justify-self: stretch; max-width: none; background: #fff8e8; border: 1px dashed #e0c58f; }
+.yazisma-kim { display: block; font-size: 0.8rem; font-weight: 600; color: var(--soluk); margin-bottom: 4px; }
+.yazisma-mesaj .on-metin { margin: 0; overflow-wrap: anywhere; }
+@media (max-width: 599px) { .yazisma-mesaj { max-width: 100%; } }
+.ayrac-nokta { color: var(--soluk); margin: 0 4px; }

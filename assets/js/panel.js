@@ -4,7 +4,7 @@
  *  - İlk girişte, kayıt sırasında verilen ad/soyad/unvan ile "taslak" profil oluşturur
  *    (veritabanı kuralı gereği taslak profil herkese açık değildir; yalnızca uzman ve yönetici görür).
  *  - Profil durumunu ve sıradaki adımları gösterir.
- * Bölümler: #profil (profil düzenleme), #belgeler, #mesajlar, #bildirimler, #hesap-sil.
+ * Bölümler: #profil (profil düzenleme), #belgeler, #mesajlar, #bildirimler, #destek, #hesap-sil.
  */
 (function () {
   const sb = Oturum.istemci;
@@ -195,6 +195,7 @@
         <h2>Hesap</h2>
         <p class="soluk">Şifrenizi değiştirmek için çıkış yapıp giriş ekranındaki "Şifremi unuttum" bağlantısını kullanabilirsiniz.</p>
         <div class="panel-dugmeler">
+          <a class="btn btn-cizgi btn-kucuk" href="#destek">${ikon("soru")}Destek talebi</a>
           <button class="btn btn-cizgi btn-kucuk" type="button" data-cikis>Çıkış yap</button>
           <a class="btn btn-cizgi btn-kucuk tehlike" href="#hesap-sil">Hesabımı sil</a>
         </div>
@@ -341,6 +342,8 @@
         await Mesajlar.ac(alan, profil);
       } else if (location.hash === "#bildirimler") {
         await Bildirimler.ac(alan, profil);
+      } else if (location.hash === "#destek" || location.hash.startsWith("#destek/")) {
+        await Destek.ac(alan, profil, location.hash.split("/")[1] || null);
       } else if (location.hash === "#hesap-sil") {
         hesapSilCiz(kullanici, profil);
       } else {

@@ -14,6 +14,7 @@ const Yonetim = (() => {
   const MENU = [
     { kod: "", ad: "Özet", ikon: "katman" },
     { kod: "basvurular", ad: "Uzman başvuruları", ikon: "dogrulama" },
+    { kod: "destek", ad: "Destek talepleri", ikon: "soru" },
     { kod: "bildirimler", ad: "Sistem bildirimleri", ikon: "zil" },
     { grup: "İçerik yönetimi" },
     { kod: "mansetler", ad: "Manşetler (slider)", ikon: "yazi" },
