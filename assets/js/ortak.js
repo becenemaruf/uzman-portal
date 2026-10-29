@@ -3,6 +3,20 @@
  * Birden fazla sayfanın kullandığı küçük fonksiyonlar.
  */
 
+// E-postadaki bağlantılar (ör. Supabase panelinden gönderilen şifre yenileme) ana sayfaya dönerse,
+// adres ekindeki anahtarlar kaybolmadan doğru sayfaya aktarılır.
+(function epostaBaglantisiniYonlendir() {
+  const h = location.hash;
+  if (!h || !/access_token=|error_code=/.test(h)) return;
+  const sayfa = location.pathname.split("/").pop() || "index.html";
+  const tur = (h.match(/[#&]type=([a-z_]+)/) || [])[1];
+  let hedef = null;
+  if (tur === "recovery") hedef = "giris.html?yenile=1";
+  else if (/^(signup|magiclink|invite|email_change)$/.test(tur || "")) hedef = "panel.html";
+  else if (/error_code=/.test(h)) hedef = "giris.html";
+  if (hedef && !hedef.startsWith(sayfa)) location.replace(hedef + h);
+})();
+
 // Marka adını sayfadaki ilgili yerlere yazar (data-site-adi işaretli öğeler).
 function siteAdiniYerlestir() {
   document.querySelectorAll("[data-site-adi]").forEach((el) => {
