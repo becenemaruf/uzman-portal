@@ -1421,3 +1421,15 @@ html { scroll-padding-top: 124px; }
 .mesaj-uyari { background: #fffaf2; border: 1px solid #f0d3a8; color: #5c3d12; }
 .mesaj-uyari .ifade-uyari { border: none; padding: 0; background: none; }
 .mesaj-uyari p { margin: 8px 0 0; }
+
+/* ---------- Panel: kaydedilmemiş değişiklikler ---------- */
+.kaydedilmedi { display: inline-block; margin-left: 10px; vertical-align: middle; font-family: Inter, system-ui, sans-serif; font-size: 0.72rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--altin-acik); color: #8a5a10; border: 1px solid #ead9bd; }
+.duzen-bolum.degisti { box-shadow: 0 0 0 2px var(--altin); }
+.kaydet-cubugu { position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; background: var(--vurgu-koyu); color: #fff; box-shadow: 0 -6px 18px rgba(12, 30, 44, 0.2); padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); }
+.kaydet-cubugu.uyari { background: #8a3b12; }
+.kaydet-cubugu-ic { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.kaydet-cubugu-dugmeler { display: flex; gap: 8px; }
+.kaydet-cubugu .btn-ana { background: #fff; color: var(--vurgu-koyu); }
+.kaydet-cubugu .btn-cizgi { background: transparent; color: #fff; border-color: rgba(255,255,255,.6); }
+.duzen-duzen { padding-bottom: 72px; }
+@media (min-width: 960px) { .duzen-menu { display: grid; overflow: visible; align-content: start; } }

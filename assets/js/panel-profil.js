@@ -100,22 +100,72 @@ const ProfilDuzenle = (() => {
     durumYaz(bolum, "");
     try {
       const sonuc = await is();
-      if (sonuc === false) return; // doğrulama hatası ya da denetim uyarısı: mesaj zaten yazıldı
+      if (sonuc === false) return false; // doğrulama hatası ya da denetim uyarısı: mesaj zaten yazıldı
       const form = dugme.closest("form");
-      if (form && form.dataset.onay) {
-        delete form.dataset.onay;
-        dugme.dataset.yazi = "";
-      }
+      if (form && form.dataset.onay) delete form.dataset.onay;
+      if (form) temizIsaretle(form);
       durumYaz(bolum, "Kaydedildi.", "basari");
+      return true;
     } catch (e) {
       console.error(e);
       durumYaz(bolum, hataMetni(e), "hata");
+      return false;
     } finally {
       dugme.disabled = false;
       const form = dugme.closest("form");
       if (!(form && form.dataset.onay === "1")) dugme.textContent = dugme.dataset.ilk || eski;
     }
   }
+
+  /* ---------- Kaydedilmemiş değişiklik takibi ----------
+   * Uzman bir bölümde değişiklik yapınca bölüm başlığında "Kaydedilmedi" etiketi çıkar ve ekranın altında
+   * "Tümünü kaydet" çubuğu belirir. Sayfadan kaydetmeden çıkılmak istenirse uyarılır. */
+  const degisenler = () => [...document.querySelectorAll("form.duzen-bolum.degisti")];
+  function cubukGuncelle(cikisUyarisi = false) {
+    const cubuk = $("kaydetCubugu");
+    if (!cubuk) return;
+    const n = degisenler().length;
+    cubuk.hidden = n === 0;
+    $("kaydetCubuguMetin").textContent = cikisUyarisi
+      ? `${n} bölümde kaydedilmemiş değişiklik var. Çıkmadan önce kaydedin.`
+      : `${n} bölümde kaydedilmemiş değişiklik var.`;
+    $("kaydetmedenCik").hidden = !cikisUyarisi;
+    cubuk.classList.toggle("uyari", cikisUyarisi);
+  }
+  function kirliIsaretle(form) {
+    if (!form || form.classList.contains("degisti")) return;
+    form.classList.add("degisti");
+    form.querySelector("h2").insertAdjacentHTML("beforeend", `<span class="kaydedilmedi">Kaydedilmedi</span>`);
+    cubukGuncelle();
+  }
+  function temizIsaretle(form) {
+    form.classList.remove("degisti");
+    const e = form.querySelector(".kaydedilmedi");
+    if (e) e.remove();
+    cubukGuncelle();
+  }
+  async function tumunuKaydet() {
+    const dugme = $("tumunuKaydet");
+    dugme.disabled = true;
+    try {
+      for (const form of degisenler()) {
+        const kod = form.dataset.bolum;
+        const tamam = await kaydetIsi(kod, form.querySelector('button[type="submit"]'), () => KAYDET[kod](form));
+        if (!tamam) {
+          form.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+      }
+    } finally {
+      dugme.disabled = false;
+    }
+  }
+  window.addEventListener("beforeunload", (e) => {
+    if (degisenler().length) {
+      e.preventDefault();
+      e.returnValue = "";
+    }
+  });
 
   const kontrol = (sart, bolum, metin) => {
     if (!sart) durumYaz(bolum, metin, "hata");
@@ -711,6 +761,15 @@ const ProfilDuzenle = (() => {
           ${fotografBolumu()}${temelBolumu()}${tanitimBolumu()}${alanlarBolumu()}${gorusmeBolumu()}${egitimBolumu()}${sssBolumu()}${iletisimBolumu()}${sosyalBolumu()}
           <p class="duzen-son"><a class="btn btn-cizgi" href="panel.html#">Panele dön</a></p>
         </div>
+      </div>
+      <div class="kaydet-cubugu" id="kaydetCubugu" role="region" aria-label="Kaydedilmemiş değişiklikler" hidden>
+        <div class="kapsayici kaydet-cubugu-ic">
+          <span id="kaydetCubuguMetin" role="status"></span>
+          <div class="kaydet-cubugu-dugmeler">
+            <a class="btn btn-cizgi btn-kucuk" href="panel.html#" id="kaydetmedenCik" data-zorla hidden>Kaydetmeden çık</a>
+            <button class="btn btn-ana btn-kucuk" type="button" id="tumunuKaydet">Tümünü kaydet</button>
+          </div>
+        </div>
       </div>`;
 
     // İletişim alanlarında kayıtlı numaraları okunur biçimde göster
@@ -743,11 +802,16 @@ const ProfilDuzenle = (() => {
       });
       calistir();
     });
-    // Metin değişirse "Yine de kaydet" onayı geçersiz olur.
+    // Metin değişirse "Yine de kaydet" onayı geçersiz olur; bölüm "kaydedilmedi" olarak işaretlenir.
     alan.querySelectorAll("form.duzen-bolum").forEach((form) => {
       const dugme = form.querySelector('button[type="submit"]');
       dugme.dataset.ilk = dugme.textContent;
+      form.addEventListener("change", () => kirliIsaretle(form));
+      form.addEventListener("click", (e) => {
+        if (e.target.closest("[data-sil],[data-yukari],[data-asagi],[data-ekle],#sssEkle")) kirliIsaretle(form);
+      });
       form.addEventListener("input", () => {
+        kirliIsaretle(form);
         if (form.dataset.onay === "1") {
           delete form.dataset.onay;
           dugme.textContent = dugme.dataset.ilk;
@@ -756,6 +820,21 @@ const ProfilDuzenle = (() => {
     });
     listeleriBagla(alan);
     alanSirasiGoster();
+    $("tumunuKaydet").addEventListener("click", tumunuKaydet);
+    // Kaydedilmemiş değişiklik varken panele dönmeye çalışılırsa önce uyar.
+    alan.querySelectorAll('a[href="panel.html#"]').forEach((a) =>
+      a.addEventListener("click", (e) => {
+        if (a.hasAttribute("data-zorla")) {
+          degisenler().forEach(temizIsaretle);
+          return;
+        }
+        if (degisenler().length) {
+          e.preventDefault();
+          cubukGuncelle(true);
+          $("tumunuKaydet").focus();
+        }
+      })
+    );
 
     const fotoDosya = $("fotoDosya");
     fotoDosya.addEventListener("change", () => {
