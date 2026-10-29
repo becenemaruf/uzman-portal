@@ -508,6 +508,13 @@
         </ol>
       </nav>`;
 
+    // Uzmanın seçtiği profil rengi (yalnızca hazır listeden; bilinmeyen değer yok sayılır)
+    const profilRengi = PROFIL_RENKLERI.find((r) => r.kod === u.profilRengi);
+    if (profilRengi) {
+      document.body.style.setProperty("--profil-renk", profilRengi.renk);
+      document.body.classList.add("profil-renkli");
+    }
+
     alan.removeAttribute("aria-busy");
     alan.innerHTML = `
       ${onizlemeSeridi}

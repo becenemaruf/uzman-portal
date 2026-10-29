@@ -480,6 +480,26 @@ const ProfilDuzenle = (() => {
     );
   }
 
+  function renkBolumu() {
+    const secili = p.profil_rengi || "lacivert";
+    return bolum(
+      "renk",
+      "Profil rengi",
+      "Profil sayfanızın zemininde ve bölüm başlıklarında kullanılacak rengi seçin. Renk sayfaya hafif bir ton olarak yansır; yazıların okunurluğu değişmez.",
+      `<div class="renk-secim" role="radiogroup" aria-label="Profil rengi">${PROFIL_RENKLERI.map(
+        (r) => `<label class="renk-kutu" style="--secim-renk:${r.renk}">
+            <input type="radio" name="profilRengi" value="${r.kod}" ${r.kod === secili ? "checked" : ""}>
+            <span class="renk-ornek" aria-hidden="true"><span></span></span>
+            <span class="renk-ad">${esc(r.ad)}${r.kod === "lacivert" ? " (varsayılan)" : ""}</span>
+          </label>`
+      ).join("")}</div>
+      <div class="renk-onizleme" id="renkOnizleme" aria-hidden="true">
+        <div class="renk-onizleme-bas"><span class="renk-onizleme-ikon"></span><strong>Eğitim ve yetkinlik</strong></div>
+        <div class="renk-onizleme-govde"><span></span><span></span></div>
+      </div>`
+    );
+  }
+
   /* ---------- Etkileşimler ---------- */
   function alanSirasiGoster() {
     const kutu = $("alanSirasi");
@@ -708,6 +728,12 @@ const ProfilDuzenle = (() => {
       $("i_telefon").value = g.telefon ? okunurNumara(g.telefon) : "";
       $("i_whatsapp").value = g.whatsapp ? okunurNumara(g.whatsapp) : "";
     },
+    async renk(form) {
+      const kod = (form.querySelector('input[name="profilRengi"]:checked') || {}).value || "lacivert";
+      const { error } = await sb.from("uzmanlar").update({ profil_rengi: kod }).eq("id", p.id);
+      if (error) throw error;
+      p.profil_rengi = kod;
+    },
     async sosyal() {
       const g = {};
       const hatali = [];
@@ -746,6 +772,7 @@ const ProfilDuzenle = (() => {
       ["sss", "SSS"],
       ["iletisim", "İletişim"],
       ["sosyal", "Sosyal medya"],
+      ["renk", "Profil rengi"],
     ];
     alan.innerHTML = `
       <nav class="kirinti" aria-label="Bulunduğunuz yer">
@@ -767,7 +794,7 @@ const ProfilDuzenle = (() => {
           ${bolumler.map(([k, ad]) => `<a href="#profil" data-git="bolum-${k}">${ad}</a>`).join("")}
         </nav>
         <div class="duzen-icerik">
-          ${fotografBolumu()}${temelBolumu()}${tanitimBolumu()}${alanlarBolumu()}${gorusmeBolumu()}${egitimBolumu()}${sssBolumu()}${iletisimBolumu()}${sosyalBolumu()}
+          ${fotografBolumu()}${temelBolumu()}${tanitimBolumu()}${alanlarBolumu()}${gorusmeBolumu()}${egitimBolumu()}${sssBolumu()}${iletisimBolumu()}${sosyalBolumu()}${renkBolumu()}
           <p class="duzen-son"><a class="btn btn-cizgi" href="panel.html#">Panele dön</a></p>
         </div>
       </div>
@@ -828,6 +855,15 @@ const ProfilDuzenle = (() => {
       });
     });
     listeleriBagla(alan);
+    // Profil rengi: seçime göre küçük önizleme
+    const renkGuncelle = () => {
+      const kod = (document.querySelector('input[name="profilRengi"]:checked') || {}).value;
+      const r = PROFIL_RENKLERI.find((x) => x.kod === kod) || PROFIL_RENKLERI[0];
+      const kutu = $("renkOnizleme");
+      if (kutu) kutu.style.setProperty("--profil-renk", r.renk);
+    };
+    document.querySelectorAll('input[name="profilRengi"]').forEach((x) => x.addEventListener("change", renkGuncelle));
+    renkGuncelle();
     alanSirasiGoster();
     $("tumunuKaydet").addEventListener("click", tumunuKaydet);
     // Kaydedilmemiş değişiklik varken panele dönmeye çalışılırsa önce uyar.

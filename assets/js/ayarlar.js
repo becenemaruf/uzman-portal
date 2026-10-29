@@ -102,6 +102,18 @@ const UNVAN_ONEKLERI = ["Uzm.", "Dr.", "Uzm. Dr.", "Doç. Dr.", "Prof. Dr."];
 /* SOSYAL MEDYA
  * "kalip" veritabanındaki kurallarla aynıdır (supabase/migrations/20261029090000_sosyal_medya.sql).
  * Uzman yalnızca kullanıcı adını yazarsa "adres" ile tam bağlantı oluşturulur. */
+// Uzmanın profil sayfası için seçebileceği tema renkleri. Sayfada %10 yoğunlukta zemin rengi,
+// bölüm başlıklarında ve simgelerde vurgu olarak kullanılır. (Veritabanındaki liste ile aynı olmalı.)
+const PROFIL_RENKLERI = [
+  { kod: "lacivert", ad: "Lacivert", renk: "#1c4a66" },
+  { kod: "turkuaz", ad: "Turkuaz", renk: "#1f7a80" },
+  { kod: "yesil", ad: "Yeşil", renk: "#2f6b4f" },
+  { kod: "mor", ad: "Mor", renk: "#5b3f86" },
+  { kod: "bordo", ad: "Bordo", renk: "#8a2e3b" },
+  { kod: "altin", ad: "Altın", renk: "#8a6a3d" },
+  { kod: "gri", ad: "Gri", renk: "#4f5b66" },
+];
+
 const SOSYAL_MEDYA = [
   { kod: "instagram", etiket: "Instagram", ornek: "kullaniciadi ya da https://instagram.com/kullaniciadi",
     kalip: /^https:\/\/(www\.)?instagram\.com\/[A-Za-z0-9._]{1,30}\/?$/, adres: (k) => `https://www.instagram.com/${k}` },
