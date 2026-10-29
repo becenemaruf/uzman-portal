@@ -35,7 +35,7 @@
   async function profilGetir(kullaniciId) {
     const { data, error } = await sb
       .from("uzmanlar")
-      .select("id, slug, ad, soyad, unvan, durum, olusturulma, guncellenme")
+      .select("id, slug, ad, soyad, unvan, durum, olusturulma, guncellenme, yeni_danisan")
       .eq("kullanici_id", kullaniciId)
       .maybeSingle();
     if (error) throw error;
@@ -56,7 +56,7 @@
       const { data, error } = await sb
         .from("uzmanlar")
         .insert({ slug: temel + ek, ad, soyad, unvan, kullanici_id: kullanici.id })
-        .select("id, slug, ad, soyad, unvan, durum, olusturulma, guncellenme")
+        .select("id, slug, ad, soyad, unvan, durum, olusturulma, guncellenme, yeni_danisan")
         .single();
       if (!error) return data;
       if (error.code !== "23505") throw error; // 23505: aynı kısa ad zaten var → yeniden dene
@@ -77,7 +77,7 @@
     const gonderildi = ["incelemede", "yayinda"].includes(p.durum);
     const liste = [
       { baslik: "E-posta adresinizi doğrulayın", tamam: true },
-      { baslik: "Profil bilgilerinizi doldurun", metin: "Fotoğraf, tanıtım, çalışma alanları, eğitim, görüşme ve iletişim tercihleri.", tamam: gonderildi, yakinda: true },
+      { baslik: "Profil bilgilerinizi doldurun", metin: "Fotoğraf, tanıtım, çalışma alanları, eğitim, görüşme, iletişim ve sosyal medya.", tamam: gonderildi || p._eksik === 0, baglanti: { adres: "#profil", yazi: "Profilimi düzenle" } },
       { baslik: "Diplomalarınızı yükleyin", metin: "Psikoloji lisans ve klinik psikoloji yüksek lisans diplomaları (PDF ya da fotoğraf).", tamam: gonderildi, yakinda: true },
       { baslik: "İncelemeye gönderin", metin: "Yönetim belgelerinizi inceler; gerekirse ek belge ister.", tamam: gonderildi, yakinda: true },
       { baslik: "Profiliniz yayında", metin: "Unvanınız doğrulanınca profiliniz ve onay işaretiniz danışanlara görünür.", tamam: yayinda },
@@ -88,6 +88,7 @@
           <span class="adim-no" aria-hidden="true">${a.tamam ? ikon("onay") : i + 1}</span>
           <div><strong>${a.baslik}</strong>${a.tamam ? '<span class="gorunmez"> (tamamlandı)</span>' : ""}
             ${a.metin ? `<p>${a.metin}</p>` : ""}
+            ${a.baglanti ? `<a class="btn btn-cizgi btn-kucuk adim-baglanti" href="${a.baglanti.adres}">${a.baglanti.yazi}</a>` : ""}
             ${a.yakinda && !a.tamam ? `<span class="yakinda-etiket">Bu bölüm çok yakında açılacak</span>` : ""}
           </div>
         </li>`
@@ -95,7 +96,8 @@
       .join("")}</ol>`;
   }
 
-  function ciz(kullanici, p, yonetici) {
+  function ciz(kullanici, p, yonetici, eksik = []) {
+    p._eksik = eksik.length;
     const d = DURUMLAR[p.durum] || DURUMLAR.taslak;
     const tamAd = `${p.ad} ${p.soyad}`;
     alan.innerHTML = `
@@ -118,7 +120,21 @@
             <div><dt>Unvan</dt><dd>${esc(p.unvan)}</dd></div>
             <div><dt>Profil adresi</dt><dd><code>uzman.html?id=${esc(p.slug)}</code></dd></div>
           </dl>
-          ${p.durum === "yayinda" ? `<a class="btn btn-cizgi btn-kucuk" href="uzman.html?id=${encodeURIComponent(p.slug)}">Profilimi görüntüle</a>` : ""}
+          <div class="panel-dugmeler">
+            <a class="btn btn-ana btn-kucuk" href="#profil">Profilimi düzenle</a>
+            ${p.durum === "yayinda" ? `<a class="btn btn-cizgi btn-kucuk" href="uzman.html?id=${encodeURIComponent(p.slug)}">Profilimi görüntüle</a>` : ""}
+          </div>
+          ${
+            eksik.length
+              ? `<div class="eksik-kutu"><strong>Profilinizde eksik olanlar</strong><ul>${eksik.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`
+              : `<p class="mesaj mesaj-basari" style="margin-top:14px">Profil bilgileriniz tamam görünüyor.</p>`
+          }
+          <hr class="ayrac">
+          <label class="anahtar anahtar-genis">
+            <input type="checkbox" id="yeniDanisan" ${p.yeni_danisan ? "checked" : ""}>
+            <span><strong>Yeni danışan kabul ediyorum</strong><small>Profilinizde ve listede görünür. Kapatırsanız danışanlar şu an yeni danışan almadığınızı görür.</small></span>
+          </label>
+          <p class="mesaj" id="yeniDanisanDurum" role="status" hidden></p>
         </section>
 
         <section class="blok panel-kart">
@@ -133,6 +149,24 @@
         <button class="btn btn-cizgi btn-kucuk" type="button" data-cikis>Çıkış yap</button>
       </section>`;
     alan.querySelectorAll("[data-cikis]").forEach((b) => b.addEventListener("click", cikis));
+
+    const anahtar = document.getElementById("yeniDanisan");
+    anahtar.addEventListener("change", async () => {
+      const durum = document.getElementById("yeniDanisanDurum");
+      anahtar.disabled = true;
+      const { error } = await sb.from("uzmanlar").update({ yeni_danisan: anahtar.checked }).eq("id", p.id);
+      anahtar.disabled = false;
+      if (error) {
+        anahtar.checked = !anahtar.checked;
+        durum.className = "mesaj mesaj-hata";
+        durum.textContent = "Kaydedilemedi. Lütfen tekrar deneyin.";
+      } else {
+        p.yeni_danisan = anahtar.checked;
+        durum.className = "mesaj mesaj-basari";
+        durum.textContent = anahtar.checked ? "Yeni danışan kabul ettiğiniz kaydedildi." : "Şu an yeni danışan almadığınız kaydedildi.";
+      }
+      durum.hidden = false;
+    });
   }
 
   // Yönetici görünümü: profil sayıları. Onay ekranı bir sonraki adımda eklenecek.
@@ -191,6 +225,27 @@
   const ustCikis = document.getElementById("cikisDugme");
   if (ustCikis) ustCikis.addEventListener("click", cikis);
 
+  // Sayfa içi yönlendirme: panel.html → özet, panel.html#profil → profil düzenleme.
+  let aktif = null;
+  async function goster() {
+    if (!aktif) return;
+    const { kullanici, profil, yonetici } = aktif;
+    try {
+      if (location.hash === "#profil") {
+        await ProfilDuzenle.ac(alan, profil.id, kullanici);
+      } else {
+        const guncel = (await profilGetir(kullanici.id)) || profil;
+        const eksik = await ProfilDuzenle.eksikler(profil.id).catch(() => []);
+        ciz(kullanici, guncel, yonetici, eksik);
+      }
+      window.scrollTo(0, 0);
+    } catch (e) {
+      console.error(e);
+      hata("Sunucuya ulaşılamadı ya da bir hata oluştu. İnternet bağlantınızı kontrol edip tekrar deneyin.");
+    }
+  }
+  window.addEventListener("hashchange", goster);
+
   (async () => {
     const oturum = await Oturum.oturum();
     if (!oturum) {
@@ -213,7 +268,8 @@
         hata("Hesabınıza ait ad ve soyad bilgisi bulunamadı. Lütfen yönetimle iletişime geçin.");
         return;
       }
-      ciz(kullanici, profil, yonetici);
+      aktif = { kullanici, profil, yonetici };
+      await goster();
     } catch (e) {
       console.error(e);
       hata("Sunucuya ulaşılamadı ya da bir hata oluştu. İnternet bağlantınızı kontrol edip tekrar deneyin.");

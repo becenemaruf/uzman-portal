@@ -93,6 +93,8 @@ const Veri = (() => {
         .sort((a, b) => String(b.yayin_tarihi).localeCompare(String(a.yayin_tarihi)))
         .map((y) => ({ id: y.slug, baslik: y.baslik, tarih: tarihMetni(y.yayin_tarihi) })),
       iletisim,
+      // Sosyal medya: yalnızca dolu olanlar; adresler veritabanında platforma göre denetlenir.
+      sosyal: SOSYAL_MEDYA.filter((m) => s[m.kod]).map((m) => ({ kod: m.kod, etiket: m.etiket, adres: s[m.kod] })),
     };
   }
 
@@ -108,6 +110,7 @@ const Veri = (() => {
   const PROFIL_ALANLARI = [
     LISTE_ALANLARI, "hakkinda", "seans_suresi", "online_platform", "muayenehane_adres",
     "telefon", "whatsapp", "eposta",
+    "instagram", "linkedin", "x_hesabi", "youtube", "facebook", "tiktok", "web_sitesi",
     "uzman_egitimler(tur,metin,sira)", "uzman_sss(soru,cevap,sira)", "yazilar(slug,baslik,yayin_tarihi)",
   ].join(",");
 

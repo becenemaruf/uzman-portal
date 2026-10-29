@@ -93,3 +93,47 @@ const IHTIYAC_KATEGORILERI = [
   { kod: "diger",         sira: 8, etiket: "Bağımlılık, yeme ve diğer konular",  renk: "#6b6f78",
     kelimeler: ["bagimlilik", "yeme"] },
 ];
+
+/* PROFİL DÜZENLEME LİSTELERİ (uzman paneli) */
+const ILLER = ["Adana","Adıyaman","Afyonkarahisar","Ağrı","Aksaray","Amasya","Ankara","Antalya","Ardahan","Artvin","Aydın","Balıkesir","Bartın","Batman","Bayburt","Bilecik","Bingöl","Bitlis","Bolu","Burdur","Bursa","Çanakkale","Çankırı","Çorum","Denizli","Diyarbakır","Düzce","Edirne","Elazığ","Erzincan","Erzurum","Eskişehir","Gaziantep","Giresun","Gümüşhane","Hakkari","Hatay","Iğdır","Isparta","İstanbul","İzmir","Kahramanmaraş","Karabük","Karaman","Kars","Kastamonu","Kayseri","Kilis","Kırıkkale","Kırklareli","Kırşehir","Kocaeli","Konya","Kütahya","Malatya","Manisa","Mardin","Mersin","Muğla","Muş","Nevşehir","Niğde","Ordu","Osmaniye","Rize","Sakarya","Samsun","Siirt","Sinop","Sivas","Şanlıurfa","Şırnak","Tekirdağ","Tokat","Trabzon","Tunceli","Uşak","Van","Yalova","Yozgat","Zonguldak"];
+const DIL_SECENEKLERI = ["Türkçe", "İngilizce", "Almanca", "Fransızca", "Arapça", "Kürtçe", "Rusça", "Farsça", "İspanyolca", "İtalyanca", "Azerbaycan Türkçesi", "Türk İşaret Dili"];
+const UNVAN_ONEKLERI = ["Uzm.", "Dr.", "Uzm. Dr.", "Doç. Dr.", "Prof. Dr."];
+
+/* SOSYAL MEDYA
+ * "kalip" veritabanındaki kurallarla aynıdır (supabase/migrations/20261029090000_sosyal_medya.sql).
+ * Uzman yalnızca kullanıcı adını yazarsa "adres" ile tam bağlantı oluşturulur. */
+const SOSYAL_MEDYA = [
+  { kod: "instagram", etiket: "Instagram", ornek: "kullaniciadi ya da https://instagram.com/kullaniciadi",
+    kalip: /^https:\/\/(www\.)?instagram\.com\/[A-Za-z0-9._]{1,30}\/?$/, adres: (k) => `https://www.instagram.com/${k}` },
+  { kod: "linkedin", etiket: "LinkedIn", ornek: "https://www.linkedin.com/in/adiniz",
+    kalip: /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/(in|company)\/[A-Za-z0-9_%-]{2,100}\/?$/, adres: (k) => `https://www.linkedin.com/in/${k}` },
+  { kod: "x_hesabi", etiket: "X (Twitter)", ornek: "kullaniciadi ya da https://x.com/kullaniciadi",
+    kalip: /^https:\/\/(www\.)?(x|twitter)\.com\/[A-Za-z0-9_]{1,15}\/?$/, adres: (k) => `https://x.com/${k}` },
+  { kod: "youtube", etiket: "YouTube", ornek: "@kanaladi ya da https://www.youtube.com/@kanaladi",
+    kalip: /^https:\/\/(www\.)?youtube\.com\/(@[A-Za-z0-9._-]{3,30}|channel\/[A-Za-z0-9_-]{10,40}|c\/[A-Za-z0-9._-]{1,100})\/?$/,
+    adres: (k) => `https://www.youtube.com/@${k}` },
+  { kod: "facebook", etiket: "Facebook", ornek: "sayfaadi ya da https://www.facebook.com/sayfaadi",
+    kalip: /^https:\/\/(www\.)?facebook\.com\/([A-Za-z0-9.-]{2,80}|profile\.php\?id=[0-9]{5,20})\/?$/, adres: (k) => `https://www.facebook.com/${k}` },
+  { kod: "tiktok", etiket: "TikTok", ornek: "@kullaniciadi ya da https://www.tiktok.com/@kullaniciadi",
+    kalip: /^https:\/\/(www\.)?tiktok\.com\/@[A-Za-z0-9._]{2,24}\/?$/, adres: (k) => `https://www.tiktok.com/@${k}` },
+  { kod: "web_sitesi", etiket: "Web sitesi", ornek: "https://www.siteniz.com.tr",
+    kalip: /^https:\/\/[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+(\/[^\s<>"']*)?$/i, adres: null },
+];
+
+/* Uzmanın yazdığını tam bağlantıya çevirir; geçersizse null, boşsa "".
+ * "@ad", "ad", "instagram.com/ad", "http://..." gibi yazımlar düzeltilir. */
+function sosyalBaglanti(platform, girdi) {
+  let d = String(girdi || "").trim();
+  if (!d) return "";
+  if (/^https?:\/\//i.test(d) || /^(www\.)?[a-z0-9-]+\.[a-z]/i.test(d)) {
+    d = d.replace(/^http:\/\//i, "https://");
+    if (!/^https:\/\//i.test(d)) d = "https://" + d;
+    d = d.replace(/^https:\/\/m\./i, "https://www.").replace(/[?#].*$/, (ek) => (/profile\.php\?id=/.test(d) ? ek : ""));
+  } else if (platform.adres) {
+    d = platform.adres(d.replace(/^@/, ""));
+  } else {
+    d = "https://" + d;
+  }
+  if (d.length > 250) return null;
+  return platform.kalip.test(d) ? d : null;
+}

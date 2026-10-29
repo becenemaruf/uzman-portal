@@ -441,6 +441,13 @@
           </div>
           ${kanalYok ? `<p class="alt-not">Uzman doğrudan iletişim bilgisi paylaşmıyor. Mesajınız platform üzerinden uzmana iletilir; iletişim bilgileriniz yalnızca bu uzmana iletilir.</p>` : ""}
           <p class="alt-not">İlk mesajınızda sağlık bilgilerinizi paylaşmanız gerekmez; kısaca görüşme talebinizi iletmeniz yeterli.</p>
+          ${Array.isArray(u.sosyal) && u.sosyal.length ? `
+            <div class="sosyal-baglantilar">
+              <h3>Sosyal medya</h3>
+              <ul>${u.sosyal
+                .map((m) => `<li><a href="${esc(m.adres)}" target="_blank" rel="noopener nofollow ugc" title="${esc(m.etiket)}">${ikon(m.kod)}<span class="gorunmez">${esc(m.etiket)} (yeni sekmede açılır)</span></a></li>`)
+                .join("")}</ul>
+            </div>` : ""}
           ${iletisim.whatsapp ? `<p class="alt-not">WhatsApp butonu sizi WhatsApp uygulamasına yönlendirir; yazışmalarınız WhatsApp'ın gizlilik koşullarına tabidir.</p>` : ""}
         </section>
       </aside>`;

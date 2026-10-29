@@ -1,7 +1,7 @@
 -- =====================================================================
 -- GÜVENLİK KURALLARI TESTİ
 -- Üç sahte kullanıcı (Uzman A, Uzman B, Yönetici) ve danışan (giriş yapmamış ziyaretçi)
--- rolleriyle 42 senaryoyu dener.
+-- rolleriyle 46 senaryoyu dener.
 --
 -- NASIL ÇALIŞTIRILIR: Supabase panelindeki SQL Editor'a yapıştırıp çalıştırın.
 -- Sonuç bir "hata" olarak görünür: Bu bilinçlidir. Rapor hata olarak döndürüldüğü için
@@ -379,6 +379,41 @@ begin
     update public.uzmanlar set unvan = 'Dil ve Konuşma Terapisti' where id = pa returning unvan into d;
     r := r || case when d = 'Dil ve Konuşma Terapisti' then '✅' else '❌' end || ' 42) Kaldırılan unvan reddedildi, yeni unvan kabul edildi' || E'\n';
   end;
+
+  -- ===== PROFİL DÜZENLEME: SOSYAL MEDYA VE FOTOĞRAF =====
+  perform set_config('request.jwt.claims', json_build_object('sub', a, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  -- 43) Uzman geçerli sosyal medya bağlantısı ekleyebilir
+  update public.uzmanlar set instagram = 'https://www.instagram.com/uzman.a', web_sitesi = 'https://uzman-a.com.tr' where id = pa returning instagram into d;
+  r := r || case when d is not null then '✅' else '❌' end || ' 43) Uzman geçerli Instagram ve web sitesi adresini kaydetti' || E'\n';
+  -- 44) Platformla uyuşmayan ya da zararlı bağlantı reddedilir
+  begin
+    update public.uzmanlar set instagram = 'https://kotu-site.com/instagram.com/x' where id = pa;
+    r := r || '❌ 44) "Instagram" alanına başka bir site yazılabildi!' || E'\n';
+  exception when others then
+    begin
+      update public.uzmanlar set web_sitesi = 'javascript:alert(1)' where id = pa;
+      r := r || '❌ 44) Web sitesi alanına zararlı bağlantı yazılabildi!' || E'\n';
+    exception when others then
+      r := r || '✅ 44) Uyuşmayan ve zararlı bağlantılar reddedildi' || E'\n';
+    end;
+  end;
+  -- 45) Profil fotoğrafı dışarıdan bir adrese bağlanamaz
+  begin
+    update public.uzmanlar set foto_yolu = 'https://izleyici.example.com/piksel.gif' where id = pa;
+    r := r || '❌ 45) Profil fotoğrafı dış bir adrese bağlanabildi!' || E'\n';
+  exception when others then
+    update public.uzmanlar set foto_yolu = 'https://nzkkbnhwxmjcywvghxon.supabase.co/storage/v1/object/public/uzman-fotograflari/' || a::text || '/profil-1.webp' where id = pa returning foto_yolu into d;
+    r := r || case when d is not null then '✅' else '❌' end || ' 45) Dış adres reddedildi; platform deposundaki fotoğraf kabul edildi' || E'\n';
+  end;
+  -- 46) Uzman B, A'nın çalışma alanlarını değiştiremez
+  insert into public.uzman_uzmanliklar (uzman_id, alan_id, sira) select pa, id, 0 from public.uzmanlik_alanlari order by sira limit 1;
+  reset role;
+  perform set_config('request.jwt.claims', json_build_object('sub', b, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  delete from public.uzman_uzmanliklar where uzman_id = pa;
+  get diagnostics n = row_count;
+  r := r || case when n = 0 then '✅' else '❌' end || format(' 46) Başka uzman A''nın çalışma alanlarını silebildi mi? silinen: %s', n) || E'\n';
 
   reset role;
   -- Rapor hata olarak döndürülür: böylece testin yaptığı her şey otomatik olarak geri alınır.
