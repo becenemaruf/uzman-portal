@@ -195,6 +195,10 @@ const SiteIcerik = (() => {
     }
     if (!surum) return;
 
+    // Panelden yayımlanmış bir sürüm varsa sayfa dosyasındaki "Taslak sürüm" şeridi kalkar
+    // (önizlemede taslak bir sürüme bakılıyorsa şerit kalır).
+    if (surum.durum === "yayinda") document.querySelectorAll(".ornek-uyari").forEach((el) => (el.hidden = true));
+
     const baslik = document.querySelector("[data-sayfa-baslik]");
     if (baslik) baslik.textContent = surum.baslik;
     const giris = document.querySelector("[data-sayfa-giris]");
