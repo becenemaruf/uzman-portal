@@ -190,7 +190,9 @@ const ProfilDuzenle = (() => {
       ${ipucu ? `<p class="alan-ipucu" id="${id}-ipucu">${ipucu}</p>` : ""}
     </div>`;
 
-  const sayacli = (id, sinir) => `<p class="alan-ipucu sayac" data-sayac="${id}" data-sinir="${sinir}"></p>`;
+  // İncelemeye gönderme için en az uzunluklar (veritabanındaki ozel.basvuru_tamligini_denetle ile aynı)
+  const ENAZ = { kisa: 80, hakkinda: 400 };
+  const sayacli = (id, sinir, enaz = 0) => `<p class="alan-ipucu sayac" data-sayac="${id}" data-sinir="${sinir}" data-enaz="${enaz}"></p>`;
 
   function sayaclariBagla(kok) {
     kok.querySelectorAll("[data-sayac]").forEach((s) => {
@@ -198,8 +200,10 @@ const ProfilDuzenle = (() => {
       const sinir = Number(s.dataset.sinir);
       const guncelle = () => {
         const n = say(girdi.value);
-        s.textContent = `${n} / ${sinir}`;
-        s.classList.toggle("asim", n > sinir);
+        const enaz = Number(s.dataset.enaz) || 0;
+        const eksik = enaz && n < enaz;
+        s.textContent = `${n} / ${sinir}` + (enaz ? (eksik ? ` · incelemeye göndermek için en az ${enaz} karakter (${enaz - n} kaldı)` : " · yeterli uzunlukta ✓") : "");
+        s.classList.toggle("asim", n > sinir || !!eksik);
       };
       girdi.addEventListener("input", guncelle);
       guncelle();
@@ -328,7 +332,7 @@ const ProfilDuzenle = (() => {
         `<textarea class="girdi" id="dKisa" rows="2" maxlength="200" placeholder="ör. Yetişkinler ve çiftlerle kaygı, ilişki ve yaşam geçişleri konularında çalışıyorum.">${esc(p.kisa_tanitim || "")}</textarea>`,
         "Uzman listesinde adınızın altında görünen <strong>tek cümlelik özet</strong>. Üniversite ve eğitim bilgilerinizi \"Eğitim ve sertifikalar\" bölümüne yazın."
       )}
-      ${sayacli("dKisa", 200)}
+      ${sayacli("dKisa", 200, ENAZ.kisa)}
       <div class="ifade-sonuc" data-denetim="dKisa" aria-live="polite"></div>
       ${alanHtml(
         "dHakkinda",
@@ -336,7 +340,7 @@ const ProfilDuzenle = (() => {
         `<textarea class="girdi" id="dHakkinda" rows="9" maxlength="5000">${esc(p.hakkinda || "")}</textarea>`,
         "Paragrafları ayırmak için bir satır boş bırakın."
       )}
-      ${sayacli("dHakkinda", 5000)}
+      ${sayacli("dHakkinda", 5000, ENAZ.hakkinda)}
       <div class="ifade-sonuc" data-denetim="dHakkinda" aria-live="polite"></div>`
     );
   }
@@ -921,11 +925,12 @@ const ProfilDuzenle = (() => {
     const liste = [];
     if (!x.foto_yolu) liste.push("Profil fotoğrafı");
     if (!x.sehir) liste.push("Şehir");
-    if (!x.kisa_tanitim) liste.push("Kısa tanıtım");
-    if (!x.hakkinda) liste.push("Hakkımda yazısı");
+    const uzunluk = (m) => String(m || "").trim().length;
+    if (uzunluk(x.kisa_tanitim) < ENAZ.kisa) liste.push(`Kısa tanıtım (en az ${ENAZ.kisa} karakter; şu an ${uzunluk(x.kisa_tanitim)})`);
+    if (uzunluk(x.hakkinda) < ENAZ.hakkinda) liste.push(`Hakkımda yazısı (en az ${ENAZ.hakkinda} karakter; şu an ${uzunluk(x.hakkinda)})`);
     if (!x.gorusme_online && !x.gorusme_yuzyuze) liste.push("Görüşme şekli");
     if ((ua.count || 0) < 3) liste.push("En az 3 çalışma alanı");
-    if ((ue.count || 0) < 1) liste.push("Akademik eğitim bilgisi");
+    if ((ue.count || 0) < 2) liste.push("Akademik eğitim: lisans ve yüksek lisans (en az 2 kayıt)");
     return liste;
   }
 

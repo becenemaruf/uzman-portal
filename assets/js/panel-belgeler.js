@@ -263,7 +263,7 @@ const Belgeler = (() => {
         const { error } = await sb.from("uzmanlar").update({ durum: "incelemede" }).eq("id", profil.id);
         if (error) {
           gonder.disabled = false;
-          durumYaz("gonderDurum", error.message && /belge/i.test(error.message) ? error.message : "Gönderilemedi. Lütfen tekrar deneyin.", "hata");
+          durumYaz("gonderDurum", error.message && /belge|Eksik/i.test(error.message) ? error.message : "Gönderilemedi. Lütfen tekrar deneyin.", "hata");
           return;
         }
         await yenile();
