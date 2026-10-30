@@ -132,7 +132,7 @@
       u.kisaTanitim ||
       `${u.ad}, ${konum ? konum + " " : ""}${u.unvan}. Çalışma alanları, görüşme bilgileri ve iletişim seçenekleri.`
     ).slice(0, 160);
-    const gorsel = u.foto ? new URL(u.foto, sayfaKoku).href : `${sayfaKoku}assets/img/marka/isaret-512.png`;
+    const gorsel = u.foto ? new URL(u.foto, sayfaKoku).href : `${sayfaKoku}assets/img/marka/paylasim.jpg`;
 
     document.title = baslik;
     metaAyarla("description", aciklama);
