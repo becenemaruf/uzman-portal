@@ -13,6 +13,8 @@
   // Yönetim panelindeki "Manşet alanını göster" ayarı kapalıysa alan hiç gösterilmez.
   const ayarlar = typeof SiteIcerik !== "undefined" ? await SiteIcerik.ayarlar() : {};
   if (ayarlar.manset_goster === false) return;
+  // "Manşeti telefonlarda da göster" kapalıysa dar ekranlarda alan CSS ile gizlenir
+  if (ayarlar.manset_mobil_goster === false) document.body.classList.add("manset-mobil-kapali");
 
   const mansetler = await Veri.mansetleriGetir();
   if (!mansetler.length) return; // alan "hidden" olarak kalır

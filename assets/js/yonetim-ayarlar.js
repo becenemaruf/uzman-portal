@@ -32,6 +32,7 @@
         { ad: "ana_sayfa_aciklama", etiket: "Ana sayfa açıklama metni (arama başlığının altındaki cümle)", tur: "uzun", sinir: 300 },
         { ad: "footer_aciklama", etiket: "Alt bilgi (footer) açıklaması", tur: "uzun", sinir: 400 },
         { ad: "manset_goster", etiket: "Ana sayfada manşet (slider) alanını göster", tur: "secim" },
+        { ad: "manset_mobil_goster", etiket: "Manşeti telefonlarda da göster (kapalıysa yalnızca bilgisayar ve tablette görünür)", tur: "secim" },
         { ad: "duyurular_goster", etiket: "Ana sayfada duyuru ve tanıtım alanlarını göster", tur: "secim" },
       ],
     },

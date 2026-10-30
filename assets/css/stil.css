@@ -1932,3 +1932,6 @@ body.profil-renkli .blok h3 { color: color-mix(in srgb, var(--profil-renk) 85%, 
 .secim-karti:has(input:checked) { border-color: var(--vurgu); box-shadow: 0 0 0 2px rgba(28,74,102,.12); }
 .secim-karti input { margin-top: .2rem; accent-color: var(--vurgu); }
 .secim-karti small { display: block; color: var(--soluk); font-size: .82rem; margin-top: .15rem; line-height: 1.4; }
+
+/* Manşet telefonlarda kapalı (yönetim > Genel site ayarları) */
+@media (max-width: 699px) { body.manset-mobil-kapali .manset-alani { display: none !important; } }
