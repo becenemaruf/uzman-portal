@@ -195,13 +195,21 @@
     const bas = (sayfa - 1) * SAYFA_BOYUTU;
     const sayfadakiler = sonuclar.slice(bas, bas + SAYFA_BOYUTU);
 
-    $("sonucSayisi").innerHTML =
-      toplam > SAYFA_BOYUTU
+    $("sonucSayisi").innerHTML = !uzmanlar.length
+      ? ""
+      : toplam > SAYFA_BOYUTU
         ? `<strong>${toplam}</strong> klinik psikolog bulundu <span class="aralik">· ${bas + 1}–${bas + sayfadakiler.length} arası gösteriliyor</span>`
         : `<strong>${toplam}</strong> klinik psikolog bulundu`;
 
     kartAlani.innerHTML = toplam
       ? sayfadakiler.map(kartHtml).join("")
+      : !uzmanlar.length
+      ? // Rehberde henüz hiç yayında profil yoksa (ör. yayının ilk günleri) filtre mesajı yerine bu gösterilir
+        `<div class="bos-durum">
+           <h2>Uzman profilleri çok yakında burada</h2>
+           <p>Klinik psikologların başvuruları inceleniyor; unvanı doğrulanan uzmanlar yayımlandıkça bu listede yer alacak.</p>
+           <a class="btn btn-ana" href="giris.html#kayit">Klinik psikolog musunuz? Profil oluşturun</a>
+         </div>`
       : `<div class="bos-durum">
            <h2>Bu kriterlere uygun klinik psikolog bulunamadı</h2>
            <p>Birkaç filtreyi kaldırmayı ya da aramanızı genişletmeyi deneyin.</p>

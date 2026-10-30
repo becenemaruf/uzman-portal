@@ -252,6 +252,7 @@ const SiteIcerik = (() => {
     for (const [konum, kap] of Object.entries(yerler)) {
       if (!kap) continue;
       const liste = ogeler.filter((o) => o.konum === konum && o.aktif !== false && baglantiUygun(o.baglanti)).sort((a, b) => a.sira - b.sira);
+      if (!liste.length) continue; // hiç bağlantı gelmezse sayfanın kendi menüsü kalır (menü asla boş görünmez)
       // Bu sayfayı gösteren ilk bağlantı (çapasız olan öncelikli) "bulunduğunuz sayfa" olarak işaretlenir
       const dosya = (o) => o.baglanti.split(/[?#]/)[0].toLowerCase();
       const isaretli = konum === "ust" ? liste.find((o) => dosya(o) === buSayfa && !o.baglanti.includes("#")) || liste.find((o) => dosya(o) === buSayfa) : null;

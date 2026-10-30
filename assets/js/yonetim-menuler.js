@@ -179,6 +179,8 @@
         if (!Yonetim.baglantiUygun(o.baglanti))
           return mesaj(k, `«${o.etiket}» bağlantısı geçerli değil. Sitedeki bir sayfa (ör. hakkimizda.html), https:// ile başlayan bir adres ya da mailto: kullanın.`, "hata");
       }
+      if (!liste.some((o) => o.aktif))
+        return mesaj(k, "Menüde sitede gösterilen en az bir bağlantı olmalı. Hiç bağlantı kalmazsa sayfaların kendi varsayılan menüsü görünür.", "hata");
       dugme.disabled = true;
       try {
         const kalan = new Set(liste.filter((o) => o.id).map((o) => o.id));
