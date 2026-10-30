@@ -1875,3 +1875,6 @@ body.profil-renkli .blok h3 { color: color-mix(in srgb, var(--profil-renk) 85%, 
 .yazisma-mesaj .on-metin { margin: 0; overflow-wrap: anywhere; }
 @media (max-width: 599px) { .yazisma-mesaj { max-width: 100%; } }
 .ayrac-nokta { color: var(--soluk); margin: 0 4px; }
+
+/* 404 sayfası */
+.bulunamadi-dugmeler { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.75rem 0 1rem; }
