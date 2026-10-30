@@ -307,7 +307,10 @@ function mobilMenu() {
     const acik = menu.classList.toggle("acik");
     dugme.setAttribute("aria-expanded", String(acik));
   });
-  menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", kapat));
+  // Menü bağlantıları sonradan değişebildiği için (yönetim panelindeki menü düzenleyici) olay tek yerden dinlenir
+  menu.addEventListener("click", (e) => {
+    if (e.target.closest("a")) kapat();
+  });
   document.addEventListener("click", (e) => {
     if (!menu.contains(e.target)) kapat();
   });

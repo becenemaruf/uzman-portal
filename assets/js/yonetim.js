@@ -2,7 +2,7 @@
  * YÖNETİM PANELİ — ÇERÇEVE (yonetim.html)
  *  - Yalnızca "yoneticiler" tablosunda kaydı olan hesaplar girebilir. Asıl koruma veritabanındadır:
  *    bu sayfadaki her okuma/yazma, Supabase güvenlik kuralları (RLS) tarafından ayrıca denetlenir.
- *  - Sol menü + sayfa içi yönlendirme (#basvurular, #mansetler, #duyurular, #sayfalar, #ayarlar).
+ *  - Sol menü + sayfa içi yönlendirme (#basvurular, #mansetler, #duyurular, #sayfalar, #menuler, #ayarlar).
  *  - Bölümler kendilerini Yonetim.bolumEkle(...) ile kaydeder (yonetim-*.js dosyaları).
  */
 const Yonetim = (() => {
@@ -20,6 +20,7 @@ const Yonetim = (() => {
     { kod: "mansetler", ad: "Manşetler (slider)", ikon: "yazi" },
     { kod: "duyurular", ad: "Duyurular ve tanıtımlar", ikon: "bilgi" },
     { kod: "sayfalar", ad: "Sabit sayfalar", ikon: "yazi" },
+    { kod: "menuler", ad: "Menüler", ikon: "yol" },
     { kod: "ayarlar", ad: "Genel site ayarları", ikon: "filtre" },
   ];
 

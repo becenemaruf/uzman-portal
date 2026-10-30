@@ -1878,3 +1878,23 @@ body.profil-renkli .blok h3 { color: color-mix(in srgb, var(--profil-renk) 85%, 
 
 /* 404 sayfası */
 .bulunamadi-dugmeler { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.75rem 0 1rem; }
+
+/* Yönetim — menü düzenleyici */
+.menu-duzen + .menu-duzen { margin-top: 1.25rem; }
+.menu-onizleme { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem 1.25rem; margin: .9rem 0 1.1rem; padding: .85rem 1rem;
+  border: 1px dashed var(--cizgi, #d9d6cc); border-radius: 12px; background: var(--zemin, #f6f5f0); font-size: .95rem; }
+.menu-onizleme.alt-onizleme { font-size: .85rem; color: var(--soluk, #5b6670); }
+.menu-onizleme .metin-link { pointer-events: none; }
+.menu-satirlar { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: .6rem; }
+.menu-satir { display: grid; grid-template-columns: auto 1fr; gap: .75rem; padding: .85rem; border: 1px solid var(--cizgi, #e3e0d6); border-radius: 12px; background: #fff; }
+.menu-satir.pasif { opacity: .62; background: var(--zemin, #f6f5f0); }
+.menu-sira { display: flex; flex-direction: column; gap: .35rem; }
+.menu-alanlar { display: grid; grid-template-columns: minmax(150px, 1fr) minmax(220px, 2fr); gap: .25rem .9rem; min-width: 0; }
+.menu-alanlar .form-alani { margin: 0; min-width: 0; }
+.menu-baglanti-secim { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: .5rem; }
+.menu-secenekler { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1.25rem; }
+.menu-secenekler .onay-kutusu { margin: 0; }
+.menu-secenekler [data-sil] { margin-left: auto; }
+@media (max-width: 720px) {
+  .menu-alanlar, .menu-baglanti-secim { grid-template-columns: 1fr; }
+}

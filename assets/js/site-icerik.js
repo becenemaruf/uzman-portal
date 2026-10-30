@@ -238,9 +238,62 @@ const SiteIcerik = (() => {
     meta("robots", "noindex");
   }
 
+  // ---------- Menüler (menu_ogeleri) ----------
+  // Son okunan menü tarayıcıda saklanır ve sayfa açılır açılmaz uygulanır (titreme olmasın);
+  // ardından güncel hâli okunur. Okunamazsa sayfa dosyasındaki menü olduğu gibi kalır.
+  const MENU_DEPO = "kpMenu:v1";
+  const baglantiUygun = (a) =>
+    /^https?:\/\/[^\s<>"'`]+$/.test(a) || /^#[A-Za-z0-9_-]*$/.test(a) || /^[a-z0-9-]+\.html([?#][^\s<>"'`]*)?$/.test(a) || /^mailto:[^\s<>"'`]+$/.test(a);
+
+  function menuleriUygula(ogeler) {
+    if (!Array.isArray(ogeler)) return;
+    const buSayfa = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+    const yerler = { ust: document.querySelector("#anaMenu .menu-baglantilar"), alt: document.querySelector("footer .alt-linkler") };
+    for (const [konum, kap] of Object.entries(yerler)) {
+      if (!kap) continue;
+      const liste = ogeler.filter((o) => o.konum === konum && o.aktif !== false && baglantiUygun(o.baglanti)).sort((a, b) => a.sira - b.sira);
+      // Bu sayfayı gösteren ilk bağlantı (çapasız olan öncelikli) "bulunduğunuz sayfa" olarak işaretlenir
+      const dosya = (o) => o.baglanti.split(/[?#]/)[0].toLowerCase();
+      const isaretli = konum === "ust" ? liste.find((o) => dosya(o) === buSayfa && !o.baglanti.includes("#")) || liste.find((o) => dosya(o) === buSayfa) : null;
+      kap.replaceChildren(
+        ...liste.map((o) => {
+          const a = document.createElement("a");
+          if (konum === "ust") a.className = "metin-link";
+          a.href = o.baglanti;
+          a.textContent = o.etiket;
+          if (o.yeni_sekme) {
+            a.target = "_blank";
+            a.rel = "noopener";
+          }
+          if (o === isaretli) a.setAttribute("aria-current", "page");
+          return a;
+        })
+      );
+    }
+  }
+
+  try {
+    const onbellek = JSON.parse(localStorage.getItem(MENU_DEPO) || "null");
+    if (onbellek) menuleriUygula(onbellek);
+  } catch (e) {
+    /* depolama kapalı */
+  }
+  const menuyuYenile = () =>
+    oku("menu_ogeleri?select=konum,etiket,baglanti,yeni_sekme,sira&aktif=eq.true&order=konum,sira")
+    .then((ogeler) => {
+      menuleriUygula(ogeler);
+      try {
+        localStorage.setItem(MENU_DEPO, JSON.stringify(ogeler));
+      } catch (e) {
+        /* depolama kapalı */
+      }
+    })
+    .catch((e) => console.warn("Menüler okunamadı; sayfadaki menü gösteriliyor.", e));
+  menuyuYenile();
+
   ayarlarSozu.then(ayarlariUygula);
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sayfayiUygula);
   else sayfayiUygula();
 
-  return { ayarlar: () => ayarlarSozu };
+  return { ayarlar: () => ayarlarSozu, menuyuYenile };
 })();
