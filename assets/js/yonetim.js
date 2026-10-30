@@ -19,6 +19,7 @@ const Yonetim = (() => {
     { grup: "İçerik yönetimi" },
     { kod: "mansetler", ad: "Manşetler (slider)", ikon: "yazi" },
     { kod: "duyurular", ad: "Duyurular ve tanıtımlar", ikon: "bilgi" },
+    { kod: "blog", ad: "Blog yazıları", ikon: "kep" },
     { kod: "sayfalar", ad: "Sabit sayfalar", ikon: "yazi" },
     { kod: "menuler", ad: "Menüler", ikon: "yol" },
     { kod: "ayarlar", ad: "Genel site ayarları", ikon: "filtre" },

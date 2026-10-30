@@ -48,6 +48,32 @@ const Veri = (() => {
   }
 
   // Bir veritabanı satırını sayfaların kullandığı uzman nesnesine çevirir.
+  // Platform (yönetim) yazılarının yazar kimliği
+  const PLATFORM_YAZAR = { id: null, ad: "Klinik Psikologlar", unvan: "Platform yazısı", foto: "assets/img/marka/isaret-256.webp", platform: true };
+
+  // Yazı satırını sayfaların kullandığı biçime çevirir. Yazarı yayında olmayan uzman yazısı → null
+  function yaziCevir(y) {
+    let yazar;
+    if (y.tur === "platform") {
+      yazar = { ...PLATFORM_YAZAR, unvan: y.yazar_adi || PLATFORM_YAZAR.unvan };
+    } else {
+      if (!y.uzmanlar) return null;
+      yazar = { id: y.uzmanlar.slug, ad: tamAd(y.uzmanlar), foto: y.uzmanlar.foto_yolu, unvan: y.uzmanlar.unvan, ornek: y.uzmanlar.ornek };
+    }
+    return {
+      id: y.slug,
+      tur: y.tur || "uzman",
+      yazarId: yazar.id,
+      kategori: y.kategori,
+      baslik: y.baslik,
+      ozet: y.ozet,
+      kapak: y.kapak_yolu,
+      tarih: String(y.yayin_tarihi).slice(0, 10),
+      okumaDakika: y.okuma_dakika,
+      yazar,
+    };
+  }
+
   function uzmanaCevir(s) {
     (s.uzman_uzmanliklar || []).forEach((x) => {
       if (x.uzmanlik_alanlari) ALAN_KATEGORILERI[x.uzmanlik_alanlari.ad] = x.uzmanlik_alanlari.kategori;
@@ -154,45 +180,29 @@ const Veri = (() => {
      * Metin düz yazı olarak saklanır ve sayfada HTML olarak YORUMLANMAZ (boş satırlar paragraf olur). */
     async yaziGetir(id) {
       if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id || "")) return null;
+      // Yazarı olmayan (platform) yazılar da gelsin diye "inner" değil, sol birleştirme kullanılır;
+      // uzman yazısının yazarı yayında değilse embed boş döner ve yazı gösterilmez.
       const satirlar = await oku(
-        `yazilar?select=slug,baslik,ozet,icerik,kategori,okuma_dakika,yayin_tarihi,guncellenme,` +
-          `uzmanlar!inner(slug,unvan_oneki,ad,soyad,unvan,foto_yolu,ornek)` +
-          `&slug=eq.${encodeURIComponent(id)}&durum=eq.yayinda&uzmanlar.durum=eq.yayinda&uzmanlar.unvan=${encodeURIComponent(UNVAN_SUZGECI)}`
+        `yazilar?select=slug,tur,hedef,yazar_adi,baslik,ozet,icerik,kategori,okuma_dakika,yayin_tarihi,guncellenme,` +
+          `uzmanlar(slug,unvan_oneki,ad,soyad,unvan,foto_yolu,ornek)` +
+          `&slug=eq.${encodeURIComponent(id)}&durum=eq.yayinda&or=(tur.eq.uzman,hedef.in.(herkes,ikisi))&uzmanlar.durum=eq.yayinda&uzmanlar.unvan=${encodeURIComponent(UNVAN_SUZGECI)}`
       );
-      if (!satirlar.length) return null;
-      const y = satirlar[0];
-      return {
-        id: y.slug,
-        baslik: y.baslik,
-        ozet: y.ozet,
-        paragraflar: y.icerik ? y.icerik.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean) : [],
-        kategori: y.kategori,
-        okumaDakika: y.okuma_dakika,
-        tarih: String(y.yayin_tarihi).slice(0, 10),
-        guncellenme: y.guncellenme,
-        yazar: { id: y.uzmanlar.slug, ad: tamAd(y.uzmanlar), foto: y.uzmanlar.foto_yolu, unvan: y.uzmanlar.unvan, ornek: y.uzmanlar.ornek },
-      };
+      const y = satirlar.map(yaziCevir).filter(Boolean)[0];
+      if (!y) return null;
+      const ham = satirlar[0];
+      return { ...y, icerik: ham.icerik || "", guncellenme: ham.guncellenme };
     },
 
     // Blog yazıları: en yeniler önce, yazarın bilgisiyle birlikte.
     async yazilariGetir(adet = 6) {
       try {
         const satirlar = await oku(
-          `yazilar?select=slug,baslik,ozet,kategori,kapak_yolu,okuma_dakika,yayin_tarihi,` +
-            `uzmanlar!inner(slug,unvan_oneki,ad,soyad,unvan,foto_yolu)` +
-            `&durum=eq.yayinda&uzmanlar.durum=eq.yayinda&uzmanlar.unvan=${encodeURIComponent(UNVAN_SUZGECI)}&order=yayin_tarihi.desc&limit=${Number(adet) || 6}`
+          `yazilar?select=slug,tur,hedef,yazar_adi,baslik,ozet,kategori,kapak_yolu,okuma_dakika,yayin_tarihi,` +
+            `uzmanlar(slug,unvan_oneki,ad,soyad,unvan,foto_yolu,ornek)` +
+            `&durum=eq.yayinda&or=(tur.eq.uzman,hedef.in.(herkes,ikisi))` +
+            `&uzmanlar.durum=eq.yayinda&uzmanlar.unvan=${encodeURIComponent(UNVAN_SUZGECI)}&order=yayin_tarihi.desc&limit=${(Number(adet) || 6) * 3}`
         );
-        return satirlar.map((y) => ({
-          id: y.slug,
-          yazarId: y.uzmanlar.slug,
-          kategori: y.kategori,
-          baslik: y.baslik,
-          ozet: y.ozet,
-          kapak: y.kapak_yolu,
-          tarih: String(y.yayin_tarihi).slice(0, 10),
-          okumaDakika: y.okuma_dakika,
-          yazar: { id: y.uzmanlar.slug, ad: tamAd(y.uzmanlar), foto: y.uzmanlar.foto_yolu, unvan: y.uzmanlar.unvan },
-        }));
+        return satirlar.map(yaziCevir).filter(Boolean).slice(0, Number(adet) || 6);
       } catch (e) {
         console.error(e);
         return [];

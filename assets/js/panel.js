@@ -4,7 +4,7 @@
  *  - İlk girişte, kayıt sırasında verilen ad/soyad/unvan ile "taslak" profil oluşturur
  *    (veritabanı kuralı gereği taslak profil herkese açık değildir; yalnızca uzman ve yönetici görür).
  *  - Profil durumunu ve sıradaki adımları gösterir.
- * Bölümler: #profil (profil düzenleme), #belgeler, #mesajlar, #bildirimler, #destek, #hesap-sil.
+ * Bölümler: #profil (profil düzenleme), #belgeler, #mesajlar, #yazilarim, #yazi/<no>, #gelisim, #bildirimler, #destek, #hesap-sil.
  */
 (function () {
   const sb = Oturum.istemci;
@@ -124,7 +124,7 @@
     </section>`;
   }
 
-  function ciz(kullanici, p, yonetici, eksik = [], okunmamis = 0) {
+  function ciz(kullanici, p, yonetici, eksik = [], okunmamis = 0, yaziOzet = null) {
     p._eksik = eksik.length;
     const d = DURUMLAR[p.durum] || DURUMLAR.taslak;
     const tamAd = `${p.ad} ${p.soyad}`;
@@ -190,6 +190,8 @@
         </div>
         <a class="btn ${okunmamis ? "btn-ana" : "btn-cizgi"} btn-kucuk" href="#mesajlar">${ikon("mesaj")}Mesajlarımı aç</a>
       </section>
+
+      ${yaziOzet ? Yazilar.kartlar(yaziOzet) : ""}
 
       <section class="blok panel-kart panel-guvenlik">
         <h2>Hesap</h2>
@@ -340,6 +342,8 @@
         await Belgeler.ac(alan, profil, kullanici);
       } else if (location.hash === "#mesajlar") {
         await Mesajlar.ac(alan, profil);
+      } else if (/^#(yazilarim|yazi|gelisim)(\/|$)/.test(location.hash)) {
+        await Yazilar.ac(alan, profil, location.hash);
       } else if (location.hash === "#bildirimler") {
         await Bildirimler.ac(alan, profil);
       } else if (location.hash === "#destek" || location.hash.startsWith("#destek/")) {
@@ -348,8 +352,8 @@
         hesapSilCiz(kullanici, profil);
       } else {
         const guncel = (await profilGetir(kullanici.id)) || profil;
-        const [eksik, okunmamis] = await Promise.all([ProfilDuzenle.eksikler(profil.id).catch(() => []), Mesajlar.okunmamisSayisi(profil.id)]);
-        ciz(kullanici, guncel, yonetici, eksik, okunmamis);
+        const [eksik, okunmamis, yaziOzet] = await Promise.all([ProfilDuzenle.eksikler(profil.id).catch(() => []), Mesajlar.okunmamisSayisi(profil.id), Yazilar.ozet(profil.id)]);
+        ciz(kullanici, guncel, yonetici, eksik, okunmamis, yaziOzet);
       }
       // Bildirim zili ve okunmamış kritik bildirim şeridi (her görünümde)
       if (location.hash !== "#hesap-sil") Bildirimler.guncelle(alan, profil);

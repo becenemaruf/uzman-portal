@@ -58,6 +58,7 @@
     const gercek = data.filter((x) => !x.ornek);
     const say = (d) => gercek.filter((x) => x.durum === d).length;
     const { count: destekAcik } = await sb.from("destek_talepleri").select("id", { count: "exact", head: true }).eq("durum", "acik");
+    const { count: yaziBekleyen } = await sb.from("yazilar").select("id", { count: "exact", head: true }).eq("tur", "uzman").eq("durum", "incelemede");
     const kutu = (sayi, etiket, filtre, vurgu) =>
       `<a class="sayac-kutu ${vurgu ? "vurgulu" : ""}" href="#basvurular/${filtre}"><strong>${sayi}</strong><span>${etiket}</span></a>`;
 
@@ -98,6 +99,10 @@
       <section class="blok panel-kart">
         <h2>Destek talepleri</h2>
         <div class="sayaclar">${kutu(destekAcik || 0, "Yanıt bekleyen talep", "", (destekAcik || 0) > 0).replace('href="#basvurular/"', 'href="#destek"')}</div>
+      </section>
+      <section class="blok panel-kart">
+        <h2>Blog yazıları</h2>
+        <div class="sayaclar">${kutu(yaziBekleyen || 0, "İnceleme bekleyen yazı", "", (yaziBekleyen || 0) > 0).replace('href="#basvurular/"', 'href="#blog"')}</div>
       </section>
       <section class="blok panel-kart">
         <h2>Yayındaki profillerde son değişiklikler</h2>

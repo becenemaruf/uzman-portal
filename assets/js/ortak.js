@@ -176,6 +176,49 @@ function renkliEtiket(alan) {
   return `<span class="etiket etiket-renkli" style="background:${saydamRenk(renk, 0.15)};color:${koyuRenk(renk)}">${esc(alan)}</span>`;
 }
 
+/* BLOG YAZISI METNİ
+ * Yazılar düz metin olarak saklanır; HTML olarak YORUMLANMAZ (güvenlik). Basit kurallar:
+ *   boş satır      → yeni paragraf
+ *   "## Başlık"    → ara başlık
+ *   "- madde"      → madde işaretli liste (bloktaki her satır "- " ile başlamalı)
+ *   **kalın**      → kalın yazı
+ * Her parça önce kaçışlanır (esc), sonra yalnızca bu birkaç etiket eklenir.
+ */
+function yaziGovdesi(metin) {
+  const satirIci = (s) => esc(s).replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
+  return String(metin || "")
+    .replace(/\r\n?/g, "\n")
+    .split(/\n\s*\n/)
+    .map((b) => b.trim())
+    .filter(Boolean)
+    .map((b) => {
+      if (/^##\s+/.test(b) && !b.includes("\n")) return `<h2>${satirIci(b.replace(/^##\s+/, ""))}</h2>`;
+      const satirlar = b.split("\n");
+      if (satirlar.every((s) => /^\s*[-•]\s+/.test(s))) return `<ul>${satirlar.map((s) => `<li>${satirIci(s.replace(/^\s*[-•]\s+/, ""))}</li>`).join("")}</ul>`;
+      return `<p>${satirlar.map(satirIci).join("<br>")}</p>`;
+    })
+    .join("");
+}
+
+// Başlıktan adres kısaltması: "Çocuklarda Kaygı" → "cocuklarda-kaygi"
+function adresKisaltmasi(metin) {
+  return (
+    String(metin || "")
+      .toLocaleLowerCase("tr")
+      .replace(/[çğıöşüâîû]/g, (h) => ({ ç: "c", ğ: "g", ı: "i", ö: "o", ş: "s", ü: "u", â: "a", î: "i", û: "u" })[h])
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 80)
+      .replace(/-+$/g, "") || "yazi"
+  );
+}
+
+// Okuma süresi (dakika): dakikada ~200 kelime
+function okumaSuresi(metin) {
+  const kelime = String(metin || "").trim().split(/\s+/).filter(Boolean).length;
+  return Math.min(120, Math.max(1, Math.round(kelime / 200)));
+}
+
 /* TARİH */
 // "2026-10-20" ya da tam tarih → "20 Ekim 2026"
 function tarihMetni(deger) {

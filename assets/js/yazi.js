@@ -1,7 +1,7 @@
 /*
  * YAZI OKUMA SAYFASI (yazi.html?id=...)
  * Blog kartlarındaki ve uzman profillerindeki yazı bağlantıları buraya gelir.
- * Yazı metni düz yazı olarak saklanır; HTML olarak yorumlanmaz (güvenlik).
+ * Yazı metni düz yazı olarak saklanır; yaziGovdesi() yalnızca paragraf, ara başlık, liste ve kalın yazıya çevirir (HTML yorumlanmaz).
  */
 (function () {
   const alan = document.getElementById("yaziIcerik");
@@ -50,7 +50,8 @@
     }
 
     const adres = `${kok}yazi.html?id=${encodeURIComponent(y.id)}`;
-    const yazarAdresi = `uzman.html?id=${encodeURIComponent(y.yazar.id)}`;
+    const platform = y.yazar.platform;
+    const yazarAdresi = platform ? "hakkimizda.html" : `uzman.html?id=${encodeURIComponent(y.yazar.id)}`;
     const baslik = `${y.baslik} | ${SITE.ad}`;
     const aciklama = (y.ozet || y.baslik).slice(0, 160);
     document.title = baslik;
@@ -76,12 +77,14 @@
       dateModified: y.guncellenme || undefined,
       inLanguage: "tr-TR",
       mainEntityOfPage: adres,
-      author: { "@type": "Person", name: y.yazar.ad, jobTitle: y.yazar.unvan, url: `${kok}${yazarAdresi}` },
+      author: platform
+        ? { "@type": "Organization", name: SITE.ad, url: kok }
+        : { "@type": "Person", name: y.yazar.ad, jobTitle: y.yazar.unvan, url: `${kok}${yazarAdresi}` },
     }).replace(/</g, "\\u003c");
     document.head.appendChild(ld);
 
-    const govde = y.paragraflar.length
-      ? y.paragraflar.map((p) => `<p>${esc(p)}</p>`).join("")
+    const govde = y.icerik.trim()
+      ? yaziGovdesi(y.icerik)
       : `<p class="yazi-not">Bu yazının tam metni henüz eklenmedi. Şimdilik özetini okuyabilirsiniz.</p>`;
 
     alan.innerHTML = `

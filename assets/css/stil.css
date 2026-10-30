@@ -1243,6 +1243,9 @@ html { scroll-padding-top: 124px; }
 .yazi-yazar a { font-weight: 600; color: var(--metin); }
 .yazi-yazar small { display: block; color: var(--soluk); }
 .yazi-govde p { font-size: 1.06rem; line-height: 1.75; margin: 0 0 1.1em; }
+.yazi-govde h2 { font-family: var(--serif, "Source Serif 4", Georgia, serif); font-size: 1.35rem; line-height: 1.3; margin: 1.6em 0 .6em; }
+.yazi-govde ul { margin: 0 0 1.1em; padding-left: 1.3em; }
+.yazi-govde li { font-size: 1.06rem; line-height: 1.7; margin-bottom: .35em; }
 .yazi-not { margin-top: 32px; padding: 14px 16px; background: var(--bilgi-acik); border-radius: 10px; font-size: 0.9rem; color: var(--soluk); }
 
 /* ---------- Profil: isim yanındaki onay işareti ve açıklama balonu ---------- */
@@ -1898,3 +1901,34 @@ body.profil-renkli .blok h3 { color: color-mix(in srgb, var(--profil-renk) 85%, 
 @media (max-width: 720px) {
   .menu-alanlar, .menu-baglanti-secim { grid-template-columns: 1fr; }
 }
+
+/* Blog modülü — uzman paneli ve yönetim */
+.bicim-yardimi { margin: 0 0 .5rem; font-size: .88rem; color: var(--soluk); }
+.bicim-yardimi summary { cursor: pointer; color: var(--vurgu); font-weight: 500; }
+.bicim-yardimi ul { margin: .5rem 0 0; padding-left: 1.2rem; }
+.bicim-yardimi li { margin-bottom: .2rem; }
+.bicim-yardimi code { background: var(--zemin); border: 1px solid var(--cizgi); border-radius: 4px; padding: 0 .3em; font-size: .85em; }
+.yazi-metin-alani { min-height: 320px; line-height: 1.65; font-size: 1rem; resize: vertical; }
+.yazi-onizleme-kutu { margin: .5rem 0 1rem; border: 1px dashed var(--cizgi-koyu); border-radius: 12px; padding: .75rem 1rem; background: var(--zemin); }
+.yazi-onizleme-kutu summary { cursor: pointer; font-weight: 600; }
+.yazi-onizleme-kutu .yazi-sayfa { margin-top: .75rem; }
+.gelisim-kisa { list-style: none; margin: .25rem 0 1rem; padding: 0; display: grid; gap: .55rem; }
+.gelisim-kisa li { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .5rem; }
+.gelisim-kisa li .alan-ipucu { flex-basis: 100%; margin: 0; }
+.gelisim-kisa a { font-weight: 500; }
+.yeni-rozet { display: inline-block; font-size: .7rem; font-weight: 600; letter-spacing: .02em; padding: .1rem .45rem; border-radius: 999px; background: #e6f2ea; color: #1f5f3d; }
+.gelisim-liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.gelisim-kart { display: flex; flex-direction: column; gap: .4rem; color: inherit; text-decoration: none; transition: border-color .15s, box-shadow .15s; }
+.gelisim-kart:hover { border-color: var(--cizgi-koyu); box-shadow: 0 6px 20px rgba(11,34,51,.06); }
+.gelisim-kart h2 { font-size: 1.15rem; margin: 0; }
+.gelisim-kart .etiket { align-self: flex-start; }
+.gelisim-kart p { margin: 0; }
+.panel-yazi { max-width: 760px; }
+.panel-yazi h1 { margin: .4rem 0 .6rem; }
+.uyari-metin { color: #8a4b0f; }
+.hedef-secim { border: 0; padding: 0; margin: 0 0 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .6rem; }
+.hedef-secim legend { margin-bottom: .4rem; }
+.secim-karti { display: flex; gap: .6rem; align-items: flex-start; padding: .75rem .85rem; border: 1px solid var(--cizgi); border-radius: 12px; background: #fff; cursor: pointer; }
+.secim-karti:has(input:checked) { border-color: var(--vurgu); box-shadow: 0 0 0 2px rgba(28,74,102,.12); }
+.secim-karti input { margin-top: .2rem; accent-color: var(--vurgu); }
+.secim-karti small { display: block; color: var(--soluk); font-size: .82rem; margin-top: .15rem; line-height: 1.4; }
