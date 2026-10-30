@@ -210,6 +210,37 @@
     $("sayfaFormu").addEventListener("input", kirlilik);
     editor.addEventListener("input", kirlilik);
 
+    // Sarı kutuya tıklanınca yalnızca kutunun içi seçilir (üç kez tıklamada yandaki satırlar da seçilip silinmesin)
+    editor.addEventListener("click", (e) => {
+      const kutu = e.target.closest && e.target.closest("span.eksik");
+      if (!kutu || !editor.contains(kutu)) return;
+      const aralik = document.createRange();
+      aralik.selectNodeContents(kutu);
+      const secim = window.getSelection();
+      secim.removeAllRanges();
+      secim.addRange(aralik);
+    });
+
+    // Sarı "eksik" kutusunun içine yazılmaya başlanınca kutu kalkar, yazılan metin normal metne dönüşür
+    editor.addEventListener("input", () => {
+      const secim = window.getSelection();
+      if (!secim || !secim.rangeCount) return;
+      const dugum = secim.anchorNode;
+      const kutu = dugum && (dugum.nodeType === 1 ? dugum : dugum.parentElement)?.closest("span.eksik");
+      if (!kutu || !editor.contains(kutu)) return;
+      const ofset = secim.anchorOffset;
+      kutu.replaceWith(...kutu.childNodes);
+      try {
+        const aralik = document.createRange();
+        aralik.setStart(dugum, Math.min(ofset, dugum.nodeType === 3 ? dugum.length : dugum.childNodes.length));
+        aralik.collapse(true);
+        secim.removeAllRanges();
+        secim.addRange(aralik);
+      } catch (e) {
+        /* imleç konumu korunamazsa sorun değil */
+      }
+    });
+
     // --- Araç çubuğu ---
     alan.querySelectorAll("[data-komut]").forEach((d) =>
       d.addEventListener("mousedown", (e) => {

@@ -10,7 +10,7 @@ const GuvenliHtml = (() => {
   const AYAR = {
     ALLOWED_TAGS: [
       "h2", "h3", "h4", "p", "br", "hr", "strong", "b", "em", "i", "u", "small", "span", "div", "section",
-      "ul", "ol", "li", "a", "blockquote", "table", "caption", "thead", "tbody", "tr", "th", "td", "time", "code",
+      "ul", "ol", "li", "dl", "dt", "dd", "a", "blockquote", "table", "caption", "thead", "tbody", "tr", "th", "td", "time", "code",
     ],
     ALLOWED_ATTR: ["href", "target", "rel", "id", "class", "scope", "colspan", "rowspan", "datetime", "title", "data-ayar", "data-ayar-yoksa"],
     ALLOW_DATA_ATTR: false,
